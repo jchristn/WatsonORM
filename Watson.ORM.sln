@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29411.108
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WatsonORM", "WatsonORM\WatsonORM.csproj", "{B0796A57-EED8-4E3B-830A-F9B1653919C8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B0796A57-EED8-4E3B-830A-F9B1653919C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0796A57-EED8-4E3B-830A-F9B1653919C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0796A57-EED8-4E3B-830A-F9B1653919C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0796A57-EED8-4E3B-830A-F9B1653919C8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {13570C35-5E0D-46EB-8420-EF1AAB356D35}
+	EndGlobalSection
+EndGlobal
