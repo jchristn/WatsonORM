@@ -1,3 +1,5 @@
+![alt tag](https://github.com/jchristn/watsonorm/blob/master/assets/watson.ico)
+
 # WatsonORM
 
 [![NuGet Version](https://img.shields.io/nuget/v/WatsonORM.svg?style=flat)](https://www.nuget.org/packages/WatsonORM/) [![NuGet](https://img.shields.io/nuget/dt/WatsonORM.svg)](https://www.nuget.org/packages/WatsonORM) 
