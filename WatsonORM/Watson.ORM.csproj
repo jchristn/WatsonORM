@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Joel Christner</Authors>
     <Company>Joel Christner</Company>
-    <Product>Watson.ORM</Product>
+    <Product>WatsonORM</Product>
     <Description>WatsonORM is a lightweight and easy to use object-relational mapper (ORM) in C# for .NET Core built on top of DatabaseWrapper.  Watson.ORM supports Microsoft SQL Server, MySQL, PostgreSQL, and Sqlite databases.</Description>
     <Copyright>(c)2020 Joel Christner</Copyright>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>

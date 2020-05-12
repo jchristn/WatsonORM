@@ -23,7 +23,7 @@ namespace Test
                 _Orm.Logger = Logger;
                 
                 _Orm.InitializeDatabase();
-                
+
                 /*
                 _Orm.Database.Logger = Logger;
                 _Orm.Database.LogQueries = true;
@@ -43,10 +43,10 @@ namespace Test
 
                 };
 
-                Person p1 = new Person("Joel", "Christner", Convert.ToDateTime("4/23/1977"), "initial notes p1");
-                Person p2 = new Person("Maria", "Sanchez", Convert.ToDateTime("10/10/1982"), "initial notes p2");
-                Person p3 = new Person("Jason", "Christner", Convert.ToDateTime("4/21/2020"), "initial notes p3");
-                Person p4 = new Person("Watson", "Christner", Convert.ToDateTime("9/1/2013"), "initial notes p4");
+                Person p1 = new Person("Abraham", "Lincoln", Convert.ToDateTime("1/1/1980"), "initial notes p1");
+                Person p2 = new Person("Ronald", "Reagan", Convert.ToDateTime("2/2/1981"), "initial notes p2");
+                Person p3 = new Person("George", "Bush", Convert.ToDateTime("3/3/1982"), "initial notes p3");
+                Person p4 = new Person("Barack", "Obama", Convert.ToDateTime("4/4/1983"), "initial notes p4");
 
                 Console.WriteLine("| Creating p1");
                 p1 = _Orm.Insert<Person>(p1);
@@ -68,6 +68,7 @@ namespace Test
                 DbExpression eSelect1 = new DbExpression("id", DbOperators.GreaterThan, 0);
                 List<Person> selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect1);
                 Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
+                foreach (Person curr in selectedList1) Console.WriteLine("  | " + curr.ToString());
 
                 Console.WriteLine("| Selecting many by property name");
                 DbExpression eSelect2 = new DbExpression(
@@ -76,6 +77,7 @@ namespace Test
                     0);
                 List<Person> selectedList2 = _Orm.SelectMany<Person>(null, null, eSelect2);
                 Console.WriteLine("| Retrieved: " + selectedList2.Count + " records");
+                foreach (Person curr in selectedList2) Console.WriteLine("  | " + curr.ToString());
 
                 Console.WriteLine("| Selecting by ID");
                 Person pSelected = _Orm.SelectById<Person>(3);
@@ -113,6 +115,7 @@ namespace Test
                 Console.WriteLine("| Selecting many, test 1");
                 selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect1);
                 Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
+                foreach (Person curr in selectedList1) Console.WriteLine("  | " + curr.ToString());
 
                 Console.WriteLine("| Selecting by ID");
                 pSelected = _Orm.SelectById<Person>(3);

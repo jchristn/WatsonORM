@@ -1,6 +1,6 @@
 # WatsonORM
 
-[![NuGet Version](https://img.shields.io/nuget/v/DatabaseWrapper.svg?style=flat)](https://www.nuget.org/packages/DatabaseWrapper/) [![NuGet](https://img.shields.io/nuget/dt/DatabaseWrapper.svg)](https://www.nuget.org/packages/DatabaseWrapper) 
+[![NuGet Version](https://img.shields.io/nuget/v/WatsonORM.svg?style=flat)](https://www.nuget.org/packages/WatsonORM/) [![NuGet](https://img.shields.io/nuget/dt/WatsonORM.svg)](https://www.nuget.org/packages/WatsonORM) 
 
 ## Description
 
