@@ -6,7 +6,7 @@
 
 ## Description
 
-WatsonORM is a lightweight and easy to use object-relational mapper (ORM) in C# for .NET Core built on top of DatabaseWrapper.  Watson.ORM supports Microsoft SQL Server, MySQL, PostgreSQL, and Sqlite databases.
+WatsonORM is a lightweight and easy to use object-relational mapper (ORM) in C# for .NET Core built on top of DatabaseWrapper.  WatsonORM supports Microsoft SQL Server, MySQL, PostgreSQL, and Sqlite databases.
 
 Core features:
 
