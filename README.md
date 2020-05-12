@@ -2,123 +2,88 @@
 
 [![NuGet Version](https://img.shields.io/nuget/v/DatabaseWrapper.svg?style=flat)](https://www.nuget.org/packages/DatabaseWrapper/) [![NuGet](https://img.shields.io/nuget/dt/DatabaseWrapper.svg)](https://www.nuget.org/packages/DatabaseWrapper) 
 
-Watson.ORM is a lightweight and easy to use object-relational mapper (ORM) in C# for .NET Core.
-
-For a sample app exercising this library, refer to the test project contained within the solution.
-
 ## Description
 
-DatabaseWrapper is a simple database wrapper for Microsoft SQL Server, MySQL, PostgreSQL, and Sqlite databases written in C#.   
+WatsonORM is a lightweight and easy to use object-relational mapper (ORM) in C# for .NET Core built on top of DatabaseWrapper.  Watson.ORM supports Microsoft SQL Server, MySQL, PostgreSQL, and Sqlite databases.
 
 Core features:
 
-- Dynamic query building using expression objects
-- Support for nested queries within expressions
-- Support for SQL server native vs Windows authentication
-- Support for SELECT, INSERT, UPDATE, DELETE, TRUNCATE, CREATE, DROP or raw queries
-- Programmatic table creation and removal (drop)
-- Built-in sanitization
+- Annotate classes and automatically create database tables
+- Quickly create, read, update, or delete database records using your own objects
+- Reduce time-to-production and time spent building scaffolding code
+- Programmatic table creation and removal
 
-## New in v2.0.4
+For a sample app exercising this library, refer to the ```Test``` project contained within the solution.
 
-- Truncate table fix
+## New in v1.0.0
 
-## A Note on Sanitization
-
-Use of parameterized queries vs building queries dynamically is a sensitive subject.  Proponents of parameterized queries have data on their side - that parameterization does the right thing to prevent SQL injection and other issues.  *I do not disagree with them*.  However, it is worth noting that with proper care, you CAN build systems that allow you to dynamically build queries, and you SHOULD do so as long as you build in the appropriate safeguards.
-
-If you find an injection attack that will defeat the sanitization layer built into this project, please let me know!
-
+- Initial release
+ 
 ## Simple Example
 
-Refer to the test project for a more complete example with sample table setup scripts.
+This example uses ```Sqlite```.  For ```MsSql```, ```MySql```, or ```PgSql```, you must make sure the database exists.  Tables will be automatically created in this example.  Refer to the ```Test``` project for a complete example.
 ```
-using DatabaseWrapper;
-// SQL Server, MySQL, or PostgreSQL
+using Watson.ORM;
 
-DatabaseClient client = new DatabaseClient(DbTypes.MsSql, "localhost", 0, null, null, "SQLEXPRESS", "test");
-// Sqlite
-DatabaseClient client = new DatabaseClient("filename");
+// Apply attributes to your class
+[Table("person")]
+public class Person
+{
+  [Column("id", true, DataTypes.Int, false)]
+  public int Id { get; set; }
 
-// some variables we'll be using
-Dictionary<string, object> d;
-Expression e;
-List<string> fields;
-DataTable result;
+  [Column("firstname", false, DataTypes.Nvarchar, 64, false)]
+  public string FirstName { get; set; }
 
-// add a record
-d = new Dictionary<string, object>();
-d.Add("firstName", "Joel");
-d.Add("lastName", "Christner");
-d.Add("notes", "Author");
-result = client.Insert("person", d);
+  // Parameter-less constructor is required
+  public Person()
+  {
+  }
+...
+}
 
-// update a record
-d = new Dictionary<string, object>();
-d.Add("notes", "The author :)");
-e = new Expression("firstName", Operators.Equals, "Joel"); 
-result = client.Update("person", d, e);
+// Initialize
+DatabaseSettings settings = new DatabaseSettings("./WatsonORM.db");
+WatsonORM orm = new WatsonORM(settings);
+orm.InitializeDatabase();
+orm.InitializeTable(typeof(Person));
 
-// retrieve 10 records
-fields = new List<string> { "firstName", "lastName" }; // leave null for *
-e = new Expression("lastName", Operators.Equals, "Christner"); 
-result = client.Select("person", 0, 10, fields, e, "ORDER BY personId ASC");
+// Insert 
+Person person = new Person { FirstName = "Joel" };
+Person inserted = orm.Insert<Person>(person);
 
-// delete a record
-e = new Expression("firstName", Operators.Equals, "Joel"); 
-result = client.Delete("person", e);
+// Select
+Person selected = orm.SelectById<Person>(1); 
 
-// execute a raw query
-result = client.RawQuery("SELECT customer_id FROM customer WHERE customer_id > 10");
+// Select many by column name
+DbExpression e1 = new DbExpression("id", DbOperators.GreaterThan, 0);
+List<Person> people = orm.SelectMany<Person>(e1);
+
+// Select many by property
+DbExpression e2 = new DbExpression(
+  orm.GetColumnName<Person>(nameof(Person.Id)),
+  DbOperators.GreaterThan,
+  0);
+people = orm.SelectMany<Person>(e2);
+
+// Select many by property with pagination
+// Retrieve 50 records starting at record number 10
+people = orm.SelectMany<Person>(10, 50, e2);
+
+// Update
+inserted.FirstName = "Jason";
+Person updated = orm.Update<Person>(inserted);
+
+// Delete
+orm.Delete<Person>(updated); 
 ```
+ 
+## Pagination with SelectMany
 
-## Sample Compound Expression
+```SelectMany``` can be paginated by using the method with signature ```(int? indexStart, int? maxResults, DbExpression expr)```.  ```indexStart``` is the number of records to skip, and ```maxResults``` is the number of records to retrieve.  
 
-Expressions can be nested in either the LeftTerm or RightTerm.  Conversion from Expression to a WHERE clause uses recursion, so you should have a good degree of flexibility in building your expressions in terms of depth.
-```
-Expression e = new Expression {
-	LeftTerm = new Expression("age", Operators.GreaterThan, 30),
-	Operator = Operators.And,
-	RightTerm = new Expression("height", Operators.LessThan, 74)
-};
-```
-
-## Select with Pagination
-
-Use indexStart, maxResults, and orderByClause to retrieve paginated results.  The query will retrieve maxResults records starting at row number indexStart using an ordering based on orderByClause.  See the example in the DatabaseWrapperTest project.
-
-IMPORTANT: When doing pagination, you MUST specify an ```orderByClause```.
-```
-DataTable result = client.Select("person", 5, 10, null, e, "ORDER BY age DESC");
-```
-
-## Need a Timestamp?
-
-We added a simple static method for this which you can use when building expressions (or elsewhere).  An object method exists as well.
-```
-string mssql1 = DatabaseClient.DbTimestamp(DbTypes.MsSql, DateTime.Now));
-string mssql2 = client.Timestamp(DateTime.Now);
-// 08/23/2016 05:34:32.4349034 PM
-
-string mysql1 = DatabaseClient.DbTimestamp(DbTypes.MySql, DateTime.Now));
-string mysql2 = client.Timestamp(DateTime.Now);
-// 2016-08-23 17:34:32.446913 
-```
-
-## Other Notes
-
-### MySQL
-
-- MySQL does not like to return updated rows.  Sorry about that.  I thought about making the UPDATE clause require that you supply the ID field and the ID value so that I could retrieve it after the fact, but that approach is just too limiting.
-
-### PostgreSQL
-
-- Cleansing of strings in PostgreSQL uses the dollar-quote style.  Fieldnames are always encapsulated in double-quotes for PostgreSQL.
-
-### Sqlite
-
-- Sqlite seems to work well with .NET Core, but has image format exception issues with .NET Framework 4.6.1.  If anyone has a fix for this, please submit a PR!
-
+Paginated results are always ordered by the primary key column value in ascending order, i.e. ```ORDER BY id ASC``` in the ```Person``` example above.
+  
 ## Version history
 
 Refer to CHANGELOG.md.

@@ -5,9 +5,17 @@
     <Authors>Joel Christner</Authors>
     <Company>Joel Christner</Company>
     <Product>Watson.ORM</Product>
-    <Description>Watson.ORM is a lightweight and easy to use object-relational mapper (ORM) in C# for .NET Core.</Description>
+    <Description>WatsonORM is a lightweight and easy to use object-relational mapper (ORM) in C# for .NET Core built on top of DatabaseWrapper.  Watson.ORM supports Microsoft SQL Server, MySQL, PostgreSQL, and Sqlite databases.</Description>
     <Copyright>(c)2020 Joel Christner</Copyright>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/jchristn/watsonorm</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/jchristn/watsonorm</RepositoryUrl>
+    <RepositoryType>Github</RepositoryType>
+    <PackageTags>orm object relational mapper map database object data convert sql sqlite mysql pgsql postgres</PackageTags>
+    <PackageReleaseNotes>Initial release.</PackageReleaseNotes>
+    <PackageIconUrl>https://raw.githubusercontent.com/jchristn/WatsonORM/master/assets/watson.ico</PackageIconUrl>
+    <PackageId>WatsonORM</PackageId>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
