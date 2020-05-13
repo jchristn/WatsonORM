@@ -23,12 +23,10 @@ namespace Test
                 _Orm.Logger = Logger;
                 
                 _Orm.InitializeDatabase();
-
-                /*
+                 
                 _Orm.Database.Logger = Logger;
                 _Orm.Database.LogQueries = true;
-                _Orm.Database.LogResults = true;
-                */
+                _Orm.Database.LogResults = true; 
 
                 _Orm.InitializeTable(typeof(Person));
 
@@ -72,9 +70,9 @@ namespace Test
 
                 Console.WriteLine("| Selecting many by property name");
                 DbExpression eSelect2 = new DbExpression(
-                    _Orm.GetColumnName<Person>(nameof(Person.Id)),
-                    DbOperators.GreaterThan,
-                    0);
+                    _Orm.GetColumnName<Person>(nameof(Person.FirstName)),
+                    DbOperators.Equals,
+                    "Abraham");
                 List<Person> selectedList2 = _Orm.SelectMany<Person>(null, null, eSelect2);
                 Console.WriteLine("| Retrieved: " + selectedList2.Count + " records");
                 foreach (Person curr in selectedList2) Console.WriteLine("  | " + curr.ToString());

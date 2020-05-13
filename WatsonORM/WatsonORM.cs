@@ -611,13 +611,16 @@ namespace Watson.ORM
             PropertyInfo[] properties = typeof(T).GetProperties();
             foreach (PropertyInfo prop in properties)
             {
-                object[] attrs = prop.GetCustomAttributes(true);
-                foreach (object attr in attrs)
+                if (prop.Name.Equals(propName))
                 {
-                    ColumnAttribute colAttr = attr as ColumnAttribute;
-                    if (colAttr != null)
+                    object[] attrs = prop.GetCustomAttributes(true);
+                    foreach (object attr in attrs)
                     {
-                        return colAttr.Name;
+                        ColumnAttribute colAttr = attr as ColumnAttribute;
+                        if (colAttr != null)
+                        {
+                            return colAttr.Name;
+                        }
                     }
                 }
             }
