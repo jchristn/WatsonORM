@@ -30,6 +30,16 @@ namespace Watson.ORM
         [EnumMember(Value = "Int")]
         Int,
         /// <summary>
+        /// Boolean.
+        /// </summary>
+        [EnumMember(Value = "Boolean")]
+        Boolean,
+        /// <summary>
+        /// Enum.
+        /// </summary>
+        [EnumMember(Value = "Enum")]
+        Enum,
+        /// <summary>
         /// Long
         /// </summary>
         [EnumMember(Value = "Long")]

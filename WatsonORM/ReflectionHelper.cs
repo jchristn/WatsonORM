@@ -237,6 +237,10 @@ namespace Watson.ORM
         {
             switch (dt)
             {
+                case DataTypes.Boolean:
+                    return DataType.Int;
+                case DataTypes.Enum:
+                    return DataType.Nvarchar;
                 case DataTypes.Varchar:
                     return DataType.Varchar;
                 case DataTypes.Nvarchar:

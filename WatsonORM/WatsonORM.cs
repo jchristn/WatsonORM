@@ -441,22 +441,43 @@ namespace Watson.ORM
                     ColumnAttribute colAttr = attr as ColumnAttribute;
                     if (colAttr != null)
                     {
-                        Column col = new Column(
-                            colAttr.Name,
-                            colAttr.PrimaryKey,
-                            DbTypeConverter(colAttr.Type),
-                            colAttr.MaxLength,
-                            colAttr.Precision,
-                            colAttr.Nullable);
-                        
-                        columns.Add(col);
-
-                        if (!col.PrimaryKey) ret.Add(colAttr.Name, prop.GetValue(obj));
+                        if (!colAttr.PrimaryKey)
+                        {
+                            switch (colAttr.Type)
+                            {
+                                case DataTypes.Enum:
+                                case DataTypes.Boolean:
+                                case DataTypes.Int:
+                                    ret.Add(colAttr.Name, Convert.ToInt32(prop.GetValue(obj)));
+                                    break;
+                                case DataTypes.DateTime:
+                                    ret.Add(colAttr.Name, _Database.Timestamp(Convert.ToDateTime(prop.GetValue(obj))));
+                                    break;
+                                case DataTypes.Blob:
+                                    ret.Add(colAttr.Name, prop.GetValue(obj));
+                                    break;
+                                case DataTypes.Double:
+                                    ret.Add(colAttr.Name, Convert.ToDouble(prop.GetValue(obj)));
+                                    break;
+                                case DataTypes.Decimal:
+                                    ret.Add(colAttr.Name, Convert.ToDecimal(prop.GetValue(obj)));
+                                    break;
+                                case DataTypes.Long: 
+                                    ret.Add(colAttr.Name, Convert.ToInt64(prop.GetValue(obj)));
+                                    break;
+                                case DataTypes.Nvarchar:
+                                case DataTypes.Varchar:
+                                    ret.Add(colAttr.Name, prop.GetValue(obj).ToString());
+                                    break;
+                                default:
+                                    throw new ArgumentException("Unknown data type '" + colAttr.Type.ToString() + "'.");
+                            }                            
+                        }
                     }
                 }
             }
 
-            if (columns == null || columns.Count < 1) throw new InvalidOperationException("Type '" + obj.GetType().Name + "' does not have any properties with a 'Column' attribute.");
+            if (ret.Count < 1) throw new InvalidOperationException("Type '" + obj.GetType().Name + "' does not have any properties with a 'Column' attribute.");
             return ret;
         }
 
@@ -489,13 +510,14 @@ namespace Watson.ORM
             T ret = new T();
             TypeMetadata md = GetTypeMetadata(typeof(T));
              
-            foreach (DataColumn col in row.Table.Columns)
+            foreach (DataColumn dc in row.Table.Columns)
             {
-                if (md.Columns.Any(c => c.Name.Equals(col.ColumnName)))
+                if (md.Columns.Any(c => c.Name.Equals(dc.ColumnName)))
                 {
-                    object val = row[col.ColumnName];
-                    string propName = GetPropertyNameFromColumnName(typeof(T), col.ColumnName);
-                    if (String.IsNullOrEmpty(propName)) throw new ArgumentException("Unable to find property in type '" + typeof(T).Name + "' for column '" + col.ColumnName + "'.");
+                    Column col = md.Columns.Where(c => c.Name.Equals(dc.ColumnName)).First(); 
+                    object val = row[dc.ColumnName];
+                    string propName = GetPropertyNameFromColumnName(typeof(T), dc.ColumnName);
+                    if (String.IsNullOrEmpty(propName)) throw new ArgumentException("Unable to find property in type '" + typeof(T).Name + "' for column '" + dc.ColumnName + "'.");
 
                     PropertyInfo property = typeof(T).GetProperty(propName);
                     if (val != null)
@@ -503,7 +525,29 @@ namespace Watson.ORM
                         // Remap the object to the property type since some databases misalign
                         // Example: sqlite uses int64 when it should be int32
                         // Console.WriteLine("| Column data type [" + col.DataType.ToString() + "], property data type [" + property.PropertyType.ToString() + "]");
-                        property.SetValue(ret, Convert.ChangeType(val, property.PropertyType));
+
+                        if (property.PropertyType == typeof(bool))
+                        {
+                            property.SetValue(ret, Convert.ToBoolean(val));
+                        }
+                        else if (property.PropertyType.IsEnum)
+                        {
+                            Type propType = property.PropertyType;
+                            property.SetValue(ret, (Enum.Parse(property.PropertyType, val.ToString())));
+                        }
+                        else
+                        {
+                            property.SetValue(ret, Convert.ChangeType(val, property.PropertyType));
+                        }
+
+                        /*
+                         * 
+                         * 
+                         * Need to set based on the original data type...
+                         * 
+                         * 
+                         * 
+                         */
                     }
                     else
                     {

@@ -23,22 +23,30 @@ namespace Test
         [Column("notes", false, DataTypes.Nvarchar, true)]
         public string Notes { get; set; }
 
+        [Column("persontype", false, DataTypes.Nvarchar, 8, false)]
+        public PersonType Type { get; set; }
+
+        [Column("ishandsome", false, DataTypes.Boolean, false)]
+        public bool IsHandsome { get; set; }
+
         public Person()
         {
 
         }
 
-        public Person(string first, string last, DateTime birthDate, string notes)
+        public Person(string first, string last, DateTime birthDate, string notes, PersonType personType, bool isHandsome)
         {
             FirstName = first;
             LastName = last;
             Birthdate = birthDate;
             Notes = notes;
+            Type = personType;
+            IsHandsome = isHandsome;
         }
 
         public override string ToString()
         {
-            return "ID " + Id + " " + FirstName + " " + LastName + " Birthdate " + Birthdate.ToString() + " Notes " + Notes;
-        }
+            return "ID " + Id + " " + FirstName + " " + LastName + " Birthdate " + Birthdate.ToString() + " [" + Type.ToString() + "] Notes " + Notes + " Type " + Type.ToString() + " Handsome? " + IsHandsome;
+        } 
     }
 }

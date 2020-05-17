@@ -41,10 +41,10 @@ namespace Test
 
                 };
 
-                Person p1 = new Person("Abraham", "Lincoln", Convert.ToDateTime("1/1/1980"), "initial notes p1");
-                Person p2 = new Person("Ronald", "Reagan", Convert.ToDateTime("2/2/1981"), "initial notes p2");
-                Person p3 = new Person("George", "Bush", Convert.ToDateTime("3/3/1982"), "initial notes p3");
-                Person p4 = new Person("Barack", "Obama", Convert.ToDateTime("4/4/1983"), "initial notes p4");
+                Person p1 = new Person("Abraham", "Lincoln", Convert.ToDateTime("1/1/1980"), "initial notes p1", PersonType.Human, false);
+                Person p2 = new Person("Ronald", "Reagan", Convert.ToDateTime("2/2/1981"), "initial notes p2", PersonType.Cat, true);
+                Person p3 = new Person("George", "Bush", Convert.ToDateTime("3/3/1982"), "initial notes p3", PersonType.Dog, false);
+                Person p4 = new Person("Barack", "Obama", Convert.ToDateTime("4/4/1983"), "initial notes p4", PersonType.Human, true);
 
                 Console.WriteLine("| Creating p1");
                 p1 = _Orm.Insert<Person>(p1);
