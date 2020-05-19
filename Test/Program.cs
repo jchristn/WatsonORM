@@ -78,7 +78,7 @@ namespace Test
                 foreach (Person curr in selectedList2) Console.WriteLine("  | " + curr.ToString());
 
                 Console.WriteLine("| Selecting by ID");
-                Person pSelected = _Orm.SelectById<Person>(3);
+                Person pSelected = _Orm.SelectByPrimaryKey<Person>(3);
                 Console.WriteLine("| Selected: " + pSelected.ToString());
 
                 Console.WriteLine("| Selecting first by column name");
@@ -108,6 +108,15 @@ namespace Test
 
                 #endregion
 
+                #region Update-Many-Records
+
+                Console.WriteLine("| Updating many records");
+                Dictionary<string, object> updateVals = new Dictionary<string, object>();
+                updateVals.Add(_Orm.GetColumnName<Person>("Notes"), "Updated during update many!");
+                _Orm.UpdateMany<Person>(eSelect1, updateVals);
+
+                #endregion
+
                 #region Select
 
                 Console.WriteLine("| Selecting many, test 1");
@@ -116,7 +125,7 @@ namespace Test
                 foreach (Person curr in selectedList1) Console.WriteLine("  | " + curr.ToString());
 
                 Console.WriteLine("| Selecting by ID");
-                pSelected = _Orm.SelectById<Person>(3);
+                pSelected = _Orm.SelectByPrimaryKey<Person>(3);
                 Console.WriteLine("| Selected: " + pSelected.ToString());
 
                 Console.WriteLine("| Selecting first");
@@ -133,12 +142,12 @@ namespace Test
 
                 // delete p2
                 Console.WriteLine("| Deleting p2");
-                _Orm.DeleteById<Person>(2);
+                _Orm.DeleteByPrimaryKey<Person>(2);
 
                 // delete p3 and p4
                 Console.WriteLine("| Deleting p3 and p4");
                 DbExpression eDelete = new DbExpression("id", DbOperators.GreaterThan, 2);
-                _Orm.DeleteByFilter<Person>(eDelete);
+                _Orm.DeleteMany<Person>(eDelete);
                  
                 #endregion
             }

@@ -41,7 +41,6 @@ public class Person
   public Person()
   {
   }
-...
 }
 
 // Initialize
@@ -55,7 +54,7 @@ Person person = new Person { FirstName = "Joel" };
 Person inserted = orm.Insert<Person>(person);
 
 // Select
-Person selected = orm.SelectById<Person>(1); 
+Person selected = orm.SelectByPrimaryKey<Person>(1); 
 
 // Select many by column name
 DbExpression e1 = new DbExpression("id", DbOperators.GreaterThan, 0);

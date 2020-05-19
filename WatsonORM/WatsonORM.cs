@@ -15,6 +15,8 @@ namespace Watson.ORM
     /// </summary>
     public class WatsonORM : IDisposable
     {
+        #region Public-Members
+
         /// <summary>
         /// Database settings.
         /// </summary>
@@ -52,15 +54,22 @@ namespace Watson.ORM
             }
         }
 
+        #endregion
+
+        #region Private-Members
+
         private Action<string> _Logger = null;
         private string _Header = "[WatsonORM] ";
         private CancellationTokenSource _TokenSource = new CancellationTokenSource();
         private CancellationToken _Token;
         private DatabaseSettings _Settings = null;
-        private DatabaseClient _Database = null;
-
+        private DatabaseClient _Database = null; 
         private readonly object _MetadataLock = new object();
         private Dictionary<Type, TypeMetadata> _Metadata = new Dictionary<Type, TypeMetadata>();
+
+        #endregion
+
+        #region Constructors-and-Factories
 
         /// <summary>
         /// Instantiate the object.  Once constructed, call InitializeDatabase() and InitializeTable() for each table if needed.
@@ -73,6 +82,10 @@ namespace Watson.ORM
             _Settings = settings;
             _Token = _TokenSource.Token;
         }
+
+        #endregion
+
+        #region Public-Methods
 
         /// <summary>
         /// Dispose of the object and release background workers.
@@ -182,6 +195,31 @@ namespace Watson.ORM
         }
 
         /// <summary>
+        /// INSERT multiple records.
+        /// </summary>
+        /// <typeparam name="T">Type of object.</typeparam>
+        /// <param name="objs">List of objects.</param>
+        /// <returns>List of INSERTed objects.</returns>
+        public List<T> InsertMany<T>(List<T> objs) where T : class, new()
+        {
+            if (objs == null || objs.Count < 1) throw new ArgumentNullException(nameof(objs));
+
+            string tableName = GetTableNameFromType(typeof(T));
+            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T));
+            string primaryKeyPropertyName = GetPrimaryKeyPropertyName(typeof(T));
+
+            List<T> ret = new List<T>();
+            foreach (T obj in objs)
+            {
+                Dictionary<string, object> insertVals = ObjectToDictionary(obj);
+                DataTable result = _Database.Insert(tableName, insertVals);
+                ret.Add(DataTableToObject<T>(result));   
+            }
+
+            return ret;
+        }
+
+        /// <summary>
         /// UPDATE an object.
         /// </summary>
         /// <typeparam name="T">Type of object.</typeparam>
@@ -204,6 +242,26 @@ namespace Watson.ORM
         }
 
         /// <summary>
+        /// UPDATE multiple rows.
+        /// </summary>
+        /// <typeparam name="T">Type of object.</typeparam>
+        /// <param name="expr">Expression.</param>
+        /// <param name="updateVals">Update values.</param>
+        public void UpdateMany<T>(DbExpression expr, Dictionary<string, object> updateVals)
+        {
+            if (expr == null) throw new ArgumentNullException(nameof(expr));
+            if (updateVals == null || updateVals.Count < 1) throw new ArgumentNullException(nameof(updateVals));
+
+            string tableName = GetTableNameFromType(typeof(T));
+            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T));
+
+            Expression e = DbExpressionConverter(expr);
+            e.PrependAnd(primaryKeyColumnName, DbOperatorsConverter(DbOperators.IsNotNull), null);
+
+            DataTable result = _Database.Update(tableName, updateVals, e);
+        }
+
+        /// <summary>
         /// DELETE an object.
         /// </summary>
         /// <typeparam name="T">Type of object.</typeparam>
@@ -222,11 +280,11 @@ namespace Watson.ORM
         }
 
         /// <summary>
-        /// DELETE an object by ID.
+        /// DELETE an object by its primary key.
         /// </summary>
         /// <typeparam name="T">Type of object.</typeparam>
         /// <param name="id">Id value.</param>
-        public void DeleteById<T>(object id) where T : class, new()
+        public void DeleteByPrimaryKey<T>(object id) where T : class, new()
         {
             if (id == null) throw new ArgumentNullException(nameof(id));
 
@@ -242,8 +300,8 @@ namespace Watson.ORM
         /// DELETE objects by an Expression..
         /// </summary>
         /// <typeparam name="T">Type of object.</typeparam>
-        /// <param name="e">Expression.</param>
-        public void DeleteByFilter<T>(DbExpression expr) where T : class, new()
+        /// <param name="expr">Expression.</param>
+        public void DeleteMany<T>(DbExpression expr) where T : class, new()
         {
             if (expr == null) throw new ArgumentNullException(nameof(expr)); 
             string tableName = GetTableNameFromType(typeof(T)); 
@@ -251,13 +309,53 @@ namespace Watson.ORM
         }
 
         /// <summary>
+        /// SELECT an object by id.
+        /// </summary>
+        /// <typeparam name="T">Type of object.</typeparam>
+        /// <param name="id">Id.</param>
+        /// <returns>Object.</returns>
+        public T SelectByPrimaryKey<T>(object id) where T : class, new()
+        {
+            if (id == null) throw new ArgumentNullException(nameof(id));
+
+            string tableName = GetTableNameFromType(typeof(T));
+            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T));
+            string primaryKeyPropertyName = GetPrimaryKeyPropertyName(typeof(T));
+
+            Expression e = new Expression(primaryKeyColumnName, DbOperatorsConverter(DbOperators.Equals), id);
+            DataTable result = _Database.Select(tableName, null, null, null, e, null);
+            return DataTableToObject<T>(result);
+        }
+
+        /// <summary>
+        /// SELECT an object using a filter.
+        /// </summary>
+        /// <typeparam name="T">Type of filter.</typeparam>
+        /// <param name="e">Expression by which SELECT should be filtered (i.e. WHERE clause).</param>
+        /// <param name="orderByClause">ORDER BY clause.</param>
+        /// <returns>Object.</returns>
+        public T SelectFirst<T>(DbExpression expr) where T : class, new()
+        {
+            if (expr == null) throw new ArgumentNullException(nameof(expr));
+
+            string tableName = GetTableNameFromType(typeof(T));
+            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T));
+            string primaryKeyPropertyName = GetPrimaryKeyPropertyName(typeof(T));
+
+            Expression e = DbExpressionConverter(expr);
+            e.PrependAnd(primaryKeyColumnName, DbOperatorsConverter(DbOperators.IsNotNull), null);
+            string orderByClause = "ORDER BY " + primaryKeyColumnName + " ASC";
+            DataTable result = _Database.Select(tableName, null, 1, null, e, orderByClause);
+            if (result == null || result.Rows.Count < 1) return null;
+            return DataTableToObject<T>(result);
+        }
+
+        /// <summary>
         /// SELECT multiple rows.
         /// </summary>
-        /// <param name="tableName">Table name.</param> 
-        /// <param name="returnFields">List of fields to return.  If null, all fields are returned.</param>
-        /// <param name="e">Filter to apply when SELECTing rows (i.e. WHERE clause).</param>
-        /// <param name="orderByClause">ORDER BY clause.</param>
-        /// <returns>DataTable.</returns>
+        /// <typeparam name="T">Type of object.</typeparam>
+        /// <param name="expr">Expression.</param>
+        /// <returns>List of objects.</returns>
         public List<T> SelectMany<T>(DbExpression expr) where T : class, new()
         {
             if (expr == null) throw new ArgumentNullException(nameof(expr));
@@ -300,48 +398,6 @@ namespace Watson.ORM
         }
 
         /// <summary>
-        /// SELECT an object by id.
-        /// </summary>
-        /// <typeparam name="T">Type of object.</typeparam>
-        /// <param name="id">Id.</param>
-        /// <returns>Object.</returns>
-        public T SelectById<T>(object id) where T : class, new()
-        {
-            if (id == null) throw new ArgumentNullException(nameof(id));
-
-            string tableName = GetTableNameFromType(typeof(T)); 
-            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T));
-            string primaryKeyPropertyName = GetPrimaryKeyPropertyName(typeof(T));
-
-            Expression e = new Expression(primaryKeyColumnName, DbOperatorsConverter(DbOperators.Equals), id);
-            DataTable result = _Database.Select(tableName, null, null, null, e, null);
-            return DataTableToObject<T>(result);
-        }
-
-        /// <summary>
-        /// SELECT an object using a filter.
-        /// </summary>
-        /// <typeparam name="T">Type of filter.</typeparam>
-        /// <param name="e">Expression by which SELECT should be filtered (i.e. WHERE clause).</param>
-        /// <param name="orderByClause">ORDER BY clause.</param>
-        /// <returns>Object.</returns>
-        public T SelectFirst<T>(DbExpression expr) where T : class, new()
-        {
-            if (expr == null) throw new ArgumentNullException(nameof(expr));
-
-            string tableName = GetTableNameFromType(typeof(T)); 
-            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T));
-            string primaryKeyPropertyName = GetPrimaryKeyPropertyName(typeof(T));
-
-            Expression e = DbExpressionConverter(expr);
-            e.PrependAnd(primaryKeyColumnName, DbOperatorsConverter(DbOperators.IsNotNull), null);
-            string orderByClause = "ORDER BY " + primaryKeyColumnName + " ASC";
-            DataTable result = _Database.Select(tableName, null, 1, null, e, orderByClause);
-            if (result == null || result.Rows.Count < 1) return null;
-            return DataTableToObject<T>(result);
-        }
-
-        /// <summary>
         /// Retrieve the column name for a given property.
         /// </summary>
         /// <typeparam name="T">Type of object.</typeparam>
@@ -370,6 +426,10 @@ namespace Watson.ORM
 
             _Logger?.Invoke(_Header + "dispose complete");
         }
+
+        #endregion
+
+        #region Private-Conversion-Methods
 
         private Operators DbOperatorsConverter(DbOperators oper)
         {
@@ -540,14 +600,6 @@ namespace Watson.ORM
                             property.SetValue(ret, Convert.ChangeType(val, property.PropertyType));
                         }
 
-                        /*
-                         * 
-                         * 
-                         * Need to set based on the original data type...
-                         * 
-                         * 
-                         * 
-                         */
                     }
                     else
                     {
@@ -584,7 +636,9 @@ namespace Watson.ORM
             }
         }
 
-        #region Metadata-Methods
+        #endregion
+
+        #region Private-Metadata-Methods
 
         private TypeMetadata GetTypeMetadata(Type t)
         {
