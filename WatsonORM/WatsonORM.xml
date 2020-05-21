@@ -1,0 +1,163 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WatsonORM</name>
+    </assembly>
+    <members>
+        <member name="T:Watson.ORM.WatsonORM">
+            <summary>
+            WatsonORM, a lightweight and easy to use object-relational mapper (ORM).
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.WatsonORM.Settings">
+            <summary>
+            Database settings.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.WatsonORM.Logger">
+            <summary>
+            Method to invoke when sending log messages.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.WatsonORM.Database">
+            <summary>
+            Direct access to the underlying database client.
+            </summary>
+        </member>
+        <member name="M:Watson.ORM.WatsonORM.#ctor(Watson.ORM.Core.DatabaseSettings)">
+            <summary>
+            Instantiate the object.  Once constructed, call InitializeDatabase() and InitializeTable() for each table if needed.
+            </summary>
+            <param name="settings">Database settings.</param>
+        </member>
+        <member name="M:Watson.ORM.WatsonORM.Dispose">
+            <summary>
+            Dispose of the object and release background workers.
+            </summary>
+        </member>
+        <member name="M:Watson.ORM.WatsonORM.InitializeDatabase">
+            <summary>
+            Initialize the database client.
+            If the client is already initialized, it will first be disposed.
+            </summary>
+        </member>
+        <member name="M:Watson.ORM.WatsonORM.InitializeTable(System.Type)">
+            <summary>
+            Create table (if it doesn't exist) for a given class.
+            </summary>
+            <param name="t">Class for which a table should be created.</param>
+        </member>
+        <member name="M:Watson.ORM.WatsonORM.DropTable(System.Type)">
+            <summary>
+            Drop table if it exists for a given class.
+            </summary>
+            <param name="t">Class for which a table should be dropped.</param>
+        </member>
+        <member name="M:Watson.ORM.WatsonORM.TruncateTable(System.Type)">
+            <summary>
+            Truncate table if it exists for a given class.
+            </summary>
+            <param name="t">Class for which a table should be dropped.</param>
+        </member>
+        <member name="M:Watson.ORM.WatsonORM.Insert``1(``0)">
+            <summary>
+            INSERT an object.
+            </summary>
+            <typeparam name="T">Type of object.</typeparam>
+            <param name="obj">Object to INSERT.</param>
+            <returns>INSERTed object.</returns>
+        </member>
+        <member name="M:Watson.ORM.WatsonORM.InsertMany``1(System.Collections.Generic.List{``0})">
+            <summary>
+            INSERT multiple records.
+            </summary>
+            <typeparam name="T">Type of object.</typeparam>
+            <param name="objs">List of objects.</param>
+            <returns>List of objects.</returns>
+        </member>
+        <member name="M:Watson.ORM.WatsonORM.Update``1(``0)">
+            <summary>
+            UPDATE an object.
+            </summary>
+            <typeparam name="T">Type of object.</typeparam>
+            <param name="obj">Object to UPDATE.</param>
+            <returns>UPDATEd object.</returns>
+        </member>
+        <member name="M:Watson.ORM.WatsonORM.UpdateMany``1(Watson.ORM.Core.DbExpression,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            UPDATE multiple rows.
+            </summary>
+            <typeparam name="T">Type of object.</typeparam>
+            <param name="expr">Expression.</param>
+            <param name="updateVals">Update values.</param>
+        </member>
+        <member name="M:Watson.ORM.WatsonORM.Delete``1(``0)">
+            <summary>
+            DELETE an object.
+            </summary>
+            <typeparam name="T">Type of object.</typeparam>
+            <param name="obj">Object to DELETE.</param>
+        </member>
+        <member name="M:Watson.ORM.WatsonORM.DeleteByPrimaryKey``1(System.Object)">
+            <summary>
+            DELETE an object by its primary key.
+            </summary>
+            <typeparam name="T">Type of object.</typeparam>
+            <param name="id">Id value.</param>
+        </member>
+        <member name="M:Watson.ORM.WatsonORM.DeleteMany``1(Watson.ORM.Core.DbExpression)">
+            <summary>
+            DELETE objects by an Expression..
+            </summary>
+            <typeparam name="T">Type of object.</typeparam>
+            <param name="expr">Expression.</param>
+        </member>
+        <member name="M:Watson.ORM.WatsonORM.SelectByPrimaryKey``1(System.Object)">
+            <summary>
+            SELECT an object by id.
+            </summary>
+            <typeparam name="T">Type of object.</typeparam>
+            <param name="id">Id.</param>
+            <returns>Object.</returns>
+        </member>
+        <member name="M:Watson.ORM.WatsonORM.SelectFirst``1(Watson.ORM.Core.DbExpression)">
+            <summary>
+            SELECT an object using a filter.
+            </summary>
+            <typeparam name="T">Type of filter.</typeparam>
+            <param name="expr">Expression by which SELECT should be filtered (i.e. WHERE clause).</param> 
+            <returns>Object.</returns>
+        </member>
+        <member name="M:Watson.ORM.WatsonORM.SelectMany``1(Watson.ORM.Core.DbExpression)">
+            <summary>
+            SELECT multiple rows.
+            </summary>
+            <typeparam name="T">Type of object.</typeparam>
+            <param name="expr">Expression.</param>
+            <returns>List of objects.</returns>
+        </member>
+        <member name="M:Watson.ORM.WatsonORM.SelectMany``1(System.Nullable{System.Int32},System.Nullable{System.Int32},Watson.ORM.Core.DbExpression)">
+            <summary>
+            SELECT multiple rows.
+            </summary> 
+            <param name="indexStart">Index start.</param>
+            <param name="maxResults">Maximum number of results to retrieve.</param> 
+            <param name="expr">Filter to apply when SELECTing rows (i.e. WHERE clause).</param>
+            <returns>List of objects.</returns>
+        </member>
+        <member name="M:Watson.ORM.WatsonORM.GetColumnName``1(System.String)">
+            <summary>
+            Retrieve the column name for a given property.
+            </summary>
+            <typeparam name="T">Type of object.</typeparam>
+            <param name="propName">Property name.</param>
+            <returns>Column name.</returns>
+        </member>
+        <member name="M:Watson.ORM.WatsonORM.Dispose(System.Boolean)">
+            <summary>
+            Dispose of the object and release background workers.
+            </summary>
+            <param name="disposing">Indicate if child resources should be disposed.</param>
+        </member>
+    </members>
+</doc>

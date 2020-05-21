@@ -2,11 +2,18 @@
 
 # WatsonORM
 
-[![NuGet Version](https://img.shields.io/nuget/v/WatsonORM.svg?style=flat)](https://www.nuget.org/packages/WatsonORM/) [![NuGet](https://img.shields.io/nuget/dt/WatsonORM.svg)](https://www.nuget.org/packages/WatsonORM) 
-
+| Library | Version | Downloads |
+|---|---|---|
+| WatsonORM (all supported database types) | [![NuGet Version](https://img.shields.io/nuget/v/WatsonORM.svg?style=flat)](https://www.nuget.org/packages/WatsonORM/)  | [![NuGet](https://img.shields.io/nuget/dt/WatsonORM.svg)](https://www.nuget.org/packages/WatsonORM) |
+| WatsonORM.Mysql | [![NuGet Version](https://img.shields.io/nuget/v/WatsonORM.Mysql.svg?style=flat)](https://www.nuget.org/packages/WatsonORM.Mysql/)  | [![NuGet](https://img.shields.io/nuget/dt/WatsonORM.Mysql.svg)](https://www.nuget.org/packages/WatsonORM.Mysql) |
+| WatsonORM.Postgresql | [![NuGet Version](https://img.shields.io/nuget/v/WatsonORM.Postgresql.svg?style=flat)](https://www.nuget.org/packages/WatsonORM.Postgresql/)  | [![NuGet](https://img.shields.io/nuget/dt/WatsonORM.Postgresql.svg)](https://www.nuget.org/packages/WatsonORM.Postgresql) |
+| WatsonORM.Sqlite | [![NuGet Version](https://img.shields.io/nuget/v/WatsonORM.Sqlite.svg?style=flat)](https://www.nuget.org/packages/WatsonORM.Sqlite/)  | [![NuGet](https://img.shields.io/nuget/dt/WatsonORM.Sqlite.svg)](https://www.nuget.org/packages/WatsonORM.Sqlite) |
+| WatsonORM.SqlServer | [![NuGet Version](https://img.shields.io/nuget/v/WatsonORM.SqlServer.svg?style=flat)](https://www.nuget.org/packages/WatsonORM.SqlServer/)  | [![NuGet](https://img.shields.io/nuget/dt/WatsonORM.SqlServer.svg)](https://www.nuget.org/packages/WatsonORM.SqlServer) |
+| WatsonORM.Core | [![NuGet Version](https://img.shields.io/nuget/v/WatsonORM.Core.svg?style=flat)](https://www.nuget.org/packages/WatsonORM.Core/)  | [![NuGet](https://img.shields.io/nuget/dt/WatsonORM.Core.svg)](https://www.nuget.org/packages/WatsonORM.Core) |
+ 
 ## Description
 
-WatsonORM is a lightweight and easy to use object-relational mapper (ORM) in C# for .NET Core built on top of DatabaseWrapper.  WatsonORM supports Microsoft SQL Server, MySQL, PostgreSQL, and Sqlite databases.
+WatsonORM is a lightweight and easy to use object-relational mapper (ORM) in C# for .NET Core built on top of DatabaseWrapper.  WatsonORM supports Microsoft SQL Server, Mysql, PostgreSQL, and Sqlite databases.  
 
 Core features:
 
@@ -17,15 +24,16 @@ Core features:
 
 For a sample app exercising this library, refer to the ```Test``` project contained within the solution.
 
-## New in v1.0.0
+## New in v1.1.0
 
-- Initial release
+- Minor refactor, split into multiple projects
  
 ## Simple Example
 
-This example uses ```Sqlite```.  For ```MsSql```, ```MySql```, or ```PgSql```, you must make sure the database exists.  Tables will be automatically created in this example.  Refer to the ```Test``` project for a complete example.
+This example uses ```Sqlite```.  For ```SqlServer```, ```Mysql```, or ```Postgresql```, you must make sure the database exists.  Tables will be automatically created in this example.  Refer to the ```Test``` project for a complete example.
 ```
 using Watson.ORM;
+using Watson.ORM.Core;
 
 // Apply attributes to your class
 [Table("person")]

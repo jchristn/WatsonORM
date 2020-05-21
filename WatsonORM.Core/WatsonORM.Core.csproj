@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>WatsonORM.Core</AssemblyName>
+    <RootNamespace>Watson.ORM.Core</RootNamespace>
+    <Description>Do not install this package directly.  Core classes for WatsonORM packages.</Description>
+    <Version>1.1.0.3</Version>
+    <Authors>Joel Christner</Authors>
+    <Copyright>(c)2020 Joel Christner</Copyright>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/jchristn/watsonorm</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/jchristn/WatsonORM/master/assets/watson.ico</PackageIconUrl>
+    <RepositoryUrl>https://github.com/jchristn/watsonorm</RepositoryUrl>
+    <RepositoryType>Github</RepositoryType>
+    <PackageTags>orm object relation relational mapper map database object data convert sql server mssql sqlite mysql pgsql postgres postgresql dynamic query builder datarow datatable key foreign</PackageTags>
+    <PackageReleaseNotes>Minor refactor, dependency updates</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>C:\Code\Watson\WatsonORM-1.1\WatsonORM.Core\WatsonORM.Core.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\code\Watson\WatsonORM-1.1\WatsonORM.Core\WatsonORM.Core.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DatabaseWrapper.Core" Version="3.0.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

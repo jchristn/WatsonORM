@@ -7,6 +7,12 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using DatabaseWrapper;
+using DatabaseWrapper.Core;
+using Watson.ORM.Core;
+using Watson.ORM.Mysql;
+using Watson.ORM.Postgresql;
+using Watson.ORM.Sqlite;
+using Watson.ORM.SqlServer;
 
 namespace Watson.ORM
 {
@@ -46,11 +52,15 @@ namespace Watson.ORM
         /// <summary>
         /// Direct access to the underlying database client.
         /// </summary>
-        public DatabaseClient Database
+        public object Database
         {
             get
             {
-                return _Database;
+                if (_Mysql != null) return _Mysql.Database;
+                if (_Postgresql != null) return _Postgresql.Database;
+                if (_Sqlite != null) return _Sqlite.Database;
+                if (_SqlServer != null) return _SqlServer.Database;
+                throw new InvalidOperationException("No database client is initialized.");
             }
         }
 
@@ -63,7 +73,12 @@ namespace Watson.ORM
         private CancellationTokenSource _TokenSource = new CancellationTokenSource();
         private CancellationToken _Token;
         private DatabaseSettings _Settings = null;
-        private DatabaseClient _Database = null; 
+
+        private Watson.ORM.Mysql.WatsonORM _Mysql = null;
+        private Watson.ORM.Postgresql.WatsonORM _Postgresql = null;
+        private Watson.ORM.Sqlite.WatsonORM _Sqlite = null;
+        private Watson.ORM.SqlServer.WatsonORM _SqlServer = null;
+
         private readonly object _MetadataLock = new object();
         private Dictionary<Type, TypeMetadata> _Metadata = new Dictionary<Type, TypeMetadata>();
 
@@ -102,30 +117,42 @@ namespace Watson.ORM
         /// </summary>
         public void InitializeDatabase()
         {
-            if (_Database != null)
+            if (_Mysql != null)
             {
-                _Logger?.Invoke(_Header + "disposing existing database client");
-                _Database.Dispose();
+                _Mysql.Dispose();
             }
+            else if (_Postgresql != null)
+            {
+                _Postgresql.Dispose();
+            }
+            else if (_Sqlite != null)
+            {
+                _Sqlite.Dispose();
+            }
+            else if (_SqlServer != null)
+            {
+                _SqlServer.Dispose();
+            }
+
+            _Logger?.Invoke(_Header + "initializing database client: " + _Settings.Type.ToString() + " on " + _Settings.Hostname + ":" + _Settings.Port);
 
             switch (_Settings.Type)
             {
-                case DbTypes.MsSql:
-                case DbTypes.MySql:
-                case DbTypes.PgSql:
-                    _Logger?.Invoke(_Header + "initializing database client: " + _Settings.Type.ToString() + " on " + _Settings.Hostname + ":" + _Settings.Port);
-                    _Database = new DatabaseClient(
-                        (DatabaseWrapper.DbTypes)(_Settings.Type),
-                        _Settings.Hostname,
-                        _Settings.Port,
-                        _Settings.Username,
-                        _Settings.Password,
-                        _Settings.Instance,
-                        _Settings.DatabaseName);
+                case Core.DbTypes.Mysql:
+                    _Mysql = new Mysql.WatsonORM(_Settings);
+                    _Mysql.InitializeDatabase();
                     break;
-                case DbTypes.Sqlite:
-                    _Logger?.Invoke(_Header + "initializing database client: " + _Settings.Type.ToString() + " in file " + _Settings.Filename);
-                    _Database = new DatabaseClient(_Settings.Filename);
+                case Core.DbTypes.Postgresql:
+                    _Postgresql = new Postgresql.WatsonORM(_Settings);
+                    _Postgresql.InitializeDatabase();
+                    break;
+                case Core.DbTypes.SqlServer:
+                    _SqlServer = new SqlServer.WatsonORM(_Settings);
+                    _SqlServer.InitializeDatabase();
+                    break;
+                case Core.DbTypes.Sqlite:
+                    _Sqlite = new Sqlite.WatsonORM(_Settings);
+                    _Sqlite.InitializeDatabase();
                     break;
                 default:
                     throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
@@ -140,25 +167,26 @@ namespace Watson.ORM
         /// <param name="t">Class for which a table should be created.</param>
         public void InitializeTable(Type t)
         {
-            if (t == null) throw new ArgumentNullException(nameof(t));
-
-            string tableName = ReflectionHelper.GetTableNameFromType(t);
-            string primaryKeyPropertyName = ReflectionHelper.GetPrimaryKeyPropertyName(t);
-            List<Column> columns = ReflectionHelper.GetColumnsFromType(t);
-
-            if (String.IsNullOrEmpty(tableName)) 
-                throw new InvalidOperationException("Type '" + t.Name + "' does not have a 'Table' attribute.");
-
-            if (String.IsNullOrEmpty(primaryKeyPropertyName))
-                throw new InvalidOperationException("Type '" + t.Name + "' does not have a property with the 'PrimaryKey' attribute.");
-
-            if (columns == null || columns.Count < 1) 
-                throw new InvalidOperationException("Type '" + t.Name + "' does not have any properties with a 'Column' attribute.");
-
-            _Database.CreateTable(tableName, columns);
-            _Metadata.Add(t, new TypeMetadata(tableName, primaryKeyPropertyName, columns));
-
-            _Logger?.Invoke(_Header + "initialized table " + tableName + " for type " + t.Name + " with " + columns.Count + " column(s)");
+            if (_Mysql != null)
+            {
+                _Mysql.InitializeTable(t);
+            }
+            else if (_Postgresql != null)
+            {
+                _Postgresql.InitializeTable(t);
+            }
+            else if (_SqlServer != null)
+            {
+                _SqlServer.InitializeTable(t);
+            }
+            else if (_Sqlite != null)
+            {
+                _Sqlite.InitializeTable(t);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            } 
         }
 
         /// <summary>
@@ -167,12 +195,54 @@ namespace Watson.ORM
         /// <param name="t">Class for which a table should be dropped.</param>
         public void DropTable(Type t)
         {
-            if (t == null) throw new ArgumentNullException(nameof(t));
+            if (_Mysql != null)
+            {
+                _Mysql.DropTable(t);
+            }
+            else if (_Postgresql != null)
+            {
+                _Postgresql.DropTable(t);
+            }
+            else if (_SqlServer != null)
+            {
+                _SqlServer.DropTable(t);
+            }
+            else if (_Sqlite != null)
+            {
+                _Sqlite.DropTable(t);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
+        }
 
-            string tableName = GetTableNameFromType(t);
-            _Logger?.Invoke(_Header + "dropping table " + tableName + " for type " + t.Name);
-            _Database.DropTable(tableName);
-            _Logger?.Invoke(_Header + "dropped table " + tableName);
+        /// <summary>
+        /// Truncate table if it exists for a given class.
+        /// </summary>
+        /// <param name="t">Class for which a table should be dropped.</param>
+        public void TruncateTable(Type t)
+        {
+            if (_Mysql != null)
+            {
+                _Mysql.TruncateTable(t);
+            }
+            else if (_Postgresql != null)
+            {
+                _Postgresql.TruncateTable(t);
+            }
+            else if (_SqlServer != null)
+            {
+                _SqlServer.TruncateTable(t);
+            }
+            else if (_Sqlite != null)
+            {
+                _Sqlite.TruncateTable(t);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
         }
 
         /// <summary>
@@ -183,15 +253,26 @@ namespace Watson.ORM
         /// <returns>INSERTed object.</returns>
         public T Insert<T>(T obj) where T : class, new()
         {
-            if (obj == null) throw new ArgumentNullException(nameof(obj));
-
-            string tableName = GetTableNameFromObject(obj); 
-            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T));
-            string primaryKeyPropertyName = GetPrimaryKeyPropertyName(typeof(T)); 
-
-            Dictionary<string, object> insertVals = ObjectToDictionary(obj);
-            DataTable result = _Database.Insert(tableName, insertVals);
-            return DataTableToObject<T>(result);
+            if (_Mysql != null)
+            {
+                return _Mysql.Insert<T>(obj);
+            }
+            else if (_Postgresql != null)
+            {
+                return _Postgresql.Insert<T>(obj); 
+            }
+            else if (_SqlServer != null)
+            {
+                return _SqlServer.Insert<T>(obj);
+            }
+            else if (_Sqlite != null)
+            {
+                return _Sqlite.Insert<T>(obj);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
         }
 
         /// <summary>
@@ -199,24 +280,29 @@ namespace Watson.ORM
         /// </summary>
         /// <typeparam name="T">Type of object.</typeparam>
         /// <param name="objs">List of objects.</param>
-        /// <returns>List of INSERTed objects.</returns>
+        /// <returns>List of objects.</returns>
         public List<T> InsertMany<T>(List<T> objs) where T : class, new()
         {
-            if (objs == null || objs.Count < 1) throw new ArgumentNullException(nameof(objs));
-
-            string tableName = GetTableNameFromType(typeof(T));
-            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T));
-            string primaryKeyPropertyName = GetPrimaryKeyPropertyName(typeof(T));
-
-            List<T> ret = new List<T>();
-            foreach (T obj in objs)
+            if (_Mysql != null)
             {
-                Dictionary<string, object> insertVals = ObjectToDictionary(obj);
-                DataTable result = _Database.Insert(tableName, insertVals);
-                ret.Add(DataTableToObject<T>(result));   
+                return _Mysql.InsertMany<T>(objs);
             }
-
-            return ret;
+            else if (_Postgresql != null)
+            {
+                return _Postgresql.InsertMany<T>(objs);
+            }
+            else if (_SqlServer != null)
+            {
+                return _SqlServer.InsertMany<T>(objs);
+            }
+            else if (_Sqlite != null)
+            {
+                return _Sqlite.InsertMany<T>(objs);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
         }
 
         /// <summary>
@@ -227,18 +313,26 @@ namespace Watson.ORM
         /// <returns>UPDATEd object.</returns>
         public T Update<T>(T obj) where T : class, new()
         {
-            if (obj == null) throw new ArgumentNullException(nameof(obj));
-
-            string tableName = GetTableNameFromObject(obj); 
-            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T));
-            string primaryKeyPropertyName = GetPrimaryKeyPropertyName(typeof(T)); 
-            object primaryKeyValue = GetPrimaryKeyValue(obj, primaryKeyPropertyName);
-            
-            Dictionary<string, object> updateVals = ObjectToDictionary(obj);
-            Expression e = new Expression(primaryKeyColumnName, DbOperatorsConverter(DbOperators.Equals), primaryKeyValue);
-            _Database.Update(tableName, updateVals, e);
-            DataTable result = _Database.Select(tableName, null, null, null, e, null);
-            return DataTableToObject<T>(result);
+            if (_Mysql != null)
+            {
+                return _Mysql.Update<T>(obj);
+            }
+            else if (_Postgresql != null)
+            {
+                return _Postgresql.Update<T>(obj);
+            }
+            else if (_SqlServer != null)
+            {
+                return _SqlServer.Update<T>(obj);
+            }
+            else if (_Sqlite != null)
+            {
+                return _Sqlite.Update<T>(obj);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
         }
 
         /// <summary>
@@ -249,16 +343,26 @@ namespace Watson.ORM
         /// <param name="updateVals">Update values.</param>
         public void UpdateMany<T>(DbExpression expr, Dictionary<string, object> updateVals)
         {
-            if (expr == null) throw new ArgumentNullException(nameof(expr));
-            if (updateVals == null || updateVals.Count < 1) throw new ArgumentNullException(nameof(updateVals));
-
-            string tableName = GetTableNameFromType(typeof(T));
-            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T));
-
-            Expression e = DbExpressionConverter(expr);
-            e.PrependAnd(primaryKeyColumnName, DbOperatorsConverter(DbOperators.IsNotNull), null);
-
-            DataTable result = _Database.Update(tableName, updateVals, e);
+            if (_Mysql != null)
+            {
+                _Mysql.UpdateMany<T>(expr, updateVals);
+            }
+            else if (_Postgresql != null)
+            {
+                _Postgresql.UpdateMany<T>(expr, updateVals);
+            }
+            else if (_SqlServer != null)
+            {
+                _SqlServer.UpdateMany<T>(expr, updateVals);
+            }
+            else if (_Sqlite != null)
+            {
+                _Sqlite.UpdateMany<T>(expr, updateVals);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
         }
 
         /// <summary>
@@ -268,15 +372,26 @@ namespace Watson.ORM
         /// <param name="obj">Object to DELETE.</param>
         public void Delete<T>(T obj) where T : class, new()
         {
-            if (obj == null) throw new ArgumentNullException(nameof(obj));
-
-            string tableName = GetTableNameFromObject(obj); 
-            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T));
-            string primaryKeyPropertyName = GetPrimaryKeyPropertyName(typeof(T)); 
-            object primaryKeyValue = GetPrimaryKeyValue(obj, primaryKeyPropertyName);
-            
-            Expression e = new Expression(primaryKeyColumnName, DbOperatorsConverter(DbOperators.Equals), primaryKeyValue);
-            _Database.Delete(tableName, e);
+            if (_Mysql != null)
+            {
+                _Mysql.Delete<T>(obj);
+            }
+            else if (_Postgresql != null)
+            {
+                _Postgresql.Delete<T>(obj);
+            }
+            else if (_SqlServer != null)
+            {
+                _SqlServer.Delete<T>(obj);
+            }
+            else if (_Sqlite != null)
+            {
+                _Sqlite.Delete<T>(obj);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
         }
 
         /// <summary>
@@ -286,14 +401,26 @@ namespace Watson.ORM
         /// <param name="id">Id value.</param>
         public void DeleteByPrimaryKey<T>(object id) where T : class, new()
         {
-            if (id == null) throw new ArgumentNullException(nameof(id));
-
-            string tableName = GetTableNameFromType(typeof(T)); 
-            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T));
-            string primaryKeyPropertyName = GetPrimaryKeyPropertyName(typeof(T));
-
-            Expression e = new Expression(primaryKeyColumnName, DbOperatorsConverter(DbOperators.Equals), id);
-            _Database.Delete(tableName, e);
+            if (_Mysql != null)
+            {
+                _Mysql.DeleteByPrimaryKey<T>(id);
+            }
+            else if (_Postgresql != null)
+            {
+                _Postgresql.DeleteByPrimaryKey<T>(id);
+            }
+            else if (_SqlServer != null)
+            {
+                _SqlServer.DeleteByPrimaryKey<T>(id);
+            }
+            else if (_Sqlite != null)
+            {
+                _Sqlite.DeleteByPrimaryKey<T>(id);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
         }
 
         /// <summary>
@@ -303,9 +430,26 @@ namespace Watson.ORM
         /// <param name="expr">Expression.</param>
         public void DeleteMany<T>(DbExpression expr) where T : class, new()
         {
-            if (expr == null) throw new ArgumentNullException(nameof(expr)); 
-            string tableName = GetTableNameFromType(typeof(T)); 
-            _Database.Delete(tableName, DbExpressionConverter(expr));
+            if (_Mysql != null)
+            {
+                _Mysql.DeleteMany<T>(expr);
+            }
+            else if (_Postgresql != null)
+            {
+                _Postgresql.DeleteMany<T>(expr);
+            }
+            else if (_SqlServer != null)
+            {
+                _SqlServer.DeleteMany<T>(expr);
+            }
+            else if (_Sqlite != null)
+            {
+                _Sqlite.DeleteMany<T>(expr);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
         }
 
         /// <summary>
@@ -316,38 +460,56 @@ namespace Watson.ORM
         /// <returns>Object.</returns>
         public T SelectByPrimaryKey<T>(object id) where T : class, new()
         {
-            if (id == null) throw new ArgumentNullException(nameof(id));
-
-            string tableName = GetTableNameFromType(typeof(T));
-            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T));
-            string primaryKeyPropertyName = GetPrimaryKeyPropertyName(typeof(T));
-
-            Expression e = new Expression(primaryKeyColumnName, DbOperatorsConverter(DbOperators.Equals), id);
-            DataTable result = _Database.Select(tableName, null, null, null, e, null);
-            return DataTableToObject<T>(result);
+            if (_Mysql != null)
+            {
+                return _Mysql.SelectByPrimaryKey<T>(id);
+            }
+            else if (_Postgresql != null)
+            {
+                return _Postgresql.SelectByPrimaryKey<T>(id);
+            }
+            else if (_SqlServer != null)
+            {
+                return _SqlServer.SelectByPrimaryKey<T>(id);
+            }
+            else if (_Sqlite != null)
+            {
+                return _Sqlite.SelectByPrimaryKey<T>(id);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
         }
 
         /// <summary>
         /// SELECT an object using a filter.
         /// </summary>
         /// <typeparam name="T">Type of filter.</typeparam>
-        /// <param name="e">Expression by which SELECT should be filtered (i.e. WHERE clause).</param>
-        /// <param name="orderByClause">ORDER BY clause.</param>
+        /// <param name="expr">Expression by which SELECT should be filtered (i.e. WHERE clause).</param> 
         /// <returns>Object.</returns>
         public T SelectFirst<T>(DbExpression expr) where T : class, new()
         {
-            if (expr == null) throw new ArgumentNullException(nameof(expr));
-
-            string tableName = GetTableNameFromType(typeof(T));
-            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T));
-            string primaryKeyPropertyName = GetPrimaryKeyPropertyName(typeof(T));
-
-            Expression e = DbExpressionConverter(expr);
-            e.PrependAnd(primaryKeyColumnName, DbOperatorsConverter(DbOperators.IsNotNull), null);
-            string orderByClause = "ORDER BY " + primaryKeyColumnName + " ASC";
-            DataTable result = _Database.Select(tableName, null, 1, null, e, orderByClause);
-            if (result == null || result.Rows.Count < 1) return null;
-            return DataTableToObject<T>(result);
+            if (_Mysql != null)
+            {
+                return _Mysql.SelectFirst<T>(expr);
+            }
+            else if (_Postgresql != null)
+            {
+                return _Postgresql.SelectFirst<T>(expr);
+            }
+            else if (_SqlServer != null)
+            {
+                return _SqlServer.SelectFirst<T>(expr);
+            }
+            else if (_Sqlite != null)
+            {
+                return _Sqlite.SelectFirst<T>(expr);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
         }
 
         /// <summary>
@@ -358,43 +520,57 @@ namespace Watson.ORM
         /// <returns>List of objects.</returns>
         public List<T> SelectMany<T>(DbExpression expr) where T : class, new()
         {
-            if (expr == null) throw new ArgumentNullException(nameof(expr));
-
-            string tableName = GetTableNameFromType(typeof(T)); 
-            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T));
-
-            Expression e = DbExpressionConverter(expr);
-            e.PrependAnd(primaryKeyColumnName, DbOperatorsConverter(DbOperators.IsNotNull), null);
-            string orderByClause = "ORDER BY " + primaryKeyColumnName + " ASC";
-
-            DataTable result = _Database.Select(tableName, null, null, null, e, orderByClause);
-            return DataTableToObjectList<T>(result);
+            if (_Mysql != null)
+            {
+                return _Mysql.SelectMany<T>(expr);
+            }
+            else if (_Postgresql != null)
+            {
+                return _Postgresql.SelectMany<T>(expr);
+            }
+            else if (_SqlServer != null)
+            {
+                return _SqlServer.SelectMany<T>(expr);
+            }
+            else if (_Sqlite != null)
+            {
+                return _Sqlite.SelectMany<T>(expr);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
         }
 
         /// <summary>
         /// SELECT multiple rows.
-        /// </summary>
-        /// <param name="tableName">Table name.</param>
+        /// </summary> 
         /// <param name="indexStart">Index start.</param>
-        /// <param name="maxResults">Maximum number of results to retrieve.</param>
-        /// <param name="returnFields">List of fields to return.  If null, all fields are returned.</param>
-        /// <param name="e">Filter to apply when SELECTing rows (i.e. WHERE clause).</param>
-        /// <param name="orderByClause">ORDER BY clause.</param>
-        /// <returns>DataTable.</returns>
+        /// <param name="maxResults">Maximum number of results to retrieve.</param> 
+        /// <param name="expr">Filter to apply when SELECTing rows (i.e. WHERE clause).</param>
+        /// <returns>List of objects.</returns>
         public List<T> SelectMany<T>(int? indexStart, int? maxResults, DbExpression expr) where T : class, new()
         {
-            if (expr == null) throw new ArgumentNullException(nameof(expr));
-
-            string tableName = GetTableNameFromType(typeof(T)); 
-            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T));
-            string primaryKeyPropertyName = GetPrimaryKeyPropertyName(typeof(T));
-
-            Expression e = DbExpressionConverter(expr);
-            e.PrependAnd(primaryKeyColumnName, DbOperatorsConverter(DbOperators.IsNotNull), null);
-            string orderByClause = "ORDER BY " + primaryKeyColumnName + " ASC";
-
-            DataTable result = _Database.Select(tableName, indexStart, maxResults, null, e, orderByClause);
-            return DataTableToObjectList<T>(result);
+            if (_Mysql != null)
+            {
+                return _Mysql.SelectMany<T>(indexStart, maxResults, expr);
+            }
+            else if (_Postgresql != null)
+            {
+                return _Postgresql.SelectMany<T>(indexStart, maxResults, expr);
+            }
+            else if (_SqlServer != null)
+            {
+                return _SqlServer.SelectMany<T>(indexStart, maxResults, expr);
+            }
+            else if (_Sqlite != null)
+            {
+                return _Sqlite.SelectMany<T>(indexStart, maxResults, expr);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
         }
 
         /// <summary>
@@ -405,8 +581,26 @@ namespace Watson.ORM
         /// <returns>Column name.</returns>
         public string GetColumnName<T>(string propName)
         {
-            if (String.IsNullOrEmpty(propName)) throw new ArgumentNullException(nameof(propName));
-            return GetColumnNameForPropertyName<T>(propName);
+            if (_Mysql != null)
+            {
+                return _Mysql.GetColumnName<T>(propName);
+            }
+            else if (_Postgresql != null)
+            {
+                return _Postgresql.GetColumnName<T>(propName);
+            }
+            else if (_SqlServer != null)
+            {
+                return _SqlServer.GetColumnName<T>(propName);
+            }
+            else if (_Sqlite != null)
+            {
+                return _Sqlite.GetColumnName<T>(propName);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
         }
 
         /// <summary>
@@ -415,337 +609,26 @@ namespace Watson.ORM
         /// <param name="disposing">Indicate if child resources should be disposed.</param>
         protected virtual void Dispose(bool disposing)
         {
-            _Logger?.Invoke(_Header + "dispose requested");
-
-            if (disposing)
+            if (_Mysql != null)
             {
-                if (_Database != null) _Database.Dispose();
-
-                _TokenSource.Cancel();
+                _Mysql.Dispose();
             }
-
-            _Logger?.Invoke(_Header + "dispose complete");
-        }
-
-        #endregion
-
-        #region Private-Conversion-Methods
-
-        private Operators DbOperatorsConverter(DbOperators oper)
-        {
-            switch (oper)
+            else if (_Postgresql != null)
             {
-                case DbOperators.And:
-                    return Operators.And;
-                case DbOperators.Or:
-                    return Operators.Or;
-                case DbOperators.Equals:
-                    return Operators.Equals;
-                case DbOperators.NotEquals:
-                    return Operators.NotEquals;
-                case DbOperators.In:
-                    return Operators.In;
-                case DbOperators.NotIn:
-                    return Operators.NotIn;
-                case DbOperators.Contains:
-                    return Operators.Contains;
-                case DbOperators.ContainsNot:
-                    return Operators.ContainsNot;
-                case DbOperators.StartsWith:
-                    return Operators.StartsWith;
-                case DbOperators.EndsWith:
-                    return Operators.EndsWith;
-                case DbOperators.GreaterThan:
-                    return Operators.GreaterThan;
-                case DbOperators.GreaterThanOrEqualTo:
-                    return Operators.GreaterThanOrEqualTo;
-                case DbOperators.LessThan:
-                    return Operators.LessThan;
-                case DbOperators.LessThanOrEqualTo:
-                    return Operators.LessThanOrEqualTo;
-                case DbOperators.IsNull:
-                    return Operators.IsNull;
-                case DbOperators.IsNotNull:
-                    return Operators.IsNotNull;
-                default:
-                    throw new ArgumentException("Unknown operator '" + oper.ToString() + "'.");
+                _Postgresql.Dispose();
             }
-        }
-
-        private Expression DbExpressionConverter(DbExpression expr)
-        {
-            if (expr == null) return null;
-              
-            return new Expression(
-                (expr.LeftTerm is DbExpression ? DbExpressionConverter((DbExpression)expr.LeftTerm) : expr.LeftTerm),
-                DbOperatorsConverter(expr.Operator),
-                (expr.RightTerm is DbExpression ? DbExpressionConverter((DbExpression)expr.RightTerm) : expr.RightTerm));
-        }
-
-        private Dictionary<string, object> ObjectToDictionary(object obj)
-        {
-            if (obj == null) throw new ArgumentNullException(nameof(obj));
-
-            string tableName = GetTableNameFromObject(obj); 
-            if (String.IsNullOrEmpty(tableName)) throw new InvalidOperationException("Type '" + obj.GetType().Name + "' does not have a 'Table' attribute.");
-            List<Column> columns = new List<Column>();
-
-            Dictionary<string, object> ret = new Dictionary<string, object>();
-
-            PropertyInfo[] properties = obj.GetType().GetProperties();
-            foreach (PropertyInfo prop in properties)
+            else if (_SqlServer != null)
             {
-                object[] attrs = prop.GetCustomAttributes(true);
-                foreach (object attr in attrs)
-                {
-                    ColumnAttribute colAttr = attr as ColumnAttribute;
-                    if (colAttr != null)
-                    {
-                        if (!colAttr.PrimaryKey)
-                        {
-                            switch (colAttr.Type)
-                            {
-                                case DataTypes.Enum:
-                                case DataTypes.Boolean:
-                                case DataTypes.Int:
-                                    ret.Add(colAttr.Name, Convert.ToInt32(prop.GetValue(obj)));
-                                    break;
-                                case DataTypes.DateTime:
-                                    ret.Add(colAttr.Name, _Database.Timestamp(Convert.ToDateTime(prop.GetValue(obj))));
-                                    break;
-                                case DataTypes.Blob:
-                                    ret.Add(colAttr.Name, prop.GetValue(obj));
-                                    break;
-                                case DataTypes.Double:
-                                    ret.Add(colAttr.Name, Convert.ToDouble(prop.GetValue(obj)));
-                                    break;
-                                case DataTypes.Decimal:
-                                    ret.Add(colAttr.Name, Convert.ToDecimal(prop.GetValue(obj)));
-                                    break;
-                                case DataTypes.Long: 
-                                    ret.Add(colAttr.Name, Convert.ToInt64(prop.GetValue(obj)));
-                                    break;
-                                case DataTypes.Nvarchar:
-                                case DataTypes.Varchar:
-                                    ret.Add(colAttr.Name, prop.GetValue(obj).ToString());
-                                    break;
-                                default:
-                                    throw new ArgumentException("Unknown data type '" + colAttr.Type.ToString() + "'.");
-                            }                            
-                        }
-                    }
-                }
+                _SqlServer.Dispose();
             }
-
-            if (ret.Count < 1) throw new InvalidOperationException("Type '" + obj.GetType().Name + "' does not have any properties with a 'Column' attribute.");
-            return ret;
-        }
-
-        private List<T> DataTableToObjectList<T>(DataTable table) where T : class, new()
-        {
-            List<T> ret = new List<T>();
-
-            if (table == null) return null;
-            if (table.Rows == null || table.Rows.Count < 1) return ret;
-
-            foreach (DataRow row in table.Rows)
+            else if (_Sqlite != null)
             {
-                T obj = DataRowToObject<T>(row);
-                if (obj != null) ret.Add(obj);
+                _Sqlite.Dispose();
             }
-
-            return ret;
-        }
-
-        private T DataTableToObject<T>(DataTable table) where T : class, new()
-        {
-            if (table == null || table.Rows == null || table.Rows.Count < 1) return null;
-            return DataRowToObject<T>(table.Rows[0]);
-        }
-
-        private T DataRowToObject<T>(DataRow row) where T : class, new()
-        {
-            if (row == null) return null;
-
-            T ret = new T();
-            TypeMetadata md = GetTypeMetadata(typeof(T));
-             
-            foreach (DataColumn dc in row.Table.Columns)
+            else
             {
-                if (md.Columns.Any(c => c.Name.Equals(dc.ColumnName)))
-                {
-                    Column col = md.Columns.Where(c => c.Name.Equals(dc.ColumnName)).First(); 
-                    object val = row[dc.ColumnName];
-                    string propName = GetPropertyNameFromColumnName(typeof(T), dc.ColumnName);
-                    if (String.IsNullOrEmpty(propName)) throw new ArgumentException("Unable to find property in type '" + typeof(T).Name + "' for column '" + dc.ColumnName + "'.");
-
-                    PropertyInfo property = typeof(T).GetProperty(propName);
-                    if (val != null)
-                    {
-                        // Remap the object to the property type since some databases misalign
-                        // Example: sqlite uses int64 when it should be int32
-                        // Console.WriteLine("| Column data type [" + col.DataType.ToString() + "], property data type [" + property.PropertyType.ToString() + "]");
-
-                        if (property.PropertyType == typeof(bool))
-                        {
-                            property.SetValue(ret, Convert.ToBoolean(val));
-                        }
-                        else if (property.PropertyType.IsEnum)
-                        {
-                            Type propType = property.PropertyType;
-                            property.SetValue(ret, (Enum.Parse(property.PropertyType, val.ToString())));
-                        }
-                        else
-                        {
-                            property.SetValue(ret, Convert.ChangeType(val, property.PropertyType));
-                        }
-
-                    }
-                    else
-                    {
-                        property.SetValue(ret, null);
-                    }
-                }
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
             }
-
-            return ret;
-        }
-         
-        private DataType DbTypeConverter(DataTypes dt)
-        {
-            switch (dt)
-            {
-                case DataTypes.Varchar:
-                    return DataType.Varchar;
-                case DataTypes.Nvarchar:
-                    return DataType.Nvarchar;
-                case DataTypes.Int:
-                    return DataType.Int;
-                case DataTypes.Long:
-                    return DataType.Long;
-                case DataTypes.Decimal:
-                    return DataType.Decimal;
-                case DataTypes.Double:
-                    return DataType.Double;
-                case DataTypes.DateTime:
-                    return DataType.DateTime;
-                case DataTypes.Blob:
-                    return DataType.Blob;
-                default:
-                    throw new ArgumentException("Unknown data type '" + dt.ToString() + "'.");
-            }
-        }
-
-        #endregion
-
-        #region Private-Metadata-Methods
-
-        private TypeMetadata GetTypeMetadata(Type t)
-        {
-            if (t == null) throw new ArgumentNullException(nameof(t));
-
-            lock (_MetadataLock)
-            {
-                if (_Metadata.ContainsKey(t)) return _Metadata[t];
-            }
-
-            throw new InvalidOperationException("Type '" + t.Name + "' has not been initialized into the ORM.");
-        }
-
-        private string GetTableNameFromType(Type t)
-        {
-            if (t == null) throw new ArgumentNullException(nameof(t));
-
-            TypeMetadata md = GetTypeMetadata(t);
-
-            return md.TableName;
-        }
-
-        private string GetTableNameFromObject(object obj)
-        {
-            if (obj == null) throw new ArgumentNullException(nameof(obj));
-            return GetTableNameFromType(obj.GetType());
-        }
-
-        private string GetPrimaryKeyColumnName(Type t)
-        {
-            if (t == null) throw new ArgumentNullException(nameof(t));
-
-            TypeMetadata md = GetTypeMetadata(t);
-            
-            foreach (Column col in md.Columns)
-            {
-                if (col.PrimaryKey) return col.Name;
-            }
-            
-            throw new InvalidOperationException("Type '" + t.Name + "' does not have a property with the 'PrimaryKey' attribute."); 
-        }
-
-        private string GetPrimaryKeyPropertyName(Type t)
-        {
-            if (t == null) throw new ArgumentNullException(nameof(t));
-
-            TypeMetadata md = GetTypeMetadata(t);
-
-            return md.PrimaryKeyPropertyName; 
-        }
-
-        private object GetPrimaryKeyValue(object obj, string propName)
-        {
-            object val = GetPropertyValue(obj, propName);
-            if (val == null) throw new InvalidOperationException("Property '" + propName + "' cannot be null if decorated as a primary key.");
-            return val;
-        }
-
-        private object GetPropertyValue(object obj, string propName)
-        {
-            return obj.GetType().GetProperty(propName).GetValue(obj, null);
-        }
-
-        private string GetColumnNameForPropertyName<T>(string propName)
-        {
-            if (String.IsNullOrEmpty(propName)) throw new ArgumentNullException(nameof(propName));
-
-            PropertyInfo[] properties = typeof(T).GetProperties();
-            foreach (PropertyInfo prop in properties)
-            {
-                if (prop.Name.Equals(propName))
-                {
-                    object[] attrs = prop.GetCustomAttributes(true);
-                    foreach (object attr in attrs)
-                    {
-                        ColumnAttribute colAttr = attr as ColumnAttribute;
-                        if (colAttr != null)
-                        {
-                            return colAttr.Name;
-                        }
-                    }
-                }
-            }
-
-            throw new ArgumentException("No 'Column' attribute found for property name '" + propName + "'.");
-        }
-         
-        private string GetPropertyNameFromColumnName(Type t, string columnName)
-        {
-            if (t == null) throw new ArgumentNullException(nameof(t));
-            if (String.IsNullOrEmpty(columnName)) throw new ArgumentNullException(nameof(columnName));
-
-            PropertyInfo[] properties = t.GetProperties();
-            foreach (PropertyInfo prop in properties)
-            {
-                object[] attrs = prop.GetCustomAttributes(true);
-                foreach (object attr in attrs)
-                {
-                    ColumnAttribute colAttr = attr as ColumnAttribute;
-                    if (colAttr != null)
-                    {
-                        if (colAttr.Name.Equals(columnName)) return prop.Name;
-                    }
-                }
-            }
-
-            throw new ArgumentException("No property found for column name '" + columnName + "'.");
         }
 
         #endregion

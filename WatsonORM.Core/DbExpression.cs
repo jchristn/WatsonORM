@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Watson.ORM
+namespace Watson.ORM.Core
 {
     /// <summary>
     /// Boolean expression.

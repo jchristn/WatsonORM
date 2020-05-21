@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using DatabaseWrapper;
+using System.Text; 
 
-namespace Watson.ORM
+namespace Watson.ORM.Core
 {
     /// <summary>
     /// Database settings.
@@ -73,10 +72,9 @@ namespace Watson.ORM
         /// <param name="hostname">The hostname of the database server.</param>
         /// <param name="port">The TCP port number on which the server is listening.</param>
         /// <param name="username">The username to use when accessing the database.</param>
-        /// <param name="password">The password to use when accessing the database.</param>
-        /// <param name="instance">For SQL Server Express, the instance name.</param>
+        /// <param name="password">The password to use when accessing the database.</param> 
         /// <param name="dbName">The name of the database.</param>
-        public DatabaseSettings(string dbType, string hostname, int port, string username, string password, string instance, string dbName)
+        public DatabaseSettings(string dbType, string hostname, int port, string username, string password, string dbName)
         {
             if (String.IsNullOrEmpty(dbType)) throw new ArgumentNullException(nameof(dbType));
             if (String.IsNullOrEmpty(hostname)) throw new ArgumentNullException(nameof(hostname));
@@ -86,7 +84,59 @@ namespace Watson.ORM
 
             Type = (DbTypes)(Enum.Parse(typeof(DbTypes), dbType));
             if (Type == DbTypes.Sqlite) throw new ArgumentException("For SQLite, use the filename constructor for DatabaseSettings.");
+             
+            Hostname = hostname;
+            Port = port;
+            Username = username;
+            Password = password;
+            Instance = null;
+            DatabaseName = dbName;
+        }
 
+        /// <summary>
+        /// Instantiate the object using SQL Server, MySQL, or PostgreSQL.
+        /// </summary>
+        /// <param name="dbType">The type of database.</param>
+        /// <param name="hostname">The hostname of the database server.</param>
+        /// <param name="port">The TCP port number on which the server is listening.</param>
+        /// <param name="username">The username to use when accessing the database.</param>
+        /// <param name="password">The password to use when accessing the database.</param> 
+        /// <param name="dbName">The name of the database.</param>
+        public DatabaseSettings(DbTypes dbType, string hostname, int port, string username, string password, string dbName)
+        {
+            if (String.IsNullOrEmpty(hostname)) throw new ArgumentNullException(nameof(hostname));
+            if (String.IsNullOrEmpty(username)) throw new ArgumentNullException(nameof(username));
+            if (String.IsNullOrEmpty(password)) throw new ArgumentNullException(nameof(password));
+            if (String.IsNullOrEmpty(dbName)) throw new ArgumentNullException(nameof(dbName));
+
+            if (Type == DbTypes.Sqlite) throw new ArgumentException("For SQLite, use the filename constructor for DatabaseSettings.");
+
+            Type = dbType;
+            Hostname = hostname;
+            Port = port;
+            Username = username;
+            Password = password;
+            Instance = null;
+            DatabaseName = dbName;
+        }
+
+        /// <summary>
+        /// Instantiate the object for SQL Server Express.
+        /// </summary> 
+        /// <param name="hostname">The hostname of the database server.</param>
+        /// <param name="port">The TCP port number on which the server is listening.</param>
+        /// <param name="username">The username to use when accessing the database.</param>
+        /// <param name="password">The password to use when accessing the database.</param>
+        /// <param name="instance">For SQL Server Express, the instance name.</param>
+        /// <param name="dbName">The name of the database.</param>
+        public DatabaseSettings(string hostname, int port, string username, string password, string instance, string dbName)
+        { 
+            if (String.IsNullOrEmpty(hostname)) throw new ArgumentNullException(nameof(hostname));
+            if (String.IsNullOrEmpty(username)) throw new ArgumentNullException(nameof(username));
+            if (String.IsNullOrEmpty(password)) throw new ArgumentNullException(nameof(password));
+            if (String.IsNullOrEmpty(dbName)) throw new ArgumentNullException(nameof(dbName));
+
+            Type = DbTypes.SqlServer; 
             Hostname = hostname;
             Port = port;
             Username = username;

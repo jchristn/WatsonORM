@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Converters;
 using System.Runtime.Serialization;
 
-namespace Watson.ORM
+namespace Watson.ORM.Core
 { 
     /// <summary>
     /// Enumeration containing the supported WHERE clause operators.

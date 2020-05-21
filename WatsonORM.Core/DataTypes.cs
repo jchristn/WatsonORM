@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Converters;
 using System.Runtime.Serialization;
 
-namespace Watson.ORM
+namespace Watson.ORM.Core
 {  
     /// <summary>
     /// Type of data contained in the column.

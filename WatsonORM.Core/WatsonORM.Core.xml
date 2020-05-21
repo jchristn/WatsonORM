@@ -1,0 +1,499 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WatsonORM.Core</name>
+    </assembly>
+    <members>
+        <member name="T:Watson.ORM.Core.ColumnAttribute">
+            <summary>
+            Links a class property to a column in a WatsonORM-managed database table.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.ColumnAttribute.Name">
+            <summary>
+            Name of the column.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.ColumnAttribute.PrimaryKey">
+            <summary>
+            Indicates whether or not the column is a primary key.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.ColumnAttribute.Type">
+            <summary>
+            The data type of the column.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.ColumnAttribute.MaxLength">
+            <summary>
+            The maximum length of the column.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.ColumnAttribute.Precision">
+            <summary>
+            The decimal precision of the column.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.ColumnAttribute.Nullable">
+            <summary>
+            Indicates whether or not the column allows a null value.
+            </summary>
+        </member>
+        <member name="M:Watson.ORM.Core.ColumnAttribute.#ctor(System.String,System.Boolean,Watson.ORM.Core.DataTypes,System.Boolean)">
+            <summary>
+            Links a class property to a column in a WatsonORM-managed database table.
+            </summary>
+            <param name="name">Name of the column.</param>
+            <param name="primaryKey">Indicates whether or not the column is a primary key.</param>
+            <param name="dataType">The data type of the column.</param> 
+            <param name="isNullable">Indicates whether or not the column allows a null value.</param>
+        </member>
+        <member name="M:Watson.ORM.Core.ColumnAttribute.#ctor(System.String,System.Boolean,Watson.ORM.Core.DataTypes,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Links a class property to a column in a WatsonORM-managed database table.
+            </summary>
+            <param name="name">Name of the column.</param>
+            <param name="primaryKey">Indicates whether or not the column is a primary key.</param>
+            <param name="dataType">The data type of the column.</param>
+            <param name="maxLength">The maximum length of the column.</param>
+            <param name="precision">The decimal precision of the column.</param>
+            <param name="isNullable">Indicates whether or not the column allows a null value.</param>
+        </member>
+        <member name="M:Watson.ORM.Core.ColumnAttribute.#ctor(System.String,System.Boolean,Watson.ORM.Core.DataTypes,System.Int32,System.Boolean)">
+            <summary>
+            Links a class property to a column in a WatsonORM-managed database table.
+            </summary>
+            <param name="name">Name of the column.</param>
+            <param name="primaryKey">Indicates whether or not the column is a primary key.</param>
+            <param name="dataType">The data type of the column.</param>
+            <param name="maxLength">The maximum length of the column.</param>
+            <param name="isNullable">Indicates whether or not the column allows a null value.</param>
+        </member>
+        <member name="T:Watson.ORM.Core.DatabaseSettings">
+            <summary>
+            Database settings.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.DatabaseSettings.Filename">
+            <summary>
+            Filename, if using Sqlite.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.DatabaseSettings.Type">
+            <summary>
+            The type of database.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.DatabaseSettings.Hostname">
+            <summary>
+            The hostname of the database server.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.DatabaseSettings.Port">
+            <summary>
+            The TCP port number on which the server is listening.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.DatabaseSettings.Username">
+            <summary>
+            The username to use when accessing the database.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.DatabaseSettings.Password">
+            <summary>
+            The password to use when accessing the database.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.DatabaseSettings.Instance">
+            <summary>
+            For SQL Server Express, the instance name.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.DatabaseSettings.DatabaseName">
+            <summary>
+            The name of the database.
+            </summary>
+        </member>
+        <member name="M:Watson.ORM.Core.DatabaseSettings.#ctor(System.String)">
+            <summary>
+            Instantiate the object using Sqlite.
+            </summary>
+            <param name="filename">The Sqlite database filename.</param>
+        </member>
+        <member name="M:Watson.ORM.Core.DatabaseSettings.#ctor(System.String,System.String,System.Int32,System.String,System.String,System.String)">
+            <summary>
+            Instantiate the object using SQL Server, MySQL, or PostgreSQL.
+            </summary>
+            <param name="dbType">The type of database.</param>
+            <param name="hostname">The hostname of the database server.</param>
+            <param name="port">The TCP port number on which the server is listening.</param>
+            <param name="username">The username to use when accessing the database.</param>
+            <param name="password">The password to use when accessing the database.</param> 
+            <param name="dbName">The name of the database.</param>
+        </member>
+        <member name="M:Watson.ORM.Core.DatabaseSettings.#ctor(Watson.ORM.Core.DbTypes,System.String,System.Int32,System.String,System.String,System.String)">
+            <summary>
+            Instantiate the object using SQL Server, MySQL, or PostgreSQL.
+            </summary>
+            <param name="dbType">The type of database.</param>
+            <param name="hostname">The hostname of the database server.</param>
+            <param name="port">The TCP port number on which the server is listening.</param>
+            <param name="username">The username to use when accessing the database.</param>
+            <param name="password">The password to use when accessing the database.</param> 
+            <param name="dbName">The name of the database.</param>
+        </member>
+        <member name="M:Watson.ORM.Core.DatabaseSettings.#ctor(System.String,System.Int32,System.String,System.String,System.String,System.String)">
+            <summary>
+            Instantiate the object for SQL Server Express.
+            </summary> 
+            <param name="hostname">The hostname of the database server.</param>
+            <param name="port">The TCP port number on which the server is listening.</param>
+            <param name="username">The username to use when accessing the database.</param>
+            <param name="password">The password to use when accessing the database.</param>
+            <param name="instance">For SQL Server Express, the instance name.</param>
+            <param name="dbName">The name of the database.</param>
+        </member>
+        <member name="T:Watson.ORM.Core.DataTypes">
+            <summary>
+            Type of data contained in the column.
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DataTypes.Varchar">
+            <summary>
+            Variable-length character.
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DataTypes.Nvarchar">
+            <summary>
+            Variable-length unicode character.
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DataTypes.Int">
+            <summary>
+            Integer.
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DataTypes.Boolean">
+            <summary>
+            Boolean.
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DataTypes.Enum">
+            <summary>
+            Enum.
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DataTypes.Long">
+            <summary>
+            Long
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DataTypes.Decimal">
+            <summary>
+            Decimal
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DataTypes.Double">
+            <summary>
+            Double
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DataTypes.DateTime">
+            <summary>
+            Timestamp
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DataTypes.Blob">
+            <summary>
+            Blob
+            </summary>
+        </member>
+        <member name="T:Watson.ORM.Core.DbExpression">
+            <summary>
+            Boolean expression.
+            </summary>
+        </member>
+        <member name="M:Watson.ORM.Core.DbExpression.#ctor">
+            <summary>
+            A structure in the form of term-operator-term that defines a boolean operation within a WHERE clause.
+            </summary>
+        </member>
+        <member name="M:Watson.ORM.Core.DbExpression.#ctor(System.Object,Watson.ORM.Core.DbOperators,System.Object)">
+            <summary>
+            A structure in the form of term-operator-term that defines a boolean operation within a WHERE clause.
+            </summary>
+            <param name="left">The left term of the expression; can either be a string term or a nested Expression.</param>
+            <param name="oper">The operator.</param>
+            <param name="right">The right term of the expression; can either be an object for comparison or a nested Expression.</param>
+        </member>
+        <member name="F:Watson.ORM.Core.DbExpression.LeftTerm">
+            <summary>
+            The left term of the expression; can either be a string term or a nested Expression.
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbExpression.Operator">
+            <summary>
+            The operator.
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbExpression.RightTerm">
+            <summary>
+            The right term of the expression; can either be an object for comparison or a nested Expression.
+            </summary>
+        </member>
+        <member name="T:Watson.ORM.Core.DbOperators">
+            <summary>
+            Enumeration containing the supported WHERE clause operators.
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbOperators.And">
+            <summary>
+            Boolean AND
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbOperators.Or">
+            <summary>
+            Boolean OR
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbOperators.Equals">
+            <summary>
+            Values are equal to one another
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbOperators.NotEquals">
+            <summary>
+            Values are not equal to one another
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbOperators.In">
+            <summary>
+            Value is contained within a list
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbOperators.NotIn">
+            <summary>
+            Value is not contained within a list
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbOperators.Contains">
+            <summary>
+            Value contains the specified value
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbOperators.ContainsNot">
+            <summary>
+            Value does not contain the specified value
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbOperators.StartsWith">
+            <summary>
+            Value starts with the specified value
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbOperators.EndsWith">
+            <summary>
+            Value ends with the specified value
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbOperators.GreaterThan">
+            <summary>
+            Value is greater than the specified value
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbOperators.GreaterThanOrEqualTo">
+            <summary>
+            Value is greater than or equal to the specified value
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbOperators.LessThan">
+            <summary>
+            Value is less than the specified value
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbOperators.LessThanOrEqualTo">
+            <summary>
+            Value is less than or equal to the specified value
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbOperators.IsNull">
+            <summary>
+            Value is null
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbOperators.IsNotNull">
+            <summary>
+            Value is not null
+            </summary>
+        </member>
+        <member name="T:Watson.ORM.Core.DbTypes">
+            <summary>
+            Enumeration containing the supported database types.
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbTypes.SqlServer">
+            <summary>
+            Microsoft SQL Server
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbTypes.Mysql">
+            <summary>
+            MySQL
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbTypes.Postgresql">
+            <summary>
+            PostgreSQL
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbTypes.Sqlite">
+            <summary>
+            Sqlite
+            </summary>
+        </member>
+        <member name="T:Watson.ORM.Core.ReflectionHelper">
+            <summary>
+            Methods to assist 
+            </summary>
+        </member>
+        <member name="M:Watson.ORM.Core.ReflectionHelper.HasAttribute(System.Object,System.Attribute)">
+            <summary>
+            Determine if an object has an attribute.
+            </summary>
+            <param name="obj">Object.</param>
+            <param name="attr">Attribute.</param>
+            <returns>True if the attribute exists.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.ReflectionHelper.GetTableNameFromType(System.Type)">
+            <summary>
+            Get database table name from a given type.
+            </summary>
+            <param name="t">Type.</param>
+            <returns>Database table name.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.ReflectionHelper.GetTableNameFromObject(System.Object)">
+            <summary>
+            Get database table name from a given object.
+            </summary>
+            <param name="obj">Object.</param>
+            <returns>Database table name.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.ReflectionHelper.GetColumnsFromType(System.Type)">
+            <summary>
+            Get list of columns from a given type.
+            </summary>
+            <param name="t">Type.</param>
+            <returns>List of Column.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.ReflectionHelper.GetColumnsFromObject(System.Object)">
+            <summary>
+            Get list of columns from a given object.
+            </summary>
+            <param name="obj">Object.</param>
+            <returns>List of Column.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.ReflectionHelper.GetColumnForProperty(System.Type)">
+            <summary>
+            Get table column for a given property.
+            </summary>
+            <param name="t">Type.</param>
+            <returns>Column.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.ReflectionHelper.GetColumnForProperty``1(System.String)">
+            <summary>
+            Get table column for a given property by name.
+            </summary>
+            <typeparam name="T">Type.</typeparam>
+            <param name="propName">Property name.</param>
+            <returns>Column.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.ReflectionHelper.GetColumnNameForPropertyName``1(System.String)">
+            <summary>
+            Get table column name for a given property name.
+            </summary>
+            <typeparam name="T">Type.</typeparam>
+            <param name="propName">Property name.</param>
+            <returns>Column name.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.ReflectionHelper.GetPropertyNameFromColumnName(System.Type,System.String)">
+            <summary>
+            Get property name from a given column name.
+            </summary>
+            <param name="t">Type.</param>
+            <param name="columnName">Column name.</param>
+            <returns>Property name.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.ReflectionHelper.GetPrimaryKeyColumnName(System.Type)">
+            <summary>
+            Get primary key column name for a given type.
+            </summary>
+            <param name="t">Type.</param>
+            <returns>Primary key column name.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.ReflectionHelper.GetPrimaryKeyPropertyName(System.Type)">
+            <summary>
+            Get property name of the primary key column.
+            </summary>
+            <param name="t">Type.</param>
+            <returns>Property name.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.ReflectionHelper.WalkObject(System.Object)">
+            <summary>
+            Walk an object using reflection and display its properties on the console.
+            </summary>
+            <param name="obj">Object.</param>
+        </member>
+        <member name="M:Watson.ORM.Core.ReflectionHelper.GetPropertyValue(System.Object,System.String)">
+            <summary>
+            Retrieve a property value by property name.
+            </summary>
+            <param name="obj">Object.</param>
+            <param name="propName">Property name.</param>
+            <returns>Property value.</returns>
+        </member>
+        <member name="T:Watson.ORM.Core.TableAttribute">
+            <summary>
+            Links a class to a WatsonORM-managed database table.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.TableAttribute.TableName">
+            <summary>
+            Table name.
+            </summary>
+        </member>
+        <member name="M:Watson.ORM.Core.TableAttribute.#ctor(System.String)">
+            <summary>
+            Links a class to a WatsonORM-managed database table.
+            </summary>
+            <param name="tableName">The name of the corresponding database table.</param>
+        </member>
+        <member name="T:Watson.ORM.Core.TypeMetadata">
+            <summary>
+            Metadata about a given type.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.TypeMetadata.TableName">
+            <summary>
+            The name of the database table.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.TypeMetadata.PrimaryKeyPropertyName">
+            <summary>
+            Property name of the primary key field.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.TypeMetadata.Columns">
+            <summary>
+            Columns in the table.
+            </summary>
+        </member>
+        <member name="M:Watson.ORM.Core.TypeMetadata.#ctor(System.String,System.String,System.Collections.Generic.List{DatabaseWrapper.Core.Column})">
+            <summary>
+            Instantiate the object.
+            </summary>
+            <param name="tableName">The name of the database table.</param>
+            <param name="primaryKeyPropertyName">Property name of the primary key field.</param>
+            <param name="columns">Columns in the table.</param>
+        </member>
+    </members>
+</doc>

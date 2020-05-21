@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Converters;
 using System.Runtime.Serialization;
 
-namespace Watson.ORM
+namespace Watson.ORM.Core
 {
     /// <summary>
     /// Enumeration containing the supported database types.
@@ -17,18 +17,18 @@ namespace Watson.ORM
         /// <summary>
         /// Microsoft SQL Server
         /// </summary>
-        [EnumMember(Value = "MsSql")]
-        MsSql,
+        [EnumMember(Value = "SqlServer")]
+        SqlServer,
         /// <summary>
         /// MySQL
         /// </summary>
-        [EnumMember(Value = "MySql")]
-        MySql,
+        [EnumMember(Value = "Mysql")]
+        Mysql,
         /// <summary>
         /// PostgreSQL
         /// </summary>
-        [EnumMember(Value = "PgSql")]
-        PgSql,
+        [EnumMember(Value = "Postgresql")]
+        Postgresql,
         /// <summary>
         /// Sqlite
         /// </summary>

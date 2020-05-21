@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 using Watson.ORM;
+using Watson.ORM.Core;
 
 namespace Test
 {
     class Program
     {
+        static string _DbType = null;
+        static string _Filename = null;
+        static string _Username = null;
+        static string _Password = null;
+
         static DatabaseSettings _Settings = null;
         static WatsonORM _Orm = null;
 
@@ -16,19 +22,54 @@ namespace Test
             {
                 #region Setup
 
-                if (File.Exists("./WatsonORM.db")) File.Delete("./WatsonORM.db");
+                Console.Write("DB type [mssql|mysql|pgsql|sqlite]: ");
+                _DbType = Console.ReadLine();
+                if (String.IsNullOrEmpty(_DbType)) return;
+                _DbType = _DbType.ToLower();
 
-                _Settings = new DatabaseSettings("./WatsonORM.db");
+                if (_DbType.Equals("mssql") || _DbType.Equals("mysql") || _DbType.Equals("pgsql"))
+                {
+                    Console.Write("User: ");
+                    _Username = Console.ReadLine();
+
+                    Console.Write("Password: ");
+                    _Password = Console.ReadLine();
+
+                    switch (_DbType)
+                    {
+                        case "mssql":
+                            _Settings = new DatabaseSettings(DbTypes.SqlServer, "localhost", 1433, _Username, _Password, "test");
+                            break;
+                        case "mysql":
+                            _Settings = new DatabaseSettings(DbTypes.Mysql, "localhost", 3306, _Username, _Password, "test");
+                            break;
+                        case "pgsql":
+                            _Settings = new DatabaseSettings(DbTypes.Postgresql, "localhost", 5432, _Username, _Password, "test");
+                            break;
+                        default:
+                            return;
+                    }
+                }
+                else if (_DbType.Equals("sqlite"))
+                {
+                    Console.Write("Filename: ");
+                    _Filename = Console.ReadLine();
+                    if (String.IsNullOrEmpty(_Filename)) return;
+
+                    _Settings = new DatabaseSettings(_Filename);
+                }
+                else
+                {
+                    Console.WriteLine("Invalid database type.");
+                    return;
+                }
+                 
                 _Orm = new WatsonORM(_Settings);
                 _Orm.Logger = Logger;
                 
-                _Orm.InitializeDatabase();
-                 
-                _Orm.Database.Logger = Logger;
-                _Orm.Database.LogQueries = true;
-                _Orm.Database.LogResults = true; 
-
+                _Orm.InitializeDatabase(); 
                 _Orm.InitializeTable(typeof(Person));
+                _Orm.TruncateTable(typeof(Person));
 
                 #endregion
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text; 
 
-namespace Watson.ORM
+namespace Watson.ORM.Core
 {
     /// <summary>
     /// Links a class property to a column in a WatsonORM-managed database table.

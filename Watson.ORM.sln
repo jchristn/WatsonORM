@@ -3,9 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Watson.ORM", "WatsonORM\Watson.ORM.csproj", "{B0796A57-EED8-4E3B-830A-F9B1653919C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatsonORM", "WatsonORM\WatsonORM.csproj", "{A0796A57-EED8-4E3B-830A-F9B1653919C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{41702967-8092-4CAA-94D8-F4DB17BAA7C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatsonORM.Core", "WatsonORM.Core\WatsonORM.Core.csproj", "{B0796A57-EED8-4E3B-830A-F9B1653919C8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatsonORM.Sqlite", "WatsonORM.Sqlite\WatsonORM.Sqlite.csproj", "{C6368D69-7131-4BCA-BA69-3183FC6F3498}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatsonORM.SqlServer", "WatsonORM.SqlServer\WatsonORM.SqlServer.csproj", "{D6368D69-7131-4BCA-BA69-3183FC6F3498}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatsonORM.Postgresql", "WatsonORM.Postgresql\WatsonORM.Postgresql.csproj", "{E6368D69-7131-4BCA-BA69-3183FC6F3498}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatsonORM.Mysql", "WatsonORM.Mysql\WatsonORM.Mysql.csproj", "{F6368D69-7131-4BCA-BA69-3183FC6F3498}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{11702967-8092-4CAA-94D8-F4DB17BAA7C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +23,34 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A0796A57-EED8-4E3B-830A-F9B1653919C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0796A57-EED8-4E3B-830A-F9B1653919C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0796A57-EED8-4E3B-830A-F9B1653919C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0796A57-EED8-4E3B-830A-F9B1653919C8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B0796A57-EED8-4E3B-830A-F9B1653919C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B0796A57-EED8-4E3B-830A-F9B1653919C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0796A57-EED8-4E3B-830A-F9B1653919C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0796A57-EED8-4E3B-830A-F9B1653919C8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{41702967-8092-4CAA-94D8-F4DB17BAA7C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{41702967-8092-4CAA-94D8-F4DB17BAA7C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{41702967-8092-4CAA-94D8-F4DB17BAA7C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{41702967-8092-4CAA-94D8-F4DB17BAA7C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6368D69-7131-4BCA-BA69-3183FC6F3498}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6368D69-7131-4BCA-BA69-3183FC6F3498}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6368D69-7131-4BCA-BA69-3183FC6F3498}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6368D69-7131-4BCA-BA69-3183FC6F3498}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6368D69-7131-4BCA-BA69-3183FC6F3498}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6368D69-7131-4BCA-BA69-3183FC6F3498}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6368D69-7131-4BCA-BA69-3183FC6F3498}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6368D69-7131-4BCA-BA69-3183FC6F3498}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6368D69-7131-4BCA-BA69-3183FC6F3498}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6368D69-7131-4BCA-BA69-3183FC6F3498}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6368D69-7131-4BCA-BA69-3183FC6F3498}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6368D69-7131-4BCA-BA69-3183FC6F3498}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6368D69-7131-4BCA-BA69-3183FC6F3498}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6368D69-7131-4BCA-BA69-3183FC6F3498}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6368D69-7131-4BCA-BA69-3183FC6F3498}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6368D69-7131-4BCA-BA69-3183FC6F3498}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11702967-8092-4CAA-94D8-F4DB17BAA7C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11702967-8092-4CAA-94D8-F4DB17BAA7C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11702967-8092-4CAA-94D8-F4DB17BAA7C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11702967-8092-4CAA-94D8-F4DB17BAA7C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

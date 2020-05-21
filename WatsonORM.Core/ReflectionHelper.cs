@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
-using DatabaseWrapper;
+using DatabaseWrapper.Core;
 
-namespace Watson.ORM
+namespace Watson.ORM.Core
 {
-    internal static class ReflectionHelper
+    /// <summary>
+    /// Methods to assist 
+    /// </summary>
+    public static class ReflectionHelper
     {
         /*
          * These methods do not rely on internal caching like the methods in WatsonORM.cs do.
@@ -22,7 +25,13 @@ namespace Watson.ORM
          * 
          */
 
-        internal static bool HasAttribute(object obj, Attribute attr)
+            /// <summary>
+            /// Determine if an object has an attribute.
+            /// </summary>
+            /// <param name="obj">Object.</param>
+            /// <param name="attr">Attribute.</param>
+            /// <returns>True if the attribute exists.</returns>
+        public static bool HasAttribute(object obj, Attribute attr)
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
             Attribute[] attrs = Attribute.GetCustomAttributes(obj.GetType(), attr.GetType());
@@ -30,7 +39,12 @@ namespace Watson.ORM
             return false;
         }
 
-        internal static string GetTableNameFromType(Type t)
+        /// <summary>
+        /// Get database table name from a given type.
+        /// </summary>
+        /// <param name="t">Type.</param>
+        /// <returns>Database table name.</returns>
+        public static string GetTableNameFromType(Type t)
         {
             if (t == null) throw new ArgumentNullException(nameof(t));
             TableAttribute attr = (TableAttribute)Attribute.GetCustomAttribute(t, typeof(TableAttribute));
@@ -38,13 +52,23 @@ namespace Watson.ORM
             return null;
         }
 
-        internal static string GetTableNameFromObject(object obj)
+        /// <summary>
+        /// Get database table name from a given object.
+        /// </summary>
+        /// <param name="obj">Object.</param>
+        /// <returns>Database table name.</returns>
+        public static string GetTableNameFromObject(object obj)
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
             return GetTableNameFromType(obj.GetType());
         }
 
-        internal static List<Column> GetColumnsFromType(Type t)
+        /// <summary>
+        /// Get list of columns from a given type.
+        /// </summary>
+        /// <param name="t">Type.</param>
+        /// <returns>List of Column.</returns>
+        public static List<Column> GetColumnsFromType(Type t)
         {
             if (t == null) throw new ArgumentNullException(nameof(t));
             
@@ -74,13 +98,23 @@ namespace Watson.ORM
             return ret;
         }
 
-        internal static List<Column> GetColumnsFromObject(object obj)
+        /// <summary>
+        /// Get list of columns from a given object.
+        /// </summary>
+        /// <param name="obj">Object.</param>
+        /// <returns>List of Column.</returns>
+        public static List<Column> GetColumnsFromObject(object obj)
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
             return GetColumnsFromType(obj.GetType());
         }
 
-        internal static Column GetColumnForProperty(Type t)
+        /// <summary>
+        /// Get table column for a given property.
+        /// </summary>
+        /// <param name="t">Type.</param>
+        /// <returns>Column.</returns>
+        public static Column GetColumnForProperty(Type t)
         {
             if (t == null) throw new ArgumentNullException(nameof(t));
 
@@ -109,7 +143,13 @@ namespace Watson.ORM
             return null;
         }
 
-        internal static Column GetColumnForProperty<T>(string propName)
+        /// <summary>
+        /// Get table column for a given property by name.
+        /// </summary>
+        /// <typeparam name="T">Type.</typeparam>
+        /// <param name="propName">Property name.</param>
+        /// <returns>Column.</returns>
+        public static Column GetColumnForProperty<T>(string propName)
         {
             if (String.IsNullOrEmpty(propName)) throw new ArgumentNullException(nameof(propName));
 
@@ -138,7 +178,13 @@ namespace Watson.ORM
             return null;
         }
 
-        internal static string GetColumnNameForPropertyName<T>(string propName)
+        /// <summary>
+        /// Get table column name for a given property name.
+        /// </summary>
+        /// <typeparam name="T">Type.</typeparam>
+        /// <param name="propName">Property name.</param>
+        /// <returns>Column name.</returns>
+        public static string GetColumnNameForPropertyName<T>(string propName)
         {
             if (String.IsNullOrEmpty(propName)) throw new ArgumentNullException(nameof(propName));
 
@@ -159,7 +205,13 @@ namespace Watson.ORM
             return null;
         }
 
-        internal static string GetPropertyNameFromColumnName(Type t, string columnName)
+        /// <summary>
+        /// Get property name from a given column name.
+        /// </summary>
+        /// <param name="t">Type.</param>
+        /// <param name="columnName">Column name.</param>
+        /// <returns>Property name.</returns>
+        public static string GetPropertyNameFromColumnName(Type t, string columnName)
         {
             if (t == null) throw new ArgumentNullException(nameof(t));
             if (String.IsNullOrEmpty(columnName)) throw new ArgumentNullException(nameof(columnName));
@@ -180,8 +232,13 @@ namespace Watson.ORM
 
             return null;
         }
-          
-        internal static string GetPrimaryKeyColumnName(Type t)
+
+        /// <summary>
+        /// Get primary key column name for a given type.
+        /// </summary>
+        /// <param name="t">Type.</param>
+        /// <returns>Primary key column name.</returns>
+        public static string GetPrimaryKeyColumnName(Type t)
         {
             if (t == null) throw new ArgumentNullException(nameof(t));
 
@@ -199,7 +256,12 @@ namespace Watson.ORM
             return null;
         }
 
-        internal static string GetPrimaryKeyPropertyName(Type t)
+        /// <summary>
+        /// Get property name of the primary key column.
+        /// </summary>
+        /// <param name="t">Type.</param>
+        /// <returns>Property name.</returns>
+        public static string GetPrimaryKeyPropertyName(Type t)
         {
             if (t == null) throw new ArgumentNullException(nameof(t));
 
@@ -217,7 +279,11 @@ namespace Watson.ORM
             return null;
         }
 
-        internal static void WalkObject(object obj)
+        /// <summary>
+        /// Walk an object using reflection and display its properties on the console.
+        /// </summary>
+        /// <param name="obj">Object.</param>
+        public static void WalkObject(object obj)
         {
             Console.WriteLine("");
             PropertyInfo[] properties = obj.GetType().GetProperties();
@@ -228,7 +294,13 @@ namespace Watson.ORM
             Console.WriteLine("");
         }
 
-        internal static object GetPropertyValue(object obj, string propName)
+        /// <summary>
+        /// Retrieve a property value by property name.
+        /// </summary>
+        /// <param name="obj">Object.</param>
+        /// <param name="propName">Property name.</param>
+        /// <returns>Property value.</returns>
+        public static object GetPropertyValue(object obj, string propName)
         {
             return obj.GetType().GetProperty(propName).GetValue(obj, null);
         }

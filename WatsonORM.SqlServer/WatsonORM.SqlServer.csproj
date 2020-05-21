@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Watson.ORM.SqlServer</RootNamespace>
+    <Version>1.1.0.4</Version>
+    <Authors>Joel Christner</Authors>
+    <Description>WatsonORM is a lightweight and easy to use object-relational mapper (ORM) for SQL Server in C# for .NET Core built on top of DatabaseWrapper.  Refer to other WatsonORM packages if you need support for other database types.</Description>
+    <Copyright>(c)2020 Joel Christner</Copyright>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/jchristn/watsonorm</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/jchristn/WatsonORM/master/assets/watson.ico</PackageIconUrl>
+    <RepositoryUrl>https://github.com/jchristn/watsonorm</RepositoryUrl>
+    <RepositoryType>Github</RepositoryType>
+    <PackageTags>orm object relation relational mapper map database object data convert sql server mssql sqlite mysql pgsql postgres postgresql dynamic query builder datarow datatable key foreign</PackageTags>
+    <PackageReleaseNotes>Minor refactor, dependency updates</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>C:\Code\Watson\WatsonORM-1.1\WatsonORM.SqlServer\WatsonORM.SqlServer.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\code\Watson\WatsonORM-1.1\WatsonORM.SqlServer\WatsonORM.SqlServer.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DatabaseWrapper.SqlServer" Version="3.0.0.2" />
+    <PackageReference Include="WatsonORM.Core" Version="1.1.0.3" />
+  </ItemGroup>
+
+</Project>
