@@ -19,6 +19,11 @@
             Method to invoke when sending log messages.
             </summary>
         </member>
+        <member name="P:Watson.ORM.Mysql.WatsonORM.Debug">
+            <summary>
+            Debug settings.
+            </summary>
+        </member>
         <member name="P:Watson.ORM.Mysql.WatsonORM.Database">
             <summary>
             Direct access to the underlying database client.

@@ -24,6 +24,68 @@ namespace Watson.ORM
         #region Public-Members
 
         /// <summary>
+        /// Debug settings.
+        /// </summary>
+        public DebugSettings Debug
+        {
+            get
+            {
+                return _Debug;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    _Debug = new DebugSettings();
+                    if (_Mysql != null)
+                    {
+                        _Mysql.Debug = null;
+                    }
+                    else if (_Postgresql != null)
+                    {
+                        _Postgresql.Debug = null;
+                    }
+                    else if (_Sqlite != null)
+                    {
+                        _Sqlite.Debug = null;
+                    }
+                    else if (_SqlServer != null)
+                    {
+                        _SqlServer.Debug = null;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+                    }
+                }
+                else
+                {
+                    _Debug = value;
+                    if (_Mysql != null)
+                    {
+                        _Mysql.Debug = value;
+                    }
+                    else if (_Postgresql != null)
+                    {
+                        _Postgresql.Debug = value;
+                    }
+                    else if (_Sqlite != null)
+                    {
+                        _Sqlite.Debug = value;
+                    }
+                    else if (_SqlServer != null)
+                    {
+                        _SqlServer.Debug = value;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Database settings.
         /// </summary>
         public DatabaseSettings Settings
@@ -69,6 +131,7 @@ namespace Watson.ORM
         #region Private-Members
 
         private Action<string> _Logger = null;
+        private DebugSettings _Debug = new DebugSettings();
         private string _Header = "[WatsonORM] ";
         private CancellationTokenSource _TokenSource = new CancellationTokenSource();
         private CancellationToken _Token;

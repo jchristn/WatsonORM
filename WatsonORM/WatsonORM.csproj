@@ -16,7 +16,7 @@
     <PackageIconUrl>https://raw.githubusercontent.com/jchristn/WatsonORM/master/assets/watson.ico</PackageIconUrl>
     <PackageId>WatsonORM</PackageId>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.0.4</Version>
+    <Version>1.1.0.5</Version>
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
@@ -32,11 +32,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="WatsonORM.Core" Version="1.1.0.3" />
-    <PackageReference Include="WatsonORM.Mysql" Version="1.1.0.3" />
-    <PackageReference Include="WatsonORM.Postgresql" Version="1.1.0.3" />
-    <PackageReference Include="WatsonORM.Sqlite" Version="1.1.0.4" />
-    <PackageReference Include="WatsonORM.SqlServer" Version="1.1.0.4" />
+    <PackageReference Include="WatsonORM.Core" Version="1.1.0.4" />
+    <PackageReference Include="WatsonORM.Mysql" Version="1.1.0.5" />
+    <PackageReference Include="WatsonORM.Postgresql" Version="1.1.0.5" />
+    <PackageReference Include="WatsonORM.Sqlite" Version="1.1.0.5" />
+    <PackageReference Include="WatsonORM.SqlServer" Version="1.1.0.5" />
   </ItemGroup>
 
   <ItemGroup>

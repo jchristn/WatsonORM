@@ -9,6 +9,11 @@
             WatsonORM, a lightweight and easy to use object-relational mapper (ORM).
             </summary>
         </member>
+        <member name="P:Watson.ORM.WatsonORM.Debug">
+            <summary>
+            Debug settings.
+            </summary>
+        </member>
         <member name="P:Watson.ORM.WatsonORM.Settings">
             <summary>
             Database settings.

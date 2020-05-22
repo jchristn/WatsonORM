@@ -5,7 +5,7 @@
     <AssemblyName>WatsonORM.Core</AssemblyName>
     <RootNamespace>Watson.ORM.Core</RootNamespace>
     <Description>Do not install this package directly.  Core classes for WatsonORM packages.</Description>
-    <Version>1.1.0.3</Version>
+    <Version>1.1.0.4</Version>
     <Authors>Joel Christner</Authors>
     <Copyright>(c)2020 Joel Christner</Copyright>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
@@ -14,7 +14,7 @@
     <RepositoryUrl>https://github.com/jchristn/watsonorm</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
     <PackageTags>orm object relation relational mapper map database object data convert sql server mssql sqlite mysql pgsql postgres postgresql dynamic query builder datarow datatable key foreign</PackageTags>
-    <PackageReleaseNotes>Minor refactor, dependency updates</PackageReleaseNotes>
+    <PackageReleaseNotes>DebugSettings</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 

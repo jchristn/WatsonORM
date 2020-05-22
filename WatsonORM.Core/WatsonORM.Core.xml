@@ -351,6 +351,26 @@
             Sqlite
             </summary>
         </member>
+        <member name="T:Watson.ORM.Core.DebugSettings">
+            <summary>
+            Debug settings.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.DebugSettings.DatabaseQueries">
+            <summary>
+            Enable or disable debugging of database queries.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.DebugSettings.DatabaseResults">
+            <summary>
+            Enable or disable debugging of database results.
+            </summary>
+        </member>
+        <member name="M:Watson.ORM.Core.DebugSettings.#ctor">
+            <summary>
+            Instantiate the object.
+            </summary>
+        </member>
         <member name="T:Watson.ORM.Core.ReflectionHelper">
             <summary>
             Methods to assist 

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Watson.ORM.Mysql</RootNamespace>
-    <Version>1.1.0.3</Version>
+    <Version>1.1.0.5</Version>
     <Authors>Joel Christner</Authors>
     <Description>WatsonORM is a lightweight and easy to use object-relational mapper (ORM) for MySQL in C# for .NET Core built on top of DatabaseWrapper.  Refer to other WatsonORM packages if you need support for other database types.</Description>
     <Copyright>(c)2020 Joel Christner</Copyright>
@@ -35,7 +35,7 @@
 
   <ItemGroup>
     <PackageReference Include="DatabaseWrapper.Mysql" Version="3.0.0.2" />
-    <PackageReference Include="WatsonORM.Core" Version="1.1.0.3" />
+    <PackageReference Include="WatsonORM.Core" Version="1.1.0.4" />
   </ItemGroup>
 
 </Project>

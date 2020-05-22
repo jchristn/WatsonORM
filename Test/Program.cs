@@ -63,10 +63,10 @@ namespace Test
                     Console.WriteLine("Invalid database type.");
                     return;
                 }
-                 
+                
                 _Orm = new WatsonORM(_Settings);
                 _Orm.Logger = Logger;
-                
+
                 _Orm.InitializeDatabase(); 
                 _Orm.InitializeTable(typeof(Person));
                 _Orm.TruncateTable(typeof(Person));

@@ -46,6 +46,38 @@ namespace Watson.ORM.Postgresql
         }
 
         /// <summary>
+        /// Debug settings.
+        /// </summary>
+        public DebugSettings Debug
+        {
+            get
+            {
+                return _Debug;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    _Debug = new DebugSettings();
+                    if (_Database != null)
+                    {
+                        _Database.LogQueries = false;
+                        _Database.LogResults = false;
+                    }
+                }
+                else
+                {
+                    _Debug = value;
+                    if (_Database != null)
+                    {
+                        _Database.LogQueries = value.DatabaseQueries;
+                        _Database.LogResults = value.DatabaseResults;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Direct access to the underlying database client.
         /// </summary>
         public DatabaseClient Database
@@ -61,6 +93,7 @@ namespace Watson.ORM.Postgresql
         #region Private-Members
 
         private Action<string> _Logger = null;
+        private DebugSettings _Debug = new DebugSettings();
         private string _Header = "[WatsonORM] ";
         private CancellationTokenSource _TokenSource = new CancellationTokenSource();
         private CancellationToken _Token;
