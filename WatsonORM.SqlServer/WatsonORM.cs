@@ -42,6 +42,11 @@ namespace Watson.ORM.SqlServer
             set
             {
                 _Logger = value;
+
+                if (_Database != null)
+                {
+                    _Database.Logger = value;
+                }
             }
         }
 

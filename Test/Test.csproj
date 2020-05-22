@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="WatsonORM" Version="1.1.0.4" />
+    <PackageReference Include="WatsonORM" Version="1.1.0.5" />
   </ItemGroup>
  
 </Project>

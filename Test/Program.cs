@@ -66,6 +66,8 @@ namespace Test
                 
                 _Orm = new WatsonORM(_Settings);
                 _Orm.Logger = Logger;
+                _Orm.Debug.DatabaseQueries = true;
+                _Orm.Debug.DatabaseResults = true;
 
                 _Orm.InitializeDatabase(); 
                 _Orm.InitializeTable(typeof(Person));

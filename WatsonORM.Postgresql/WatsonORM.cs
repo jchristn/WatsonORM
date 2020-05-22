@@ -42,6 +42,11 @@ namespace Watson.ORM.Postgresql
             set
             {
                 _Logger = value;
+
+                if (_Database != null)
+                {
+                    _Database.Logger = value;
+                }
             }
         }
 

@@ -107,7 +107,28 @@ namespace Watson.ORM
             }
             set
             {
-                _Logger = value;
+                _Logger = value; 
+
+                if (_Mysql != null)
+                {
+                    _Mysql.Logger = null;
+                }
+                else if (_Postgresql != null)
+                {
+                    _Postgresql.Logger = null;
+                }
+                else if (_Sqlite != null)
+                {
+                    _Sqlite.Logger = null;
+                }
+                else if (_SqlServer != null)
+                {
+                    _SqlServer.Logger = null;
+                }
+                else
+                {
+                    throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+                }
             }
         }
 
@@ -118,11 +139,26 @@ namespace Watson.ORM
         {
             get
             {
-                if (_Mysql != null) return _Mysql.Database;
-                if (_Postgresql != null) return _Postgresql.Database;
-                if (_Sqlite != null) return _Sqlite.Database;
-                if (_SqlServer != null) return _SqlServer.Database;
-                throw new InvalidOperationException("No database client is initialized.");
+                if (_Mysql != null)
+                {
+                    return _Mysql.Database;
+                }
+                if (_Postgresql != null)
+                {
+                    return _Postgresql.Database;
+                }
+                if (_Sqlite != null)
+                {
+                    return _Sqlite.Database;
+                }
+                if (_SqlServer != null)
+                {
+                    return _SqlServer.Database;
+                }
+                else
+                {
+                    throw new InvalidOperationException("No database client is initialized.");
+                }
             }
         }
 
