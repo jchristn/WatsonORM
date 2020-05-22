@@ -37,6 +37,7 @@ namespace Watson.ORM
                 if (value == null)
                 {
                     _Debug = new DebugSettings();
+
                     if (_Mysql != null)
                     {
                         _Mysql.Debug = null;
@@ -55,12 +56,13 @@ namespace Watson.ORM
                     }
                     else
                     {
-                        throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+                        throw new InvalidOperationException("No database client is initialized.");
                     }
                 }
                 else
                 {
                     _Debug = value;
+
                     if (_Mysql != null)
                     {
                         _Mysql.Debug = value;
@@ -79,7 +81,7 @@ namespace Watson.ORM
                     }
                     else
                     {
-                        throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+                        throw new InvalidOperationException("No database client is initialized.");
                     }
                 }
             }
@@ -111,23 +113,23 @@ namespace Watson.ORM
 
                 if (_Mysql != null)
                 {
-                    _Mysql.Logger = null;
+                    _Mysql.Logger = value;
                 }
                 else if (_Postgresql != null)
                 {
-                    _Postgresql.Logger = null;
+                    _Postgresql.Logger = value;
                 }
                 else if (_Sqlite != null)
                 {
-                    _Sqlite.Logger = null;
+                    _Sqlite.Logger = value;
                 }
                 else if (_SqlServer != null)
                 {
-                    _SqlServer.Logger = null;
+                    _SqlServer.Logger = value;
                 }
                 else
                 {
-                    throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+                    throw new InvalidOperationException("No database client is initialized.");
                 }
             }
         }

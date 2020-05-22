@@ -27,5 +27,16 @@ namespace Watson.ORM.Core
             DatabaseQueries = false;
             DatabaseResults = false;
         }
+
+        /// <summary>
+        /// Instantiate the object.
+        /// </summary>
+        /// <param name="dbQueries">Enable or disable debugging of database queries.</param>
+        /// <param name="dbResults">Enable or disable debugging of database results.</param>
+        public DebugSettings(bool dbQueries, bool dbResults)
+        {
+            DatabaseQueries = dbQueries;
+            DatabaseResults = dbResults;
+        }
     }
 }

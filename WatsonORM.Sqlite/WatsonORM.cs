@@ -45,7 +45,7 @@ namespace Watson.ORM.Sqlite
 
                 if (_Database != null)
                 {
-                    _Database.Logger = value;
+                    _Database.Logger = value; 
                 }
             }
         }
@@ -62,8 +62,9 @@ namespace Watson.ORM.Sqlite
             set
             {
                 if (value == null)
-                {
+                { 
                     _Debug = new DebugSettings();
+
                     if (_Database != null)
                     {
                         _Database.LogQueries = false;
@@ -71,10 +72,11 @@ namespace Watson.ORM.Sqlite
                     }
                 }
                 else
-                {
+                { 
                     _Debug = value;
+
                     if (_Database != null)
-                    {
+                    { 
                         _Database.LogQueries = value.DatabaseQueries;
                         _Database.LogResults = value.DatabaseResults;
                     }

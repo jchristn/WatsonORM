@@ -371,6 +371,13 @@
             Instantiate the object.
             </summary>
         </member>
+        <member name="M:Watson.ORM.Core.DebugSettings.#ctor(System.Boolean,System.Boolean)">
+            <summary>
+            Instantiate the object.
+            </summary>
+            <param name="dbQueries">Enable or disable debugging of database queries.</param>
+            <param name="dbResults">Enable or disable debugging of database results.</param>
+        </member>
         <member name="T:Watson.ORM.Core.ReflectionHelper">
             <summary>
             Methods to assist 
