@@ -241,13 +241,13 @@
             <summary>
             A structure in the form of term-operator-term that defines a boolean operation within a WHERE clause.
             </summary>
-            <param name="left">The left term of the expression; can either be a string term or a nested Expression.</param>
+            <param name="left">The left term of the expression; can either be a string term or a nested DbExpression.</param>
             <param name="oper">The operator.</param>
-            <param name="right">The right term of the expression; can either be an object for comparison or a nested Expression.</param>
+            <param name="right">The right term of the expression; can either be an object for comparison or a nested DbExpression.</param>
         </member>
         <member name="F:Watson.ORM.Core.DbExpression.LeftTerm">
             <summary>
-            The left term of the expression; can either be a string term or a nested Expression.
+            The left term of the expression; can either be a string term or a nested DbExpression.
             </summary>
         </member>
         <member name="F:Watson.ORM.Core.DbExpression.Operator">
@@ -257,8 +257,72 @@
         </member>
         <member name="F:Watson.ORM.Core.DbExpression.RightTerm">
             <summary>
-            The right term of the expression; can either be an object for comparison or a nested Expression.
+            The right term of the expression; can either be an object for comparison or a nested DbExpression.
             </summary>
+        </member>
+        <member name="M:Watson.ORM.Core.DbExpression.ToString">
+            <summary>
+            Display DbExpression in a human-readable string.
+            </summary>
+            <returns>String containing human-readable version of the DbExpression.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.DbExpression.PrependAnd(System.Object,Watson.ORM.Core.DbOperators,System.Object)">
+            <summary>
+            Prepends a new DbExpression using the supplied left term, operator, and right term using an AND clause.
+            </summary>
+            <param name="left">The left term of the expression; can either be a string term or a nested DbExpression.</param>
+            <param name="oper">The operator.</param>
+            <param name="right">The right term of the expression; can either be an object for comparison or a nested DbExpression.</param>
+        </member>
+        <member name="M:Watson.ORM.Core.DbExpression.PrependAnd(Watson.ORM.Core.DbExpression)">
+            <summary>
+            Prepends the DbExpression with the supplied DbExpression using an AND clause.
+            </summary>
+            <param name="prepend">The DbExpression to prepend.</param> 
+        </member>
+        <member name="M:Watson.ORM.Core.DbExpression.PrependOr(System.Object,Watson.ORM.Core.DbOperators,System.Object)">
+            <summary>
+            Prepends a new DbExpression using the supplied left term, operator, and right term using an OR clause.
+            </summary>
+            <param name="left">The left term of the expression; can either be a string term or a nested DbExpression.</param>
+            <param name="oper">The operator.</param>
+            <param name="right">The right term of the expression; can either be an object for comparison or a nested DbExpression.</param>
+        </member>
+        <member name="M:Watson.ORM.Core.DbExpression.PrependOr(Watson.ORM.Core.DbExpression)">
+            <summary>
+            Prepends the DbExpression with the supplied DbExpression using an OR clause.
+            </summary>
+            <param name="prepend">The DbExpression to prepend.</param> 
+        </member>
+        <member name="M:Watson.ORM.Core.DbExpression.PrependAndClause(Watson.ORM.Core.DbExpression,Watson.ORM.Core.DbExpression)">
+            <summary>
+            Prepends the DbExpression in prepend to the DbExpression original using an AND clause.
+            </summary>
+            <param name="prepend">The DbExpression to prepend.</param>
+            <param name="original">The original DbExpression.</param>
+            <returns>A new DbExpression.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.DbExpression.PrependOrClause(Watson.ORM.Core.DbExpression,Watson.ORM.Core.DbExpression)">
+            <summary>
+            Prepends the DbExpression in prepend to the DbExpression original using an OR clause.
+            </summary>
+            <param name="prepend">The DbExpression to prepend.</param>
+            <param name="original">The original DbExpression.</param>
+            <returns>A new DbExpression.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.DbExpression.ListToNestedAndExpression(System.Collections.Generic.List{Watson.ORM.Core.DbExpression})">
+            <summary>
+            Convert a List of DbExpression objects to a nested DbExpression containing AND between each DbExpression in the list. 
+            </summary>
+            <param name="exprList">List of DbExpression objects.</param>
+            <returns>A nested DbExpression.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.DbExpression.ListToNestedOrExpression(System.Collections.Generic.List{Watson.ORM.Core.DbExpression})">
+            <summary>
+            Convert a List of DbExpression objects to a nested DbExpression containing OR between each DbExpression in the list. 
+            </summary>
+            <param name="exprList">List of DbExpression objects.</param>
+            <returns>A nested DbExpression.</returns>
         </member>
         <member name="T:Watson.ORM.Core.DbOperators">
             <summary>
