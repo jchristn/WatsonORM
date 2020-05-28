@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using Newtonsoft.Json;
 using Watson.ORM;
 using Watson.ORM.Core;
 
@@ -89,10 +91,10 @@ namespace Test
 
                 };
 
-                Person p1 = new Person("Abraham", "Lincoln", Convert.ToDateTime("1/1/1980"), "initial notes p1", PersonType.Human, false);
-                Person p2 = new Person("Ronald", "Reagan", Convert.ToDateTime("2/2/1981"), "initial notes p2", PersonType.Cat, true);
-                Person p3 = new Person("George", "Bush", Convert.ToDateTime("3/3/1982"), "initial notes p3", PersonType.Dog, false);
-                Person p4 = new Person("Barack", "Obama", Convert.ToDateTime("4/4/1983"), "initial notes p4", PersonType.Human, true);
+                Person p1 = new Person("Abraham", "Lincoln", Convert.ToDateTime("1/1/1980"), null, 42, null, "initial notes p1", PersonType.Human, null, false);
+                Person p2 = new Person("Ronald", "Reagan", Convert.ToDateTime("2/2/1981"), Convert.ToDateTime("3/3/1982"), 43, 43, "initial notes p2", PersonType.Cat, PersonType.Cat, true);
+                Person p3 = new Person("George", "Bush", Convert.ToDateTime("3/3/1982"), null, 44, null, "initial notes p3", PersonType.Dog, PersonType.Dog, false);
+                Person p4 = new Person("Barack", "Obama", Convert.ToDateTime("4/4/1983"), Convert.ToDateTime("5/5/1983"), 45, null, "initial notes p4", PersonType.Human, null, true);
 
                 Console.WriteLine("| Creating p1");
                 p1 = _Orm.Insert<Person>(p1);
@@ -200,8 +202,17 @@ namespace Test
                 #endregion
             }
             catch (Exception e)
-            {
-                Console.WriteLine("Exception: " + Environment.NewLine + e.ToString());
+            {    
+                // Get stack trace for the exception with source file information
+                var st = new StackTrace(e, true);
+                // Get the top stack frame
+                var frame = st.GetFrame(0);
+                // Get the line number from the stack frame
+                var line = frame.GetFileLineNumber();
+                Console.WriteLine("Stack trace:" + Environment.NewLine + SerializeJson(st, true));
+                Console.WriteLine("Stack frame: " + Environment.NewLine + SerializeJson(st, true));
+                Console.WriteLine("Line number: " + line);
+                Console.WriteLine("Exception: " + Environment.NewLine + SerializeJson(e, true));
             }
 
             Console.WriteLine("");
@@ -212,6 +223,35 @@ namespace Test
         static void Logger(string msg)
         {
             Console.WriteLine(msg);
+        }
+
+        static string SerializeJson(object obj, bool pretty)
+        {
+            if (obj == null) return null;
+            string json;
+
+            if (pretty)
+            {
+                json = JsonConvert.SerializeObject(
+                  obj,
+                  Newtonsoft.Json.Formatting.Indented,
+                  new JsonSerializerSettings
+                  {
+                      NullValueHandling = NullValueHandling.Ignore,
+                      DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+                  });
+            }
+            else
+            {
+                json = JsonConvert.SerializeObject(obj,
+                  new JsonSerializerSettings
+                  {
+                      NullValueHandling = NullValueHandling.Ignore,
+                      DateTimeZoneHandling = DateTimeZoneHandling.Utc
+                  });
+            }
+
+            return json;
         }
     }
 }

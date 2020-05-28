@@ -179,10 +179,7 @@ namespace Watson.ORM
         private Watson.ORM.Postgresql.WatsonORM _Postgresql = null;
         private Watson.ORM.Sqlite.WatsonORM _Sqlite = null;
         private Watson.ORM.SqlServer.WatsonORM _SqlServer = null;
-
-        private readonly object _MetadataLock = new object();
-        private Dictionary<Type, TypeMetadata> _Metadata = new Dictionary<Type, TypeMetadata>();
-
+          
         #endregion
 
         #region Constructors-and-Factories

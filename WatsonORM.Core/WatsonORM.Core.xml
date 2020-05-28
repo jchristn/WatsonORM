@@ -69,6 +69,25 @@
             <param name="maxLength">The maximum length of the column.</param>
             <param name="isNullable">Indicates whether or not the column allows a null value.</param>
         </member>
+        <member name="T:Watson.ORM.Core.Common">
+            <summary>
+            Common methods shared amongst WatsonORM modules.
+            </summary>
+        </member>
+        <member name="M:Watson.ORM.Core.Common.DbOperatorsConverter(Watson.ORM.Core.DbOperators)">
+            <summary>
+            Convert a WatsonORM DbOperators to a DatabaseWrapper Core Operators.
+            </summary>
+            <param name="oper">WatsonORM DbOperators.</param>
+            <returns>DatabaseWrapper Core Operators.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.Common.DbExpressionConverter(Watson.ORM.Core.DbExpression)">
+            <summary>
+            Convert a WatsonORM DbExpression to a DatabaseWrapper Expression.
+            </summary>
+            <param name="expr">WatsonORM DbExpression.</param>
+            <returns>DatabaseWrapper Core Expression.</returns>
+        </member>
         <member name="T:Watson.ORM.Core.DatabaseSettings">
             <summary>
             Database settings.
@@ -521,6 +540,90 @@
             <param name="tableName">The name of the database table.</param>
             <param name="primaryKeyPropertyName">Property name of the primary key field.</param>
             <param name="columns">Columns in the table.</param>
+        </member>
+        <member name="T:Watson.ORM.Core.TypeMetadataManager">
+            <summary>
+            Type metadata manager for WatsonORM.
+            </summary>
+        </member>
+        <member name="M:Watson.ORM.Core.TypeMetadataManager.#ctor">
+            <summary>
+            Instantiate the object.
+            </summary>
+        </member>
+        <member name="M:Watson.ORM.Core.TypeMetadataManager.Add(System.Type,Watson.ORM.Core.TypeMetadata)">
+            <summary>
+            Add a TypeMetadata entry for a given Type.
+            </summary>
+            <param name="t">Type.</param>
+            <param name="md">TypeMetadata.</param>
+        </member>
+        <member name="M:Watson.ORM.Core.TypeMetadataManager.GetTypeMetadata(System.Type)">
+            <summary>
+            Get TypeMetadata for a given Type, or throw an InvalidOperationException.
+            </summary>
+            <param name="t">Type.</param>
+            <returns>TypeMetadata.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.TypeMetadataManager.GetTableNameFromType(System.Type)">
+            <summary>
+            Get the database table name from a given Type, or throw an InvalidOperationException.
+            </summary>
+            <param name="t">Type.</param>
+            <returns>Database table name.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.TypeMetadataManager.GetTableNameFromObject(System.Object)">
+            <summary>
+            Get the table name from a given object, or throw an InvalidOperationException.
+            </summary>
+            <param name="obj">Object.</param>
+            <returns>Database table name.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.TypeMetadataManager.GetPrimaryKeyColumnName(System.Type)">
+            <summary>
+            Get the primary key column name from a given type, or throw an InvalidOperationException.
+            </summary>
+            <param name="t">Type.</param>
+            <returns>Primary key column name.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.TypeMetadataManager.GetPrimaryKeyPropertyName(System.Type)">
+            <summary>
+            Get the primary key property name from a given Type, or throw an InvalidOperationException.
+            </summary>
+            <param name="t">Type.</param>
+            <returns>Primary key property name.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.TypeMetadataManager.GetPrimaryKeyValue(System.Object,System.String)">
+            <summary>
+            Get the primary key value from a given object given the object and the property name.
+            </summary>
+            <param name="obj">Object.</param>
+            <param name="propName">Property name.</param>
+            <returns>Value.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.TypeMetadataManager.GetPropertyValue(System.Object,System.String)">
+            <summary>
+            Get the value of a given property from an object.
+            </summary>
+            <param name="obj">Object.</param>
+            <param name="propName">Property name.</param>
+            <returns>Value.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.TypeMetadataManager.GetColumnNameForPropertyName``1(System.String)">
+            <summary>
+            Get the database table column name for a given property name.
+            </summary>
+            <typeparam name="T">Type.</typeparam>
+            <param name="propName">Property name.</param>
+            <returns>Column name.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.TypeMetadataManager.GetPropertyNameFromColumnName(System.Type,System.String)">
+            <summary>
+            Get the property name from the database table column name.
+            </summary>
+            <param name="t">Type.</param>
+            <param name="columnName">Column name.</param>
+            <returns>Property name.</returns>
         </member>
     </members>
 </doc>

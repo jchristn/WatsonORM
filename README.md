@@ -24,9 +24,9 @@ Core features:
 
 For a sample app exercising this library, refer to the ```Test``` project contained within the solution.
 
-## New in v1.1.0
+## New in v1.1.1
 
-- Minor refactor, split into multiple projects
+- Minor refactor, better support for nullable types (i.e. int?, decimal?, etc) 
  
 ## Simple Example
 

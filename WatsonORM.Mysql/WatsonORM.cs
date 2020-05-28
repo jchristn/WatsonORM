@@ -103,9 +103,8 @@ namespace Watson.ORM.Mysql
         private CancellationTokenSource _TokenSource = new CancellationTokenSource();
         private CancellationToken _Token;
         private DatabaseSettings _Settings = null;
-        private DatabaseClient _Database = null; 
-        private readonly object _MetadataLock = new object();
-        private Dictionary<Type, TypeMetadata> _Metadata = new Dictionary<Type, TypeMetadata>();
+        private DatabaseClient _Database = null;
+        private TypeMetadataManager _TypeMetadataMgr = new TypeMetadataManager();
 
         #endregion
 
@@ -184,7 +183,8 @@ namespace Watson.ORM.Mysql
                 throw new InvalidOperationException("Type '" + t.Name + "' does not have any properties with a 'Column' attribute.");
 
             if (!_Database.TableExists(tableName)) _Database.CreateTable(tableName, columns);
-            _Metadata.Add(t, new TypeMetadata(tableName, primaryKeyPropertyName, columns));
+
+            _TypeMetadataMgr.Add(t, new TypeMetadata(tableName, primaryKeyPropertyName, columns));
 
             _Logger?.Invoke(_Header + "initialized table " + tableName + " for type " + t.Name + " with " + columns.Count + " column(s)");
         }
@@ -197,7 +197,7 @@ namespace Watson.ORM.Mysql
         {
             if (t == null) throw new ArgumentNullException(nameof(t));
 
-            string tableName = GetTableNameFromType(t);
+            string tableName = _TypeMetadataMgr.GetTableNameFromType(t);
             _Logger?.Invoke(_Header + "dropping table " + tableName + " for type " + t.Name);
             _Database.DropTable(tableName);
             _Logger?.Invoke(_Header + "dropped table " + tableName);
@@ -211,7 +211,7 @@ namespace Watson.ORM.Mysql
         {
             if (t == null) throw new ArgumentNullException(nameof(t));
 
-            string tableName = GetTableNameFromType(t);
+            string tableName = _TypeMetadataMgr.GetTableNameFromType(t);
             _Logger?.Invoke(_Header + "truncating table " + tableName + " for type " + t.Name);
             _Database.Truncate(tableName);
             _Logger?.Invoke(_Header + "truncated table " + tableName);
@@ -227,7 +227,7 @@ namespace Watson.ORM.Mysql
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
 
-            string tableName = GetTableNameFromObject(obj);  
+            string tableName = _TypeMetadataMgr.GetTableNameFromObject(obj);  
 
             Dictionary<string, object> insertVals = ObjectToDictionary(obj);
             DataTable result = _Database.Insert(tableName, insertVals);
@@ -244,7 +244,7 @@ namespace Watson.ORM.Mysql
         {
             if (objs == null || objs.Count < 1) throw new ArgumentNullException(nameof(objs));
 
-            string tableName = GetTableNameFromType(typeof(T)); 
+            string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T)); 
 
             List<T> ret = new List<T>();
             foreach (T obj in objs)
@@ -267,13 +267,13 @@ namespace Watson.ORM.Mysql
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
 
-            string tableName = GetTableNameFromObject(obj); 
-            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T));
-            string primaryKeyPropertyName = GetPrimaryKeyPropertyName(typeof(T)); 
-            object primaryKeyValue = GetPrimaryKeyValue(obj, primaryKeyPropertyName);
+            string tableName = _TypeMetadataMgr.GetTableNameFromObject(obj); 
+            string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T));
+            string primaryKeyPropertyName = _TypeMetadataMgr.GetPrimaryKeyPropertyName(typeof(T)); 
+            object primaryKeyValue = _TypeMetadataMgr.GetPrimaryKeyValue(obj, primaryKeyPropertyName);
             
             Dictionary<string, object> updateVals = ObjectToDictionary(obj);
-            Expression e = new Expression(primaryKeyColumnName, DbOperatorsConverter(DbOperators.Equals), primaryKeyValue);
+            Expression e = new Expression(primaryKeyColumnName, Common.DbOperatorsConverter(DbOperators.Equals), primaryKeyValue);
             _Database.Update(tableName, updateVals, e);
             DataTable result = _Database.Select(tableName, null, null, null, e, null);
             return DataTableToObject<T>(result);
@@ -290,11 +290,11 @@ namespace Watson.ORM.Mysql
             if (expr == null) throw new ArgumentNullException(nameof(expr));
             if (updateVals == null || updateVals.Count < 1) throw new ArgumentNullException(nameof(updateVals));
 
-            string tableName = GetTableNameFromType(typeof(T));
-            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T));
+            string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
+            string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T));
 
-            Expression e = DbExpressionConverter(expr);
-            e.PrependAnd(primaryKeyColumnName, DbOperatorsConverter(DbOperators.IsNotNull), null);
+            Expression e = Common.DbExpressionConverter(expr);
+            e.PrependAnd(primaryKeyColumnName, Common.DbOperatorsConverter(DbOperators.IsNotNull), null);
 
             _Database.Update(tableName, updateVals, e);
         }
@@ -308,12 +308,12 @@ namespace Watson.ORM.Mysql
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
 
-            string tableName = GetTableNameFromObject(obj); 
-            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T));
-            string primaryKeyPropertyName = GetPrimaryKeyPropertyName(typeof(T)); 
-            object primaryKeyValue = GetPrimaryKeyValue(obj, primaryKeyPropertyName);
+            string tableName = _TypeMetadataMgr.GetTableNameFromObject(obj); 
+            string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T));
+            string primaryKeyPropertyName = _TypeMetadataMgr.GetPrimaryKeyPropertyName(typeof(T)); 
+            object primaryKeyValue = _TypeMetadataMgr.GetPrimaryKeyValue(obj, primaryKeyPropertyName);
             
-            Expression e = new Expression(primaryKeyColumnName, DbOperatorsConverter(DbOperators.Equals), primaryKeyValue);
+            Expression e = new Expression(primaryKeyColumnName, Common.DbOperatorsConverter(DbOperators.Equals), primaryKeyValue);
             _Database.Delete(tableName, e);
         }
 
@@ -326,10 +326,10 @@ namespace Watson.ORM.Mysql
         {
             if (id == null) throw new ArgumentNullException(nameof(id));
 
-            string tableName = GetTableNameFromType(typeof(T)); 
-            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T)); 
+            string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T)); 
+            string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T)); 
 
-            Expression e = new Expression(primaryKeyColumnName, DbOperatorsConverter(DbOperators.Equals), id);
+            Expression e = new Expression(primaryKeyColumnName, Common.DbOperatorsConverter(DbOperators.Equals), id);
             _Database.Delete(tableName, e);
         }
 
@@ -341,8 +341,8 @@ namespace Watson.ORM.Mysql
         public void DeleteMany<T>(DbExpression expr) where T : class, new()
         {
             if (expr == null) throw new ArgumentNullException(nameof(expr)); 
-            string tableName = GetTableNameFromType(typeof(T)); 
-            _Database.Delete(tableName, DbExpressionConverter(expr));
+            string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T)); 
+            _Database.Delete(tableName, Common.DbExpressionConverter(expr));
         }
 
         /// <summary>
@@ -355,10 +355,10 @@ namespace Watson.ORM.Mysql
         {
             if (id == null) throw new ArgumentNullException(nameof(id));
 
-            string tableName = GetTableNameFromType(typeof(T));
-            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T)); 
+            string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
+            string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T)); 
 
-            Expression e = new Expression(primaryKeyColumnName, DbOperatorsConverter(DbOperators.Equals), id);
+            Expression e = new Expression(primaryKeyColumnName, Common.DbOperatorsConverter(DbOperators.Equals), id);
             DataTable result = _Database.Select(tableName, null, null, null, e, null);
             return DataTableToObject<T>(result);
         }
@@ -373,11 +373,11 @@ namespace Watson.ORM.Mysql
         {
             if (expr == null) throw new ArgumentNullException(nameof(expr));
 
-            string tableName = GetTableNameFromType(typeof(T));
-            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T)); 
+            string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
+            string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T)); 
 
-            Expression e = DbExpressionConverter(expr);
-            e.PrependAnd(primaryKeyColumnName, DbOperatorsConverter(DbOperators.IsNotNull), null);
+            Expression e = Common.DbExpressionConverter(expr);
+            e.PrependAnd(primaryKeyColumnName, Common.DbOperatorsConverter(DbOperators.IsNotNull), null);
             string orderByClause = "ORDER BY " + primaryKeyColumnName + " ASC";
             DataTable result = _Database.Select(tableName, null, 1, null, e, orderByClause);
             if (result == null || result.Rows.Count < 1) return null;
@@ -394,11 +394,11 @@ namespace Watson.ORM.Mysql
         {
             if (expr == null) throw new ArgumentNullException(nameof(expr));
 
-            string tableName = GetTableNameFromType(typeof(T)); 
-            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T));
+            string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T)); 
+            string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T));
 
-            Expression e = DbExpressionConverter(expr);
-            e.PrependAnd(primaryKeyColumnName, DbOperatorsConverter(DbOperators.IsNotNull), null);
+            Expression e = Common.DbExpressionConverter(expr);
+            e.PrependAnd(primaryKeyColumnName, Common.DbOperatorsConverter(DbOperators.IsNotNull), null);
             string orderByClause = "ORDER BY " + primaryKeyColumnName + " ASC";
 
             DataTable result = _Database.Select(tableName, null, null, null, e, orderByClause);
@@ -416,11 +416,11 @@ namespace Watson.ORM.Mysql
         {
             if (expr == null) throw new ArgumentNullException(nameof(expr));
 
-            string tableName = GetTableNameFromType(typeof(T)); 
-            string primaryKeyColumnName = GetPrimaryKeyColumnName(typeof(T)); 
+            string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T)); 
+            string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T)); 
 
-            Expression e = DbExpressionConverter(expr);
-            e.PrependAnd(primaryKeyColumnName, DbOperatorsConverter(DbOperators.IsNotNull), null);
+            Expression e = Common.DbExpressionConverter(expr);
+            e.PrependAnd(primaryKeyColumnName, Common.DbOperatorsConverter(DbOperators.IsNotNull), null);
             string orderByClause = "ORDER BY " + primaryKeyColumnName + " ASC";
 
             DataTable result = _Database.Select(tableName, indexStart, maxResults, null, e, orderByClause);
@@ -436,7 +436,7 @@ namespace Watson.ORM.Mysql
         public string GetColumnName<T>(string propName)
         {
             if (String.IsNullOrEmpty(propName)) throw new ArgumentNullException(nameof(propName));
-            return GetColumnNameForPropertyName<T>(propName);
+            return _TypeMetadataMgr.GetColumnNameForPropertyName<T>(propName);
         }
 
         /// <summary>
@@ -461,63 +461,12 @@ namespace Watson.ORM.Mysql
         #endregion
 
         #region Private-Conversion-Methods
-
-        private Operators DbOperatorsConverter(DbOperators oper)
-        {
-            switch (oper)
-            {
-                case DbOperators.And:
-                    return Operators.And;
-                case DbOperators.Or:
-                    return Operators.Or;
-                case DbOperators.Equals:
-                    return Operators.Equals;
-                case DbOperators.NotEquals:
-                    return Operators.NotEquals;
-                case DbOperators.In:
-                    return Operators.In;
-                case DbOperators.NotIn:
-                    return Operators.NotIn;
-                case DbOperators.Contains:
-                    return Operators.Contains;
-                case DbOperators.ContainsNot:
-                    return Operators.ContainsNot;
-                case DbOperators.StartsWith:
-                    return Operators.StartsWith;
-                case DbOperators.EndsWith:
-                    return Operators.EndsWith;
-                case DbOperators.GreaterThan:
-                    return Operators.GreaterThan;
-                case DbOperators.GreaterThanOrEqualTo:
-                    return Operators.GreaterThanOrEqualTo;
-                case DbOperators.LessThan:
-                    return Operators.LessThan;
-                case DbOperators.LessThanOrEqualTo:
-                    return Operators.LessThanOrEqualTo;
-                case DbOperators.IsNull:
-                    return Operators.IsNull;
-                case DbOperators.IsNotNull:
-                    return Operators.IsNotNull;
-                default:
-                    throw new ArgumentException("Unknown operator '" + oper.ToString() + "'.");
-            }
-        }
-
-        private Expression DbExpressionConverter(DbExpression expr)
-        {
-            if (expr == null) return null;
-              
-            return new Expression(
-                (expr.LeftTerm is DbExpression ? DbExpressionConverter((DbExpression)expr.LeftTerm) : expr.LeftTerm),
-                DbOperatorsConverter(expr.Operator),
-                (expr.RightTerm is DbExpression ? DbExpressionConverter((DbExpression)expr.RightTerm) : expr.RightTerm));
-        }
-
+         
         private Dictionary<string, object> ObjectToDictionary(object obj)
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
 
-            string tableName = GetTableNameFromObject(obj); 
+            string tableName = _TypeMetadataMgr.GetTableNameFromObject(obj); 
             if (String.IsNullOrEmpty(tableName)) throw new InvalidOperationException("Type '" + obj.GetType().Name + "' does not have a 'Table' attribute."); 
 
             Dictionary<string, object> ret = new Dictionary<string, object>();
@@ -530,33 +479,34 @@ namespace Watson.ORM.Mysql
                 {
                     if (attr is ColumnAttribute colAttr)
                     {
-                        if (!colAttr.PrimaryKey)
+                        object val = prop.GetValue(obj); 
+                        if (val != null && !colAttr.PrimaryKey)
                         {
                             switch (colAttr.Type)
                             {
                                 case DataTypes.Enum:
                                 case DataTypes.Boolean:
                                 case DataTypes.Int:
-                                    ret.Add(colAttr.Name, Convert.ToInt32(prop.GetValue(obj)));
+                                    ret.Add(colAttr.Name, Convert.ToInt32(val));
                                     break;
                                 case DataTypes.DateTime:
-                                    ret.Add(colAttr.Name, _Database.Timestamp(Convert.ToDateTime(prop.GetValue(obj))));
+                                    ret.Add(colAttr.Name, _Database.Timestamp(Convert.ToDateTime(val)));
                                     break;
                                 case DataTypes.Blob:
-                                    ret.Add(colAttr.Name, prop.GetValue(obj));
+                                    ret.Add(colAttr.Name, val);
                                     break;
                                 case DataTypes.Double:
-                                    ret.Add(colAttr.Name, Convert.ToDouble(prop.GetValue(obj)));
+                                    ret.Add(colAttr.Name, Convert.ToDouble(val));
                                     break;
                                 case DataTypes.Decimal:
-                                    ret.Add(colAttr.Name, Convert.ToDecimal(prop.GetValue(obj)));
+                                    ret.Add(colAttr.Name, Convert.ToDecimal(val));
                                     break;
                                 case DataTypes.Long:
-                                    ret.Add(colAttr.Name, Convert.ToInt64(prop.GetValue(obj)));
+                                    ret.Add(colAttr.Name, Convert.ToInt64(val));
                                     break;
                                 case DataTypes.Nvarchar:
                                 case DataTypes.Varchar:
-                                    ret.Add(colAttr.Name, prop.GetValue(obj).ToString());
+                                    ret.Add(colAttr.Name, val.ToString());
                                     break;
                                 default:
                                     throw new ArgumentException("Unknown data type '" + colAttr.Type.ToString() + "'.");
@@ -597,7 +547,7 @@ namespace Watson.ORM.Mysql
             if (row == null) return null;
 
             T ret = new T();
-            TypeMetadata md = GetTypeMetadata(typeof(T));
+            TypeMetadata md = _TypeMetadataMgr.GetTypeMetadata(typeof(T));
              
             foreach (DataColumn dc in row.Table.Columns)
             {
@@ -605,30 +555,49 @@ namespace Watson.ORM.Mysql
                 {
                     Column col = md.Columns.Where(c => c.Name.Equals(dc.ColumnName)).First(); 
                     object val = row[dc.ColumnName];
-                    string propName = GetPropertyNameFromColumnName(typeof(T), dc.ColumnName);
+                    string propName = _TypeMetadataMgr.GetPropertyNameFromColumnName(typeof(T), dc.ColumnName);
                     if (String.IsNullOrEmpty(propName)) throw new ArgumentException("Unable to find property in type '" + typeof(T).Name + "' for column '" + dc.ColumnName + "'.");
 
                     PropertyInfo property = typeof(T).GetProperty(propName);
-                    if (val != null)
+                    if (val != null && val != DBNull.Value)
                     {
                         // Remap the object to the property type since some databases misalign
                         // Example: sqlite uses int64 when it should be int32
                         // Console.WriteLine("| Column data type [" + col.DataType.ToString() + "], property data type [" + property.PropertyType.ToString() + "]");
 
-                        if (property.PropertyType == typeof(bool))
+                        Type propType = property.PropertyType;
+                        Type underlyingType = Nullable.GetUnderlyingType(propType);
+
+                        if (underlyingType != null)
                         {
-                            property.SetValue(ret, Convert.ToBoolean(val));
-                        }
-                        else if (property.PropertyType.IsEnum)
-                        {
-                            Type propType = property.PropertyType;
-                            property.SetValue(ret, (Enum.Parse(property.PropertyType, val.ToString())));
+                            if (underlyingType == typeof(bool))
+                            {
+                                property.SetValue(ret, Convert.ToBoolean(val));
+                            }
+                            else if (underlyingType.IsEnum)
+                            {
+                                property.SetValue(ret, (Enum.Parse(underlyingType, val.ToString())));
+                            }
+                            else
+                            {
+                                property.SetValue(ret, Convert.ChangeType(val, underlyingType));
+                            }
                         }
                         else
                         {
-                            property.SetValue(ret, Convert.ChangeType(val, property.PropertyType));
+                            if (propType == typeof(bool))
+                            {
+                                property.SetValue(ret, Convert.ToBoolean(val));
+                            }
+                            else if (propType.IsEnum)
+                            {
+                                property.SetValue(ret, (Enum.Parse(propType, val.ToString())));
+                            }
+                            else
+                            {
+                                property.SetValue(ret, Convert.ChangeType(val, propType));
+                            }
                         }
-
                     }
                     else
                     {
@@ -665,116 +634,6 @@ namespace Watson.ORM.Mysql
             }
         }
 
-        #endregion
-
-        #region Private-Metadata-Methods
-
-        private TypeMetadata GetTypeMetadata(Type t)
-        {
-            if (t == null) throw new ArgumentNullException(nameof(t));
-
-            lock (_MetadataLock)
-            {
-                if (_Metadata.ContainsKey(t)) return _Metadata[t];
-            }
-
-            throw new InvalidOperationException("Type '" + t.Name + "' has not been initialized into the ORM.");
-        }
-
-        private string GetTableNameFromType(Type t)
-        {
-            if (t == null) throw new ArgumentNullException(nameof(t));
-
-            TypeMetadata md = GetTypeMetadata(t);
-
-            return md.TableName;
-        }
-
-        private string GetTableNameFromObject(object obj)
-        {
-            if (obj == null) throw new ArgumentNullException(nameof(obj));
-            return GetTableNameFromType(obj.GetType());
-        }
-
-        private string GetPrimaryKeyColumnName(Type t)
-        {
-            if (t == null) throw new ArgumentNullException(nameof(t));
-
-            TypeMetadata md = GetTypeMetadata(t);
-            
-            foreach (Column col in md.Columns)
-            {
-                if (col.PrimaryKey) return col.Name;
-            }
-            
-            throw new InvalidOperationException("Type '" + t.Name + "' does not have a property with the 'PrimaryKey' attribute."); 
-        }
-
-        private string GetPrimaryKeyPropertyName(Type t)
-        {
-            if (t == null) throw new ArgumentNullException(nameof(t));
-
-            TypeMetadata md = GetTypeMetadata(t);
-
-            return md.PrimaryKeyPropertyName; 
-        }
-
-        private object GetPrimaryKeyValue(object obj, string propName)
-        {
-            object val = GetPropertyValue(obj, propName);
-            if (val == null) throw new InvalidOperationException("Property '" + propName + "' cannot be null if decorated as a primary key.");
-            return val;
-        }
-
-        private object GetPropertyValue(object obj, string propName)
-        {
-            return obj.GetType().GetProperty(propName).GetValue(obj, null);
-        }
-
-        private string GetColumnNameForPropertyName<T>(string propName)
-        {
-            if (String.IsNullOrEmpty(propName)) throw new ArgumentNullException(nameof(propName));
-
-            PropertyInfo[] properties = typeof(T).GetProperties();
-            foreach (PropertyInfo prop in properties)
-            {
-                if (prop.Name.Equals(propName))
-                {
-                    object[] attrs = prop.GetCustomAttributes(true);
-                    foreach (object attr in attrs)
-                    {
-                        if (attr is ColumnAttribute colAttr)
-                        {
-                            return colAttr.Name;
-                        }
-                    }
-                }
-            }
-
-            throw new ArgumentException("No 'Column' attribute found for property name '" + propName + "'.");
-        }
-         
-        private string GetPropertyNameFromColumnName(Type t, string columnName)
-        {
-            if (t == null) throw new ArgumentNullException(nameof(t));
-            if (String.IsNullOrEmpty(columnName)) throw new ArgumentNullException(nameof(columnName));
-
-            PropertyInfo[] properties = t.GetProperties();
-            foreach (PropertyInfo prop in properties)
-            {
-                object[] attrs = prop.GetCustomAttributes(true);
-                foreach (object attr in attrs)
-                {
-                    if (attr is ColumnAttribute colAttr)
-                    {
-                        if (colAttr.Name.Equals(columnName)) return prop.Name;
-                    }
-                }
-            }
-
-            throw new ArgumentException("No property found for column name '" + columnName + "'.");
-        }
-
-        #endregion
+        #endregion 
     }
 }

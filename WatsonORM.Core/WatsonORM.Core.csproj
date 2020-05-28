@@ -4,8 +4,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>WatsonORM.Core</AssemblyName>
     <RootNamespace>Watson.ORM.Core</RootNamespace>
-    <Description>Do not install this package directly.  Core classes for WatsonORM packages.</Description>
-    <Version>1.1.0.10</Version>
+    <Description>Do not install this package directly.  Core classes and static methods supporting WatsonORM packages.</Description>
+    <Version>1.1.1.0</Version>
     <Authors>Joel Christner</Authors>
     <Copyright>(c)2020 Joel Christner</Copyright>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
@@ -14,7 +14,7 @@
     <RepositoryUrl>https://github.com/jchristn/watsonorm</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
     <PackageTags>orm object relation relational mapper map database object data convert sql server mssql sqlite mysql pgsql postgres postgresql dynamic query builder datarow datatable key foreign</PackageTags>
-    <PackageReleaseNotes>DebugSettings</PackageReleaseNotes>
+    <PackageReleaseNotes>- Minor refactor, improved support for nullable types (i.e. int?, etc)</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
