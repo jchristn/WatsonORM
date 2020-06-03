@@ -49,6 +49,8 @@ namespace Watson.ORM.Core
                     return Operators.LessThan;
                 case DbOperators.LessThanOrEqualTo:
                     return Operators.LessThanOrEqualTo;
+                case DbOperators.Between:
+                    return Operators.Between;
                 case DbOperators.IsNull:
                     return Operators.IsNull;
                 case DbOperators.IsNotNull:

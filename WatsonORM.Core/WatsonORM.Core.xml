@@ -239,11 +239,20 @@
         </member>
         <member name="M:Watson.ORM.Core.DbExpression.#ctor(System.Object,Watson.ORM.Core.DbOperators,System.Object)">
             <summary>
-            A structure in the form of term-operator-term that defines a boolean operation within a WHERE clause.
+            A structure in the form of term-operator-term that defines a Boolean expression within a WHERE clause.
             </summary>
             <param name="left">The left term of the expression; can either be a string term or a nested DbExpression.</param>
             <param name="oper">The operator.</param>
             <param name="right">The right term of the expression; can either be an object for comparison or a nested DbExpression.</param>
+        </member>
+        <member name="M:Watson.ORM.Core.DbExpression.#ctor(System.Object,Watson.ORM.Core.DbOperators,System.Collections.Generic.List{System.Object})">
+            <summary>
+            A structure in the form of term-operator-term that defines a Boolean expression within a WHERE clause.
+            The right term must be a List with exactly two values.
+            </summary>
+            <param name="left">The left term of the expression; can either be a string term or a nested DbExpression.</param>
+            <param name="oper">Must be 'Between'.</param>
+            <param name="right">The right term of the expression; must be a List with two values where the first value is the lower value and the second value is the upper value.</param>
         </member>
         <member name="F:Watson.ORM.Core.DbExpression.LeftTerm">
             <summary>
@@ -397,6 +406,11 @@
         <member name="F:Watson.ORM.Core.DbOperators.LessThanOrEqualTo">
             <summary>
             Value is less than or equal to the specified value
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbOperators.Between">
+            <summary>
+            Value is between two values
             </summary>
         </member>
         <member name="F:Watson.ORM.Core.DbOperators.IsNull">

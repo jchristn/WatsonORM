@@ -182,6 +182,12 @@ namespace Test
                 pSelected = _Orm.SelectFirst<Person>(eSelect2);
                 Console.WriteLine("| Selected: " + pSelected.ToString());
 
+                Console.WriteLine("| Selecting many, test 2");
+                DbExpression eSelect4 = new DbExpression("id", DbOperators.Between, new List<int> { 2, 4 });
+                selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect4);
+                Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
+                foreach (Person curr in selectedList1) Console.WriteLine("  | " + curr.ToString());
+
                 #endregion
 
                 #region Delete-Records

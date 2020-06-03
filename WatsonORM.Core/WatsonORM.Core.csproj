@@ -5,7 +5,7 @@
     <AssemblyName>WatsonORM.Core</AssemblyName>
     <RootNamespace>Watson.ORM.Core</RootNamespace>
     <Description>Do not install this package directly.  Core classes and static methods supporting WatsonORM packages.</Description>
-    <Version>1.1.1.1</Version>
+    <Version>1.1.2</Version>
     <Authors>Joel Christner</Authors>
     <Copyright>(c)2020 Joel Christner</Copyright>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
@@ -14,7 +14,8 @@
     <RepositoryUrl>https://github.com/jchristn/watsonorm</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
     <PackageTags>orm object relation relational mapper map database object data convert sql server mssql sqlite mysql pgsql postgres postgresql dynamic query builder datarow datatable key foreign</PackageTags>
-    <PackageReleaseNotes>- Additional methods for DbExpression objects</PackageReleaseNotes>
+    <PackageReleaseNotes>- Add 'Between' DbOperator
+- Dependency update</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
@@ -27,7 +28,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DatabaseWrapper.Core" Version="3.0.0.2" />
+    <PackageReference Include="DatabaseWrapper.Core" Version="3.0.1" />
   </ItemGroup>
 
   <ItemGroup>

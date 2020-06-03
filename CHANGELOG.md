@@ -2,11 +2,16 @@
 
 ## Current Version
 
+v1.1.2
+
+- Add 'Between' DbOperator
+- Dependency update
+
+## Previous Versions
+
 v1.1.1
 
 - Minor refactor, better support for nullable types (i.e. int?, decimal?, etc) 
-
-## Previous Versions
 
 v1.1.0
 

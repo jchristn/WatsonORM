@@ -85,6 +85,11 @@ namespace Watson.ORM.Core
         [EnumMember(Value = "LessThanOrEqualTo")]
         LessThanOrEqualTo,
         /// <summary>
+        /// Value is between two values
+        /// </summary>
+        [EnumMember(Value = "Between")]
+        Between,
+        /// <summary>
         /// Value is null
         /// </summary>
         [EnumMember(Value = "IsNull")]

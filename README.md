@@ -24,10 +24,11 @@ Core features:
 
 For a sample app exercising this library, refer to the ```Test``` project contained within the solution.
 
-## New in v1.1.1
+## New in v1.1.2
 
-- Minor refactor, better support for nullable types (i.e. int?, decimal?, etc) 
- 
+- Add 'Between' DbOperator
+- Dependency update
+
 ## Simple Example
 
 This example uses ```Sqlite```.  For ```SqlServer```, ```Mysql```, or ```Postgresql```, you must make sure the database exists.  Tables will be automatically created in this example.  Refer to the ```Test``` project for a complete example.
