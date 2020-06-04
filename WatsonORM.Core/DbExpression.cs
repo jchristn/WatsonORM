@@ -31,24 +31,18 @@ namespace Watson.ORM.Core
         }
 
         /// <summary>
-        /// A structure in the form of term-operator-term that defines a Boolean expression within a WHERE clause.
-        /// The right term must be a List with exactly two values.
+        /// An Expression that allows you to determine if an object is between two values, i.e. GreaterThanOrEqualTo the first value, and LessThanOrEqualTo the second value.
         /// </summary>
         /// <param name="left">The left term of the expression; can either be a string term or a nested DbExpression.</param>
-        /// <param name="oper">Must be 'Between'.</param>
         /// <param name="right">The right term of the expression; must be a List with two values where the first value is the lower value and the second value is the upper value.</param>
-        public DbExpression(object left, DbOperators oper, List<object> right)
+        public static DbExpression Between(object left, List<object> right)
         {
             if (right == null) throw new ArgumentNullException(nameof(right));
             if (right.Count != 2) throw new ArgumentException("Right term must be a list comprised of two elements, where the first element is the lower boundary and the second element is the upper boundary of a 'Between' expression.");
-            if (oper != DbOperators.Between) throw new ArgumentException("This constructor may only be used in conjunction with the DbOperator 'Between'.");
 
             DbExpression startOfBetween = new DbExpression(left, DbOperators.GreaterThanOrEqualTo, right.First());
             DbExpression endOfBetween = new DbExpression(left, DbOperators.LessThanOrEqualTo, right.Last());
-            DbExpression e = PrependAndClause(startOfBetween, endOfBetween);
-            LeftTerm = e.LeftTerm;
-            Operator = e.Operator;
-            RightTerm = e.RightTerm;
+            return PrependAndClause(startOfBetween, endOfBetween);
         }
 
         /// <summary>

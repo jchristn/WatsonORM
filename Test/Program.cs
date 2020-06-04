@@ -96,15 +96,19 @@ namespace Test
                 Person p3 = new Person("George", "Bush", Convert.ToDateTime("3/3/1982"), null, 44, null, "initial notes p3", PersonType.Dog, PersonType.Dog, false);
                 Person p4 = new Person("Barack", "Obama", Convert.ToDateTime("4/4/1983"), Convert.ToDateTime("5/5/1983"), 45, null, "initial notes p4", PersonType.Human, null, true);
 
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Creating p1");
                 p1 = _Orm.Insert<Person>(p1);
 
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Creating p2");
                 p2 = _Orm.Insert<Person>(p2);
 
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Creating p3");
                 p3 = _Orm.Insert<Person>(p3);
 
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Creating p4");
                 p4 = _Orm.Insert<Person>(p4);
 
@@ -112,12 +116,14 @@ namespace Test
 
                 #region Select
 
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting many by column name");
                 DbExpression eSelect1 = new DbExpression("id", DbOperators.GreaterThan, 0);
                 List<Person> selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect1);
                 Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
                 foreach (Person curr in selectedList1) Console.WriteLine("  | " + curr.ToString());
 
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting many by property name");
                 DbExpression eSelect2 = new DbExpression(
                     _Orm.GetColumnName<Person>(nameof(Person.FirstName)),
@@ -127,31 +133,37 @@ namespace Test
                 Console.WriteLine("| Retrieved: " + selectedList2.Count + " records");
                 foreach (Person curr in selectedList2) Console.WriteLine("  | " + curr.ToString());
 
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting by ID");
                 Person pSelected = _Orm.SelectByPrimaryKey<Person>(3);
                 Console.WriteLine("| Selected: " + pSelected.ToString());
 
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting first by column name");
                 DbExpression eSelect3 = new DbExpression("id", DbOperators.Equals, 4);
                 pSelected = _Orm.SelectFirst<Person>(eSelect3);
                 Console.WriteLine("| Selected: " + pSelected.ToString());
 
-                #endregion
+                #endregion 
 
                 #region Update-Records
 
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Updating p1");
                 p1.Notes = "updated notes p1";
                 p1 = _Orm.Update<Person>(p1);
 
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Updating p2");
                 p2.Notes = "updated notes p2";
                 p2 = _Orm.Update<Person>(p2);
 
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Updating p3");
                 p3.Notes = "updated notes p3";
                 p3 = _Orm.Update<Person>(p3);
 
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Updating p4");
                 p4.Notes = "updated notes p4";
                 p4 = _Orm.Update<Person>(p4);
@@ -160,6 +172,7 @@ namespace Test
 
                 #region Update-Many-Records
 
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Updating many records");
                 Dictionary<string, object> updateVals = new Dictionary<string, object>();
                 updateVals.Add(_Orm.GetColumnName<Person>("Notes"), "Updated during update many!");
@@ -169,21 +182,25 @@ namespace Test
 
                 #region Select
 
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting many, test 1");
                 selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect1);
                 Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
                 foreach (Person curr in selectedList1) Console.WriteLine("  | " + curr.ToString());
 
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting by ID");
                 pSelected = _Orm.SelectByPrimaryKey<Person>(3);
                 Console.WriteLine("| Selected: " + pSelected.ToString());
 
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting first");
                 pSelected = _Orm.SelectFirst<Person>(eSelect2);
                 Console.WriteLine("| Selected: " + pSelected.ToString());
 
-                Console.WriteLine("| Selecting many, test 2");
-                DbExpression eSelect4 = new DbExpression("id", DbOperators.Between, new List<int> { 2, 4 });
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
+                Console.WriteLine("| Selecting between, test 1");
+                DbExpression eSelect4 = DbExpression.Between("id", new List<object> { 2, 4 });
                 selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect4);
                 Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
                 foreach (Person curr in selectedList1) Console.WriteLine("  | " + curr.ToString());
@@ -191,16 +208,16 @@ namespace Test
                 #endregion
 
                 #region Delete-Records
-
-                // delete p1
+                 
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Deleting p1");
                 _Orm.Delete<Person>(p1);
 
-                // delete p2
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Deleting p2");
                 _Orm.DeleteByPrimaryKey<Person>(2);
 
-                // delete p3 and p4
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Deleting p3 and p4");
                 DbExpression eDelete = new DbExpression("id", DbOperators.GreaterThan, 2);
                 _Orm.DeleteMany<Person>(eDelete);
