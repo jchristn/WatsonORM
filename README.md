@@ -24,10 +24,9 @@ Core features:
 
 For a sample app exercising this library, refer to the ```Test``` project contained within the solution.
 
-## New in v1.1.2
+## New in v1.1.3
 
-- Add 'Between' DbOperator
-- Dependency update
+- Added 'Query' API
 
 ## Simple Example
 

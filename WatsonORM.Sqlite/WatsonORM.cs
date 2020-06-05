@@ -445,6 +445,17 @@ namespace Watson.ORM.Sqlite
         }
 
         /// <summary>
+        /// Execute a query directly against the database.
+        /// </summary>
+        /// <param name="query">Query.</param>
+        /// <returns>DataTable.</returns>
+        public DataTable Query(string query)
+        {
+            if (String.IsNullOrEmpty(query)) throw new ArgumentNullException(nameof(query));
+            return _Database.Query(query);
+        }
+
+        /// <summary>
         /// Dispose of the object and release background workers.
         /// </summary>
         /// <param name="disposing">Indicate if child resources should be disposed.</param>

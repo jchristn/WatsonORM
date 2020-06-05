@@ -158,6 +158,13 @@
             <param name="propName">Property name.</param>
             <returns>Column name.</returns>
         </member>
+        <member name="M:Watson.ORM.Postgresql.WatsonORM.Query(System.String)">
+            <summary>
+            Execute a query directly against the database.
+            </summary>
+            <param name="query">Query.</param>
+            <returns>DataTable.</returns>
+        </member>
         <member name="M:Watson.ORM.Postgresql.WatsonORM.Dispose(System.Boolean)">
             <summary>
             Dispose of the object and release background workers.

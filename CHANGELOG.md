@@ -2,12 +2,16 @@
 
 ## Current Version
 
+v1.1.3
+
+- Added 'Query' API
+
+## Previous Versions
+
 v1.1.2
 
 - Add 'Between' DbOperator
 - Dependency update
-
-## Previous Versions
 
 v1.1.1
 

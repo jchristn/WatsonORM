@@ -12,12 +12,11 @@
     <RepositoryUrl>https://github.com/jchristn/watsonorm</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
     <PackageTags>orm object relation relational mapper map database object data convert sql server mssql sqlite mysql pgsql postgres postgresql dynamic query builder datarow datatable key foreign</PackageTags>
-    <PackageReleaseNotes>- Add 'Between' DbOperator
-- Dependency update</PackageReleaseNotes>
+    <PackageReleaseNotes>- Added 'Query' API</PackageReleaseNotes>
     <PackageIconUrl>https://raw.githubusercontent.com/jchristn/WatsonORM/master/assets/watson.ico</PackageIconUrl>
     <PackageId>WatsonORM</PackageId>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.2.1</Version>
+    <Version>1.1.3</Version>
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
@@ -41,10 +40,10 @@
 
   <ItemGroup>
     <PackageReference Include="WatsonORM.Core" Version="1.1.2.1" />
-    <PackageReference Include="WatsonORM.Mysql" Version="1.1.2.1" />
-    <PackageReference Include="WatsonORM.Postgresql" Version="1.1.2.1" />
-    <PackageReference Include="WatsonORM.Sqlite" Version="1.1.2.1" />
-    <PackageReference Include="WatsonORM.SqlServer" Version="1.1.2.1" />
+    <PackageReference Include="WatsonORM.Mysql" Version="1.1.3" />
+    <PackageReference Include="WatsonORM.Postgresql" Version="1.1.3" />
+    <PackageReference Include="WatsonORM.Sqlite" Version="1.1.3" />
+    <PackageReference Include="WatsonORM.SqlServer" Version="1.1.3" />
   </ItemGroup>
 
 </Project>

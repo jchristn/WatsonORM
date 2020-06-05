@@ -702,6 +702,36 @@ namespace Watson.ORM
         }
 
         /// <summary>
+        /// Execute a query directly against the database.
+        /// </summary>
+        /// <param name="query">Query.</param>
+        /// <returns>DataTable.</returns>
+        public DataTable Query(string query)
+        {
+            if (String.IsNullOrEmpty(query)) throw new ArgumentNullException(nameof(query));
+            if (_Mysql != null)
+            {
+                return _Mysql.Query(query);
+            }
+            else if (_Postgresql != null)
+            {
+                return _Postgresql.Query(query);
+            }
+            else if (_SqlServer != null)
+            {
+                return _SqlServer.Query(query);
+            }
+            else if (_Sqlite != null)
+            {
+                return _Sqlite.Query(query);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
+        }
+
+        /// <summary>
         /// Dispose of the object and release background workers.
         /// </summary>
         /// <param name="disposing">Indicate if child resources should be disposed.</param>
