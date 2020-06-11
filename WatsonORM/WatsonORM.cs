@@ -90,7 +90,7 @@ namespace Watson.ORM
         /// <summary>
         /// Database settings.
         /// </summary>
-        public DatabaseSettings Settings
+        public Watson.ORM.Core.DatabaseSettings Settings
         {
             get
             {
@@ -173,7 +173,7 @@ namespace Watson.ORM
         private string _Header = "[WatsonORM] ";
         private CancellationTokenSource _TokenSource = new CancellationTokenSource();
         private CancellationToken _Token;
-        private DatabaseSettings _Settings = null;
+        private Watson.ORM.Core.DatabaseSettings _Settings = null;
 
         private Watson.ORM.Mysql.WatsonORM _Mysql = null;
         private Watson.ORM.Postgresql.WatsonORM _Postgresql = null;
@@ -188,7 +188,7 @@ namespace Watson.ORM
         /// Instantiate the object.  Once constructed, call InitializeDatabase() and InitializeTable() for each table if needed.
         /// </summary>
         /// <param name="settings">Database settings.</param>
-        public WatsonORM(DatabaseSettings settings)
+        public WatsonORM(Watson.ORM.Core.DatabaseSettings settings)
         {
             if (settings == null) throw new ArgumentNullException(nameof(settings));
 

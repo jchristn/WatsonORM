@@ -2,11 +2,15 @@
 
 ## Current Version
 
+v1.2.0
+
+- Breaking changes; update to .NET Standard 2.1
+
+## Previous Versions
+
 v1.1.3
 
 - Added 'Query' API
-
-## Previous Versions
 
 v1.1.2
 

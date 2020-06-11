@@ -24,9 +24,9 @@ Core features:
 
 For a sample app exercising this library, refer to the ```Test``` project contained within the solution.
 
-## New in v1.1.3
+## New in v1.2.0
 
-- Added 'Query' API
+- Breaking changes; update to .NET Standard 2.1
 
 ## Simple Example
 

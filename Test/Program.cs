@@ -24,12 +24,12 @@ namespace Test
             {
                 #region Setup
 
-                Console.Write("DB type [mssql|mysql|pgsql|sqlite]: ");
+                Console.Write("DB type [sqlserver|mysql|postgresql|sqlite]: ");
                 _DbType = Console.ReadLine();
                 if (String.IsNullOrEmpty(_DbType)) return;
                 _DbType = _DbType.ToLower();
 
-                if (_DbType.Equals("mssql") || _DbType.Equals("mysql") || _DbType.Equals("pgsql"))
+                if (_DbType.Equals("sqlserver") || _DbType.Equals("mysql") || _DbType.Equals("postgresql"))
                 {
                     Console.Write("User: ");
                     _Username = Console.ReadLine();
@@ -39,13 +39,13 @@ namespace Test
 
                     switch (_DbType)
                     {
-                        case "mssql":
+                        case "sqlserver":
                             _Settings = new DatabaseSettings(DbTypes.SqlServer, "localhost", 1433, _Username, _Password, "test");
                             break;
                         case "mysql":
                             _Settings = new DatabaseSettings(DbTypes.Mysql, "localhost", 3306, _Username, _Password, "test");
                             break;
-                        case "pgsql":
+                        case "postgresql":
                             _Settings = new DatabaseSettings(DbTypes.Postgresql, "localhost", 5432, _Username, _Password, "test");
                             break;
                         default:
