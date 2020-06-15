@@ -93,10 +93,22 @@ namespace Watson.ORM.Postgresql
             }
         }
 
+        /// <summary>
+        /// Indicates if the database has been initialized.
+        /// </summary>
+        public bool IsInitialized
+        {
+            get
+            {
+                return _Initialized;
+            }
+        }
+
         #endregion
 
         #region Private-Members
 
+        private bool _Initialized = false;
         private Action<string> _Logger = null;
         private DebugSettings _Debug = new DebugSettings();
         private string _Header = "[WatsonORM] ";
@@ -159,14 +171,18 @@ namespace Watson.ORM.Postgresql
                 _Settings.DatabaseName); 
 
             _Logger?.Invoke(_Header + "initialization complete");
+
+            _Initialized = true;
         }
 
         /// <summary>
         /// Create table (if it doesn't exist) for a given class.
+        /// Adding a table that has already been added will throw an ArgumentException.
         /// </summary>
         /// <param name="t">Class for which a table should be created.</param>
         public void InitializeTable(Type t)
         {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (t == null) throw new ArgumentNullException(nameof(t));
 
             string tableName = ReflectionHelper.GetTableNameFromType(t);
@@ -195,6 +211,7 @@ namespace Watson.ORM.Postgresql
         /// <param name="t">Class for which a table should be dropped.</param>
         public void DropTable(Type t)
         {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (t == null) throw new ArgumentNullException(nameof(t));
 
             string tableName = _TypeMetadataMgr.GetTableNameFromType(t);
@@ -209,6 +226,7 @@ namespace Watson.ORM.Postgresql
         /// <param name="t">Class for which a table should be dropped.</param>
         public void TruncateTable(Type t)
         {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (t == null) throw new ArgumentNullException(nameof(t));
 
             string tableName = _TypeMetadataMgr.GetTableNameFromType(t);
@@ -225,6 +243,7 @@ namespace Watson.ORM.Postgresql
         /// <returns>INSERTed object.</returns>
         public T Insert<T>(T obj) where T : class, new()
         {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (obj == null) throw new ArgumentNullException(nameof(obj));
 
             string tableName = _TypeMetadataMgr.GetTableNameFromObject(obj); 
@@ -238,12 +257,14 @@ namespace Watson.ORM.Postgresql
 
         /// <summary>
         /// INSERT multiple records.
+        /// This operation will iteratively call Insert on each individual object.</T>
         /// </summary>
         /// <typeparam name="T">Type of object.</typeparam>
         /// <param name="objs">List of objects.</param>
         /// <returns>List of objects.</returns>
         public List<T> InsertMany<T>(List<T> objs) where T : class, new()
         {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (objs == null || objs.Count < 1) throw new ArgumentNullException(nameof(objs));
 
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
@@ -269,6 +290,7 @@ namespace Watson.ORM.Postgresql
         /// <returns>UPDATEd object.</returns>
         public T Update<T>(T obj) where T : class, new()
         {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (obj == null) throw new ArgumentNullException(nameof(obj));
 
             string tableName = _TypeMetadataMgr.GetTableNameFromObject(obj); 
@@ -291,6 +313,7 @@ namespace Watson.ORM.Postgresql
         /// <param name="updateVals">Update values.</param>
         public void UpdateMany<T>(DbExpression expr, Dictionary<string, object> updateVals)
         {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (expr == null) throw new ArgumentNullException(nameof(expr));
             if (updateVals == null || updateVals.Count < 1) throw new ArgumentNullException(nameof(updateVals));
 
@@ -310,6 +333,7 @@ namespace Watson.ORM.Postgresql
         /// <param name="obj">Object to DELETE.</param>
         public void Delete<T>(T obj) where T : class, new()
         {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (obj == null) throw new ArgumentNullException(nameof(obj));
 
             string tableName = _TypeMetadataMgr.GetTableNameFromObject(obj); 
@@ -328,6 +352,7 @@ namespace Watson.ORM.Postgresql
         /// <param name="id">Id value.</param>
         public void DeleteByPrimaryKey<T>(object id) where T : class, new()
         {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (id == null) throw new ArgumentNullException(nameof(id));
 
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T)); 
@@ -345,6 +370,7 @@ namespace Watson.ORM.Postgresql
         /// <param name="expr">Expression.</param>
         public void DeleteMany<T>(DbExpression expr) where T : class, new()
         {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (expr == null) throw new ArgumentNullException(nameof(expr)); 
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T)); 
             _Database.Delete(tableName, Common.DbExpressionConverter(expr));
@@ -352,12 +378,14 @@ namespace Watson.ORM.Postgresql
 
         /// <summary>
         /// SELECT an object by id.
+        /// This operation will return null if the object does not exist.
         /// </summary>
         /// <typeparam name="T">Type of object.</typeparam>
         /// <param name="id">Id.</param>
         /// <returns>Object.</returns>
         public T SelectByPrimaryKey<T>(object id) where T : class, new()
         {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (id == null) throw new ArgumentNullException(nameof(id));
 
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
@@ -370,13 +398,15 @@ namespace Watson.ORM.Postgresql
         }
 
         /// <summary>
-        /// SELECT an object using a filter.
+        /// SELECT the first instance of an object matching a given expression.
+        /// This operation will return null if the object does not exist.
         /// </summary>
         /// <typeparam name="T">Type of filter.</typeparam>
         /// <param name="expr">Expression by which SELECT should be filtered (i.e. WHERE clause).</param> 
         /// <returns>Object.</returns>
         public T SelectFirst<T>(DbExpression expr) where T : class, new()
         {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (expr == null) throw new ArgumentNullException(nameof(expr));
 
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
@@ -393,12 +423,14 @@ namespace Watson.ORM.Postgresql
 
         /// <summary>
         /// SELECT multiple rows.
+        /// This operation will return an empty list if no matching objects are found.
         /// </summary>
         /// <typeparam name="T">Type of object.</typeparam>
         /// <param name="expr">Expression.</param>
         /// <returns>List of objects.</returns>
         public List<T> SelectMany<T>(DbExpression expr) where T : class, new()
         {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (expr == null) throw new ArgumentNullException(nameof(expr));
 
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T)); 
@@ -413,7 +445,8 @@ namespace Watson.ORM.Postgresql
         }
 
         /// <summary>
-        /// SELECT multiple rows.
+        /// SELECT multiple rows with pagination.
+        /// This operation will return an empty list if no matching objects are found.
         /// </summary> 
         /// <param name="indexStart">Index start.</param>
         /// <param name="maxResults">Maximum number of results to retrieve.</param> 
@@ -421,6 +454,7 @@ namespace Watson.ORM.Postgresql
         /// <returns>List of objects.</returns>
         public List<T> SelectMany<T>(int? indexStart, int? maxResults, DbExpression expr) where T : class, new()
         {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (expr == null) throw new ArgumentNullException(nameof(expr));
 
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T)); 
@@ -443,6 +477,7 @@ namespace Watson.ORM.Postgresql
         /// <returns>Column name.</returns>
         public string GetColumnName<T>(string propName)
         {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (String.IsNullOrEmpty(propName)) throw new ArgumentNullException(nameof(propName));
             return _TypeMetadataMgr.GetColumnNameForPropertyName<T>(propName);
         }
@@ -454,6 +489,7 @@ namespace Watson.ORM.Postgresql
         /// <returns>DataTable.</returns>
         public DataTable Query(string query)
         {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (String.IsNullOrEmpty(query)) throw new ArgumentNullException(nameof(query));
             return _Database.Query(query);
         }
@@ -474,6 +510,7 @@ namespace Watson.ORM.Postgresql
             }
 
             _Logger?.Invoke(_Header + "dispose complete");
+            _Initialized = false;
         }
 
         #endregion
