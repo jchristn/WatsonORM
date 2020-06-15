@@ -10,7 +10,7 @@ namespace Watson.ORM.Core
     /// <summary>
     /// Common methods shared amongst WatsonORM modules.
     /// </summary>
-    public static class Common
+    public static class WatsonORMCommon
     {
         /// <summary>
         /// Convert a WatsonORM DbOperators to a DatabaseWrapper Core Operators.

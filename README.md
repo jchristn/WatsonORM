@@ -24,9 +24,9 @@ Core features:
 
 For a sample app exercising this library, refer to the ```Test``` project contained within the solution.
 
-## New in v1.2.1
+## New in v1.2.2
 
-- GetTableName API
+- Timestamp API
 
 ## Simple Example
 

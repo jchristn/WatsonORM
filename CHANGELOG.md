@@ -2,11 +2,15 @@
 
 ## Current Version
 
+v1.2.2
+
+- Timestamp API
+
+## Previous Versions
+
 v1.2.1
 
 - GetTableName API
-
-## Previous Versions
 
 v1.2.0
 

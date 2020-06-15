@@ -506,6 +506,16 @@ namespace Watson.ORM.Postgresql
         }
 
         /// <summary>
+        /// Retrieve a timestamp formatted for the database.
+        /// </summary>
+        /// <param name="dt">DateTime.</param>
+        /// <returns>Formatted DateTime string.</returns>
+        public string Timestamp(DateTime dt)
+        {
+            return _Database.Timestamp(dt);
+        }
+
+        /// <summary>
         /// Dispose of the object and release background workers.
         /// </summary>
         /// <param name="disposing">Indicate if child resources should be disposed.</param>

@@ -814,6 +814,37 @@ namespace Watson.ORM
         }
 
         /// <summary>
+        /// Retrieve a timestamp formatted for the database.
+        /// </summary>
+        /// <param name="dt">DateTime.</param>
+        /// <returns>Formatted DateTime string.</returns>
+        public string Timestamp(DateTime dt)
+        {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
+
+            if (_Mysql != null)
+            {
+                return DatabaseWrapper.Mysql.DatabaseClient.DbTimestamp(dt);
+            }
+            else if (_Postgresql != null)
+            {
+                return DatabaseWrapper.Postgresql.DatabaseClient.DbTimestamp(dt);
+            }
+            else if (_SqlServer != null)
+            {
+                return DatabaseWrapper.SqlServer.DatabaseClient.DbTimestamp(dt);
+            }
+            else if (_Sqlite != null)
+            {
+                return DatabaseWrapper.Sqlite.DatabaseClient.DbTimestamp(dt);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
+        }
+
+        /// <summary>
         /// Dispose of the object and release background workers.
         /// </summary>
         /// <param name="disposing">Indicate if child resources should be disposed.</param>

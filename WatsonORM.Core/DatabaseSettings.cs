@@ -49,7 +49,10 @@ namespace Watson.ORM.Core
         /// </summary>
         public string DatabaseName { get; set; }
           
-        internal DatabaseSettings()
+        /// <summary>
+        /// Instantiate the object.
+        /// </summary>
+        public DatabaseSettings()
         {
 
         }
