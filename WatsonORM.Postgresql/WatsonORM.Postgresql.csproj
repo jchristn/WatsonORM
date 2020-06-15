@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;net461</TargetFrameworks>
     <RootNamespace>Watson.ORM.Postgresql</RootNamespace>
-    <Version>1.2.2</Version>
+    <Version>1.2.3</Version>
     <Authors>Joel Christner</Authors>
     <Company>Joel Christner</Company>
     <Description>WatsonORM is a lightweight and easy to use object-relational mapper (ORM) for PostgreSQL in C# for .NET Core built on top of DatabaseWrapper.  Refer to other WatsonORM packages if you need support for other database types.</Description>
@@ -14,7 +14,7 @@
     <RepositoryUrl>https://github.com/jchristn/watsonorm</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
     <PackageTags>orm object relation relational mapper map database object data convert sql server mssql sqlite mysql pgsql postgres postgresql dynamic query builder datarow datatable key foreign</PackageTags>
-    <PackageReleaseNotes>Timestamp API</PackageReleaseNotes>
+    <PackageReleaseNotes>Sanitize API</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 

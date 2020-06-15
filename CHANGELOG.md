@@ -2,11 +2,15 @@
 
 ## Current Version
 
+v1.2.3
+
+- Sanitize API
+
+## Previous Versions
+
 v1.2.2
 
 - Timestamp API
-
-## Previous Versions
 
 v1.2.1
 

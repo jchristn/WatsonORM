@@ -513,7 +513,21 @@ namespace Watson.ORM.SqlServer
         /// <returns>Formatted DateTime string.</returns>
         public string Timestamp(DateTime dt)
         {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             return _Database.Timestamp(dt);
+        }
+
+        /// <summary>
+        /// Returns a sanitized string useful in a raw query.
+        /// If null is supplied, null is returned.
+        /// </summary>
+        /// <param name="str">String.</param>
+        /// <returns>String.</returns>
+        public string Sanitize(string str)
+        {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
+            if (String.IsNullOrEmpty(str)) return null;
+            return _Database.SanitizeString(str);
         }
 
         /// <summary>

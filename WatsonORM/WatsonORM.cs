@@ -824,19 +824,51 @@ namespace Watson.ORM
 
             if (_Mysql != null)
             {
-                return DatabaseWrapper.Mysql.DatabaseClient.DbTimestamp(dt);
+                return _Mysql.Timestamp(dt);
             }
             else if (_Postgresql != null)
             {
-                return DatabaseWrapper.Postgresql.DatabaseClient.DbTimestamp(dt);
+                return _Postgresql.Timestamp(dt);
             }
             else if (_SqlServer != null)
             {
-                return DatabaseWrapper.SqlServer.DatabaseClient.DbTimestamp(dt);
+                return _SqlServer.Timestamp(dt);
             }
             else if (_Sqlite != null)
             {
-                return DatabaseWrapper.Sqlite.DatabaseClient.DbTimestamp(dt);
+                return _Sqlite.Timestamp(dt);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Returns a sanitized string useful in a raw query.
+        /// If null is supplied, null is returned.
+        /// </summary>
+        /// <param name="str">String.</param>
+        /// <returns>String.</returns>
+        public string Sanitize(string str)
+        {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
+
+            if (_Mysql != null)
+            {
+                return _Mysql.Sanitize(str);
+            }
+            else if (_Postgresql != null)
+            {
+                return _Postgresql.Sanitize(str);
+            }
+            else if (_SqlServer != null)
+            {
+                return _SqlServer.Sanitize(str);
+            }
+            else if (_Sqlite != null)
+            {
+                return _Sqlite.Sanitize(str);
             }
             else
             {
