@@ -3,17 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using Newtonsoft.Json;
-using Watson.ORM;
 using Watson.ORM.Core;
+using Watson.ORM.Sqlite;
 
-namespace Test
+namespace Test.Sqlite
 {
     class Program
-    {
-        static string _DbType = null;
-        static string _Filename = null;
-        static string _Username = null;
-        static string _Password = null;
+    { 
+        static string _Filename = null; 
 
         static DatabaseSettings _Settings = null;
         static WatsonORM _Orm = null;
@@ -23,49 +20,12 @@ namespace Test
             try
             {
                 #region Setup
+                 
+                Console.Write("Filename: ");
+                _Filename = Console.ReadLine();
+                if (String.IsNullOrEmpty(_Filename)) return;
 
-                Console.Write("DB type [sqlserver|mysql|postgresql|sqlite]: ");
-                _DbType = Console.ReadLine();
-                if (String.IsNullOrEmpty(_DbType)) return;
-                _DbType = _DbType.ToLower();
-
-                if (_DbType.Equals("sqlserver") || _DbType.Equals("mysql") || _DbType.Equals("postgresql"))
-                {
-                    Console.Write("User: ");
-                    _Username = Console.ReadLine();
-
-                    Console.Write("Password: ");
-                    _Password = Console.ReadLine();
-
-                    switch (_DbType)
-                    {
-                        case "sqlserver":
-                            _Settings = new DatabaseSettings(DbTypes.SqlServer, "localhost", 1433, _Username, _Password, "test");
-                            break;
-                        case "mysql":
-                            _Settings = new DatabaseSettings(DbTypes.Mysql, "localhost", 3306, _Username, _Password, "test");
-                            break;
-                        case "postgresql":
-                            _Settings = new DatabaseSettings(DbTypes.Postgresql, "localhost", 5432, _Username, _Password, "test");
-                            break;
-                        default:
-                            return;
-                    }
-                }
-                else if (_DbType.Equals("sqlite"))
-                {
-                    Console.Write("Filename: ");
-                    _Filename = Console.ReadLine();
-                    if (String.IsNullOrEmpty(_Filename)) return;
-
-                    _Settings = new DatabaseSettings(_Filename);
-                }
-                else
-                {
-                    Console.WriteLine("Invalid database type.");
-                    return;
-                }
-                
+                _Settings = new DatabaseSettings(_Filename); 
                 _Orm = new WatsonORM(_Settings);
 
                 _Orm.InitializeDatabase();
@@ -209,7 +169,7 @@ namespace Test
                 #endregion
 
                 #region Delete-Records
-                 
+
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Deleting p1");
                 _Orm.Delete<Person>(p1);
@@ -222,11 +182,11 @@ namespace Test
                 Console.WriteLine("| Deleting p3 and p4");
                 DbExpression eDelete = new DbExpression("id", DbOperators.GreaterThan, 2);
                 _Orm.DeleteMany<Person>(eDelete);
-                 
+
                 #endregion
             }
             catch (Exception e)
-            {    
+            {
                 // Get stack trace for the exception with source file information
                 var st = new StackTrace(e, true);
                 // Get the top stack frame

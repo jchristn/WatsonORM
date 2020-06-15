@@ -254,7 +254,7 @@ namespace Watson.ORM.Sqlite
 
         /// <summary>
         /// INSERT multiple records.
-        /// This operation will iteratively call Insert on each individual object.</T>
+        /// This operation will iteratively call Insert on each individual object.
         /// </summary>
         /// <typeparam name="T">Type of object.</typeparam>
         /// <param name="objs">List of objects.</param>
@@ -464,6 +464,17 @@ namespace Watson.ORM.Sqlite
 
             DataTable result = _Database.Select(tableName, indexStart, maxResults, null, e, orderByClause);
             return DataTableToObjectList<T>(result);
+        }
+
+        /// <summary>
+        /// Retrieve the table name for a given type.
+        /// </summary>
+        /// <param name="type">Type.</param>
+        /// <returns>Table name.</returns>
+        public string GetTableName(Type type)
+        {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+            return _TypeMetadataMgr.GetTableNameFromType(type);
         }
 
         /// <summary>

@@ -398,7 +398,7 @@ namespace Watson.ORM
 
         /// <summary>
         /// INSERT multiple records.
-        /// This operation will iteratively call Insert on each individual object.</T>
+        /// This operation will iteratively call Insert on each individual object.
         /// </summary>
         /// <typeparam name="T">Type of object.</typeparam>
         /// <param name="objs">List of objects.</param>
@@ -712,6 +712,37 @@ namespace Watson.ORM
             else if (_Sqlite != null)
             {
                 return _Sqlite.SelectMany<T>(indexStart, maxResults, expr);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Retrieve the table name for a given type.
+        /// </summary>
+        /// <param name="type">Type.</param>
+        /// <returns>Table name.</returns>
+        public string GetTableName(Type type)
+        {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
+
+            if (_Mysql != null)
+            {
+                return _Mysql.GetTableName(type);
+            }
+            else if (_Postgresql != null)
+            {
+                return _Postgresql.GetTableName(type);
+            }
+            else if (_SqlServer != null)
+            {
+                return _SqlServer.GetTableName(type);
+            }
+            else if (_Sqlite != null)
+            {
+                return _Sqlite.GetTableName(type);
             }
             else
             {
