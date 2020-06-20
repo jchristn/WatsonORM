@@ -299,7 +299,7 @@ namespace Watson.ORM.Postgresql
             object primaryKeyValue = _TypeMetadataMgr.GetPrimaryKeyValue(obj, primaryKeyPropertyName);
             
             Dictionary<string, object> updateVals = ObjectToDictionary(obj);
-            Expression e = new Expression(primaryKeyColumnName, Common.DbOperatorsConverter(DbOperators.Equals), primaryKeyValue);
+            Expression e = new Expression(primaryKeyColumnName, WatsonORMCommon.DbOperatorsConverter(DbOperators.Equals), primaryKeyValue);
             _Database.Update(tableName, updateVals, e);
             DataTable result = _Database.Select(tableName, null, null, null, e, null);
             return DataTableToObject<T>(result);
@@ -320,8 +320,8 @@ namespace Watson.ORM.Postgresql
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
             string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T));
 
-            Expression e = Common.DbExpressionConverter(expr);
-            e.PrependAnd(primaryKeyColumnName, Common.DbOperatorsConverter(DbOperators.IsNotNull), null);
+            Expression e = WatsonORMCommon.DbExpressionConverter(expr);
+            e.PrependAnd(primaryKeyColumnName, WatsonORMCommon.DbOperatorsConverter(DbOperators.IsNotNull), null);
 
             _Database.Update(tableName, updateVals, e);
         }
@@ -341,7 +341,7 @@ namespace Watson.ORM.Postgresql
             string primaryKeyPropertyName = _TypeMetadataMgr.GetPrimaryKeyPropertyName(typeof(T)); 
             object primaryKeyValue = _TypeMetadataMgr.GetPrimaryKeyValue(obj, primaryKeyPropertyName);
             
-            Expression e = new Expression(primaryKeyColumnName, Common.DbOperatorsConverter(DbOperators.Equals), primaryKeyValue);
+            Expression e = new Expression(primaryKeyColumnName, WatsonORMCommon.DbOperatorsConverter(DbOperators.Equals), primaryKeyValue);
             _Database.Delete(tableName, e);
         }
 
@@ -359,7 +359,7 @@ namespace Watson.ORM.Postgresql
             string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T));
             string primaryKeyPropertyName = _TypeMetadataMgr.GetPrimaryKeyPropertyName(typeof(T));
 
-            Expression e = new Expression(primaryKeyColumnName, Common.DbOperatorsConverter(DbOperators.Equals), id);
+            Expression e = new Expression(primaryKeyColumnName, WatsonORMCommon.DbOperatorsConverter(DbOperators.Equals), id);
             _Database.Delete(tableName, e);
         }
 
@@ -373,7 +373,7 @@ namespace Watson.ORM.Postgresql
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (expr == null) throw new ArgumentNullException(nameof(expr)); 
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T)); 
-            _Database.Delete(tableName, Common.DbExpressionConverter(expr));
+            _Database.Delete(tableName, WatsonORMCommon.DbExpressionConverter(expr));
         }
 
         /// <summary>
@@ -392,7 +392,7 @@ namespace Watson.ORM.Postgresql
             string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T));
             string primaryKeyPropertyName = _TypeMetadataMgr.GetPrimaryKeyPropertyName(typeof(T));
 
-            Expression e = new Expression(primaryKeyColumnName, Common.DbOperatorsConverter(DbOperators.Equals), id);
+            Expression e = new Expression(primaryKeyColumnName, WatsonORMCommon.DbOperatorsConverter(DbOperators.Equals), id);
             DataTable result = _Database.Select(tableName, null, null, null, e, null);
             return DataTableToObject<T>(result);
         }
@@ -413,8 +413,8 @@ namespace Watson.ORM.Postgresql
             string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T));
             string primaryKeyPropertyName = _TypeMetadataMgr.GetPrimaryKeyPropertyName(typeof(T));
 
-            Expression e = Common.DbExpressionConverter(expr);
-            e.PrependAnd(primaryKeyColumnName, Common.DbOperatorsConverter(DbOperators.IsNotNull), null);
+            Expression e = WatsonORMCommon.DbExpressionConverter(expr);
+            e.PrependAnd(primaryKeyColumnName, WatsonORMCommon.DbOperatorsConverter(DbOperators.IsNotNull), null);
             string orderByClause = "ORDER BY " + primaryKeyColumnName + " ASC";
             DataTable result = _Database.Select(tableName, null, 1, null, e, orderByClause);
             if (result == null || result.Rows.Count < 1) return null;
@@ -436,8 +436,8 @@ namespace Watson.ORM.Postgresql
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T)); 
             string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T));
 
-            Expression e = Common.DbExpressionConverter(expr);
-            e.PrependAnd(primaryKeyColumnName, Common.DbOperatorsConverter(DbOperators.IsNotNull), null);
+            Expression e = WatsonORMCommon.DbExpressionConverter(expr);
+            e.PrependAnd(primaryKeyColumnName, WatsonORMCommon.DbOperatorsConverter(DbOperators.IsNotNull), null);
             string orderByClause = "ORDER BY " + primaryKeyColumnName + " ASC";
 
             DataTable result = _Database.Select(tableName, null, null, null, e, orderByClause);
@@ -461,8 +461,8 @@ namespace Watson.ORM.Postgresql
             string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T));
             string primaryKeyPropertyName = _TypeMetadataMgr.GetPrimaryKeyPropertyName(typeof(T));
 
-            Expression e = Common.DbExpressionConverter(expr);
-            e.PrependAnd(primaryKeyColumnName, Common.DbOperatorsConverter(DbOperators.IsNotNull), null);
+            Expression e = WatsonORMCommon.DbExpressionConverter(expr);
+            e.PrependAnd(primaryKeyColumnName, WatsonORMCommon.DbOperatorsConverter(DbOperators.IsNotNull), null);
             string orderByClause = "ORDER BY " + primaryKeyColumnName + " ASC";
 
             DataTable result = _Database.Select(tableName, indexStart, maxResults, null, e, orderByClause);

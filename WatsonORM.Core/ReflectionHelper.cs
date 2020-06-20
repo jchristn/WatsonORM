@@ -25,7 +25,7 @@ namespace Watson.ORM.Core
          * 
          */
 
-            /// <summary>
+        /// <summary>
             /// Determine if an object has an attribute.
             /// </summary>
             /// <param name="obj">Object.</param>
