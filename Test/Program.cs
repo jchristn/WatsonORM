@@ -84,14 +84,7 @@ namespace Test
                 #endregion
 
                 #region Create-and-Store-Records
-
-                Person p = new Person
-                {
-                    FirstName = "Joel",
-                    LastName = "Christner",
-
-                };
-
+                 
                 Person p1 = new Person("Abraham", "Lincoln", Convert.ToDateTime("1/1/1980"), null, 42, null, "initial notes p1", PersonType.Human, null, false);
                 Person p2 = new Person("Ronald", "Reagan", Convert.ToDateTime("2/2/1981"), Convert.ToDateTime("3/3/1982"), 43, 43, "initial notes p2", PersonType.Cat, PersonType.Cat, true);
                 Person p3 = new Person("George", "Bush", Convert.ToDateTime("3/3/1982"), null, 44, null, "initial notes p3", PersonType.Dog, PersonType.Dog, false);
@@ -112,6 +105,21 @@ namespace Test
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Creating p4");
                 p4 = _Orm.Insert<Person>(p4);
+
+                #endregion
+
+                #region Exists-Count-Sum
+
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
+                DbExpression existsExpression = new DbExpression(_Orm.GetColumnName<Person>(nameof(Person.Id)), DbOperators.GreaterThan, 0);
+                Console.WriteLine("| Checking existence of records: " + _Orm.Exists<Person>(existsExpression));
+
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
+                DbExpression countExpression = new DbExpression(_Orm.GetColumnName<Person>(nameof(Person.Id)), DbOperators.GreaterThan, 2);
+                Console.WriteLine("| Checking count of records: " + _Orm.Count<Person>(countExpression));
+
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
+                Console.WriteLine("| Checking sum of ages: " + _Orm.Sum<Person>(_Orm.GetColumnName<Person>(nameof(Person.Age)), existsExpression));
 
                 #endregion
 

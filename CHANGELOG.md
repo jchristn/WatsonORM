@@ -2,11 +2,16 @@
 
 ## Current Version
 
+v1.3.0
+
+- Dependency update
+- New APIs: Exists, Count, Sum
+
+## Previous Versions
+
 v1.2.3
 
 - Sanitize API
-
-## Previous Versions
 
 v1.2.2
 

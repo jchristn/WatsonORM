@@ -24,9 +24,10 @@ Core features:
 
 For a sample app exercising this library, refer to the ```Test``` project contained within the solution.
 
-## New in v1.2.3
+## New in v1.3.0
 
-- Sanitize API
+- Dependency update
+- New APIs: Exists, Count, Sum
 
 ## Simple Example
 

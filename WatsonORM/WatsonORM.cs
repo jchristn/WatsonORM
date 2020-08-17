@@ -783,6 +783,103 @@ namespace Watson.ORM
         }
 
         /// <summary>
+        /// Check if objects of a given type exist that match the supplied expression.
+        /// </summary> 
+        /// <typeparam name="T">Type.</typeparam>
+        /// <param name="expr">Expression.</param>
+        /// <returns>True if exists.</returns>
+        public bool Exists<T>(DbExpression expr)
+        {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
+
+            if (_Mysql != null)
+            {
+                return _Mysql.Exists<T>(expr);
+            }
+            else if (_Postgresql != null)
+            {
+                return _Postgresql.Exists<T>(expr);
+            }
+            else if (_SqlServer != null)
+            {
+                return _SqlServer.Exists<T>(expr);
+            }
+            else if (_Sqlite != null)
+            {
+                return _Sqlite.Exists<T>(expr);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Determine the number of objects of a given type that exist that match the supplied expression.
+        /// </summary> 
+        /// <typeparam name="T">Type.</typeparam>
+        /// <param name="expr">Expression.</param>
+        /// <returns>Number of matching records.</returns>
+        public long Count<T>(DbExpression expr)
+        {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
+
+            if (_Mysql != null)
+            {
+                return _Mysql.Count<T>(expr);
+            }
+            else if (_Postgresql != null)
+            {
+                return _Postgresql.Count<T>(expr);
+            }
+            else if (_SqlServer != null)
+            {
+                return _SqlServer.Count<T>(expr);
+            }
+            else if (_Sqlite != null)
+            {
+                return _Sqlite.Count<T>(expr);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Add the contents of the specified column from objects that match the supplied expression.
+        /// </summary>
+        /// <typeparam name="T">Type.</typeparam>
+        /// <param name="columnName"></param>
+        /// <param name="expr">Expression.</param>
+        /// <returns></returns>
+        public decimal Sum<T>(string columnName, DbExpression expr)
+        {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
+
+            if (_Mysql != null)
+            {
+                return _Mysql.Sum<T>(columnName, expr);
+            }
+            else if (_Postgresql != null)
+            {
+                return _Postgresql.Sum<T>(columnName, expr);
+            }
+            else if (_SqlServer != null)
+            {
+                return _SqlServer.Sum<T>(columnName, expr);
+            }
+            else if (_Sqlite != null)
+            {
+                return _Sqlite.Sum<T>(columnName, expr);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
+        }
+
+        /// <summary>
         /// Execute a query directly against the database.
         /// </summary>
         /// <param name="query">Query.</param>

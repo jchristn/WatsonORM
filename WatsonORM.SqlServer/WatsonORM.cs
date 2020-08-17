@@ -493,7 +493,48 @@ namespace Watson.ORM.SqlServer
             if (String.IsNullOrEmpty(propName)) throw new ArgumentNullException(nameof(propName));
             return _TypeMetadataMgr.GetColumnNameForPropertyName<T>(propName);
         }
-         
+
+        /// <summary>
+        /// Check if objects of a given type exist that match the supplied expression.
+        /// </summary> 
+        /// <typeparam name="T">Type.</typeparam>
+        /// <param name="expr">Expression.</param>
+        /// <returns>True if exists.</returns>
+        public bool Exists<T>(DbExpression expr)
+        {
+            string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
+            Expression e = WatsonORMCommon.DbExpressionConverter(expr);
+            return _Database.Exists(tableName, e);
+        }
+
+        /// <summary>
+        /// Determine the number of objects of a given type that exist that match the supplied expression.
+        /// </summary> 
+        /// <typeparam name="T">Type.</typeparam>
+        /// <param name="expr">Expression.</param>
+        /// <returns>Number of matching records.</returns>
+        public long Count<T>(DbExpression expr)
+        {
+            string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
+            Expression e = WatsonORMCommon.DbExpressionConverter(expr);
+            return _Database.Count(tableName, e);
+        }
+
+        /// <summary>
+        /// Add the contents of the specified column from objects that match the supplied expression.
+        /// </summary>
+        /// <typeparam name="T">Type.</typeparam>
+        /// <param name="columnName"></param>
+        /// <param name="expr">Expression.</param>
+        /// <returns></returns>
+        public decimal Sum<T>(string columnName, DbExpression expr)
+        {
+            if (String.IsNullOrEmpty(columnName)) throw new ArgumentNullException(nameof(columnName));
+            string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
+            Expression e = WatsonORMCommon.DbExpressionConverter(expr);
+            return _Database.Sum(tableName, columnName, e);
+        }
+
         /// <summary>
         /// Execute a query directly against the database.
         /// </summary>

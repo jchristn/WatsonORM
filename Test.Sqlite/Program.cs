@@ -44,14 +44,7 @@ namespace Test.Sqlite
                 #endregion
 
                 #region Create-and-Store-Records
-
-                Person p = new Person
-                {
-                    FirstName = "Joel",
-                    LastName = "Christner",
-
-                };
-
+                 
                 Person p1 = new Person("Abraham", "Lincoln", Convert.ToDateTime("1/1/1980"), null, 42, null, "initial notes p1", PersonType.Human, null, false);
                 Person p2 = new Person("Ronald", "Reagan", Convert.ToDateTime("2/2/1981"), Convert.ToDateTime("3/3/1982"), 43, 43, "initial notes p2", PersonType.Cat, PersonType.Cat, true);
                 Person p3 = new Person("George", "Bush", Convert.ToDateTime("3/3/1982"), null, 44, null, "initial notes p3", PersonType.Dog, PersonType.Dog, false);
@@ -72,7 +65,7 @@ namespace Test.Sqlite
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Creating p4");
                 p4 = _Orm.Insert<Person>(p4);
-
+                 
                 #endregion
 
                 #region Select
