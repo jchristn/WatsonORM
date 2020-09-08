@@ -214,10 +214,24 @@ namespace Test
                 Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
                 foreach (Person curr in selectedList1) Console.WriteLine("  | " + curr.ToString());
 
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
+                Console.WriteLine("| Selecting by persontype");
+                DbExpression eSelect5 = new DbExpression("persontype", DbOperators.Equals, PersonType.Dog);
+                selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect5);
+                Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
+                foreach (Person curr in selectedList1) Console.WriteLine("  | " + curr.ToString());
+
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
+                Console.WriteLine("| Selecting handsome people");
+                DbExpression eSelect6 = new DbExpression("ishandsome", DbOperators.Equals, true);
+                selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect6);
+                Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
+                foreach (Person curr in selectedList1) Console.WriteLine("  | " + curr.ToString());
+                 
                 #endregion
 
                 #region Delete-Records
-                 
+
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Deleting p1");
                 _Orm.Delete<Person>(p1);

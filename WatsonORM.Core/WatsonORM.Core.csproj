@@ -5,7 +5,7 @@
     <AssemblyName>WatsonORM.Core</AssemblyName>
     <RootNamespace>Watson.ORM.Core</RootNamespace>
     <Description>Do not install this package directly.  Core classes and static methods supporting WatsonORM packages.</Description>
-    <Version>1.2.0.3</Version>
+    <Version>1.2.0.4</Version>
     <Authors>Joel Christner</Authors>
     <Copyright>(c)2020 Joel Christner</Copyright>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>

@@ -74,7 +74,18 @@ namespace Watson.ORM.Core
             return new Expression(
                 (expr.LeftTerm is DbExpression ? DbExpressionConverter((DbExpression)expr.LeftTerm) : expr.LeftTerm),
                 DbOperatorsConverter(expr.Operator),
-                (expr.RightTerm is DbExpression ? DbExpressionConverter((DbExpression)expr.RightTerm) : expr.RightTerm));
+                (expr.RightTerm is DbExpression ? DbExpressionConverter((DbExpression)expr.RightTerm) : TermConverter(expr.RightTerm)));
         } 
+
+        private static object TermConverter(object obj)
+        {
+            if (obj is bool)
+            {
+                if ((bool)obj == true) return 1;
+                else return 0;
+            }
+
+            return obj;
+        }
     }
 }

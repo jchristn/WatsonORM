@@ -166,6 +166,13 @@ namespace Test.Sqlite
                 Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
                 foreach (Person curr in selectedList1) Console.WriteLine("  | " + curr.ToString());
 
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
+                Console.WriteLine("| Selecting handsome people");
+                DbExpression eSelect6 = new DbExpression("ishandsome", DbOperators.Equals, true);
+                selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect6);
+                Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
+                foreach (Person curr in selectedList1) Console.WriteLine("  | " + curr.ToString());
+                 
                 #endregion
 
                 #region Delete-Records
