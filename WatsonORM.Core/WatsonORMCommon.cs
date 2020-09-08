@@ -39,8 +39,12 @@ namespace Watson.ORM.Core
                     return Operators.ContainsNot;
                 case DbOperators.StartsWith:
                     return Operators.StartsWith;
+                case DbOperators.StartsWithNot:
+                    return Operators.StartsWithNot;
                 case DbOperators.EndsWith:
                     return Operators.EndsWith;
+                case DbOperators.EndsWithNot:
+                    return Operators.EndsWithNot;
                 case DbOperators.GreaterThan:
                     return Operators.GreaterThan;
                 case DbOperators.GreaterThanOrEqualTo:

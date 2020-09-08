@@ -60,10 +60,20 @@ namespace Watson.ORM.Core
         [EnumMember(Value = "StartsWith")]
         StartsWith,
         /// <summary>
+        /// Value does not start with the specified value
+        /// </summary>
+        [EnumMember(Value = "StartsWithNot")]
+        StartsWithNot,
+        /// <summary>
         /// Value ends with the specified value
         /// </summary>
         [EnumMember(Value = "EndsWith")]
         EndsWith,
+        /// <summary>
+        /// Value does not end with the specified value
+        /// </summary>
+        [EnumMember(Value = "EndsWithNot")]
+        EndsWithNot,
         /// <summary>
         /// Value is greater than the specified value
         /// </summary>

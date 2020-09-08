@@ -34,56 +34,16 @@ namespace Watson.ORM
             }
             set
             {
-                if (value == null)
-                {
-                    _Debug = new DebugSettings();
+                if (value == null) _Debug = new DebugSettings();
 
-                    if (_Mysql != null)
-                    {
-                        _Mysql.Debug = null;
-                    }
-                    else if (_Postgresql != null)
-                    {
-                        _Postgresql.Debug = null;
-                    }
-                    else if (_Sqlite != null)
-                    {
-                        _Sqlite.Debug = null;
-                    }
-                    else if (_SqlServer != null)
-                    {
-                        _SqlServer.Debug = null;
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("No database client is initialized.");
-                    }
-                }
+                if (_Mysql != null) _Mysql.Debug = _Debug;
+                else if (_Postgresql != null) _Postgresql.Debug = _Debug;
+                else if (_Sqlite != null) _Sqlite.Debug = _Debug;
+                else if (_SqlServer != null) _SqlServer.Debug = _Debug;
                 else
                 {
-                    _Debug = value;
-
-                    if (_Mysql != null)
-                    {
-                        _Mysql.Debug = value;
-                    }
-                    else if (_Postgresql != null)
-                    {
-                        _Postgresql.Debug = value;
-                    }
-                    else if (_Sqlite != null)
-                    {
-                        _Sqlite.Debug = value;
-                    }
-                    else if (_SqlServer != null)
-                    {
-                        _SqlServer.Debug = value;
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("No database client is initialized.");
-                    }
-                }
+                    throw new InvalidOperationException("No database client is initialized.");
+                } 
             }
         }
 
@@ -111,22 +71,10 @@ namespace Watson.ORM
             {
                 _Logger = value; 
 
-                if (_Mysql != null)
-                {
-                    _Mysql.Logger = value;
-                }
-                else if (_Postgresql != null)
-                {
-                    _Postgresql.Logger = value;
-                }
-                else if (_Sqlite != null)
-                {
-                    _Sqlite.Logger = value;
-                }
-                else if (_SqlServer != null)
-                {
-                    _SqlServer.Logger = value;
-                }
+                if (_Mysql != null) _Mysql.Logger = _Logger;
+                else if (_Postgresql != null) _Postgresql.Logger = _Logger; 
+                else if (_Sqlite != null) _Sqlite.Logger = _Logger; 
+                else if (_SqlServer != null) _SqlServer.Logger = _Logger; 
                 else
                 {
                     throw new InvalidOperationException("No database client is initialized.");

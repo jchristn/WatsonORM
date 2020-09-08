@@ -93,7 +93,11 @@ orm.Delete<Person>(updated);
 ```SelectMany``` can be paginated by using the method with signature ```(int? indexStart, int? maxResults, DbExpression expr)```.  ```indexStart``` is the number of records to skip, and ```maxResults``` is the number of records to retrieve.  
 
 Paginated results are always ordered by the primary key column value in ascending order, i.e. ```ORDER BY id ASC``` in the ```Person``` example above.
-  
+
+## Using Sqlite
+
+Sqlite may not work out of the box with .NET Framework. In order to use Sqlite with .NET Framework, you'll need to manually copy the runtimes folder into your project output directory. This directory is automatically created when building for .NET Core. To get this folder, build the Test.Sqlite project and navigate to the bin/debug/netcoreapp* directory. Then copy the runtimes folder into the project output directory of your .NET Framework application.
+
 ## Version history
 
 Refer to CHANGELOG.md.
