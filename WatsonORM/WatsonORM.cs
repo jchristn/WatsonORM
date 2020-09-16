@@ -951,6 +951,102 @@ namespace Watson.ORM
             _Initialized = false;
         }
 
+        /// <summary>
+        /// Convert a DataTable to an object list for initialized tables and types.  
+        /// </summary>
+        /// <typeparam name="T">Type.</typeparam>
+        /// <param name="table">DataTable.</param>
+        /// <returns>List of the specified type.</returns>
+        public List<T> DataTableToObjectList<T>(DataTable table) where T : class, new()
+        {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
+
+            if (_Mysql != null)
+            {
+                return _Mysql.DataTableToObjectList<T>(table);
+            }
+            else if (_Postgresql != null)
+            {
+                return _Postgresql.DataTableToObjectList<T>(table);
+            }
+            else if (_SqlServer != null)
+            {
+                return _SqlServer.DataTableToObjectList<T>(table);
+            }
+            else if (_Sqlite != null)
+            {
+                return _Sqlite.DataTableToObjectList<T>(table);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Convert a DataTable to an object for an initialized table and type.
+        /// </summary>
+        /// <typeparam name="T">Type.</typeparam>
+        /// <param name="table">DataTable.</param>
+        /// <returns>Object of the specified type.</returns>
+        public T DataTableToObject<T>(DataTable table) where T : class, new()
+        {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
+
+            if (_Mysql != null)
+            {
+                return _Mysql.DataTableToObject<T>(table);
+            }
+            else if (_Postgresql != null)
+            {
+                return _Postgresql.DataTableToObject<T>(table);
+            }
+            else if (_SqlServer != null)
+            {
+                return _SqlServer.DataTableToObject<T>(table);
+            }
+            else if (_Sqlite != null)
+            {
+                return _Sqlite.DataTableToObject<T>(table);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Convert a DataRow to an object for an initialized table and type.
+        /// </summary>
+        /// <typeparam name="T">Type.</typeparam>
+        /// <param name="row">DataRow.</param>
+        /// <returns>Object of the specified type.</returns>
+        public T DataRowToObject<T>(DataRow row) where T : class, new()
+        {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
+
+            if (_Mysql != null)
+            {
+                return _Mysql.DataRowToObject<T>(row);
+            }
+            else if (_Postgresql != null)
+            {
+                return _Postgresql.DataRowToObject<T>(row);
+            }
+            else if (_SqlServer != null)
+            {
+                return _SqlServer.DataRowToObject<T>(row);
+            }
+            else if (_Sqlite != null)
+            {
+                return _Sqlite.DataRowToObject<T>(row);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
+        }
+
         #endregion
     }
 }

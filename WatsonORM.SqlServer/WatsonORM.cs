@@ -590,71 +590,13 @@ namespace Watson.ORM.SqlServer
             _Initialized = false;
         }
 
-        #endregion
-
-        #region Private-Conversion-Methods
-         
-        private Dictionary<string, object> ObjectToDictionary(object obj)
-        {
-            if (obj == null) throw new ArgumentNullException(nameof(obj));
-
-            string tableName = _TypeMetadataMgr.GetTableNameFromObject(obj);
-            if (String.IsNullOrEmpty(tableName)) throw new InvalidOperationException("Type '" + obj.GetType().Name + "' does not have a 'Table' attribute.");
-            List<Column> columns = new List<Column>();
-
-            Dictionary<string, object> ret = new Dictionary<string, object>();
-
-            PropertyInfo[] properties = obj.GetType().GetProperties();
-            foreach (PropertyInfo prop in properties)
-            {
-                object[] attrs = prop.GetCustomAttributes(true);
-                foreach (object attr in attrs)
-                {
-                    ColumnAttribute colAttr = attr as ColumnAttribute;
-                    if (colAttr != null)
-                    {
-                        object val = prop.GetValue(obj);
-                        if (val != null && !colAttr.PrimaryKey)
-                        {
-                            switch (colAttr.Type)
-                            {
-                                case DataTypes.Enum:
-                                case DataTypes.Boolean:
-                                case DataTypes.Int:
-                                    ret.Add(colAttr.Name, Convert.ToInt32(val));
-                                    break;
-                                case DataTypes.DateTime:
-                                    ret.Add(colAttr.Name, _Database.Timestamp(Convert.ToDateTime(val)));
-                                    break;
-                                case DataTypes.Blob:
-                                    ret.Add(colAttr.Name, val);
-                                    break;
-                                case DataTypes.Double:
-                                    ret.Add(colAttr.Name, Convert.ToDouble(val));
-                                    break;
-                                case DataTypes.Decimal:
-                                    ret.Add(colAttr.Name, Convert.ToDecimal(val));
-                                    break;
-                                case DataTypes.Long:
-                                    ret.Add(colAttr.Name, Convert.ToInt64(val));
-                                    break;
-                                case DataTypes.Nvarchar:
-                                case DataTypes.Varchar:
-                                    ret.Add(colAttr.Name, val.ToString());
-                                    break;
-                                default:
-                                    throw new ArgumentException("Unknown data type '" + colAttr.Type.ToString() + "'.");
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (ret.Count < 1) throw new InvalidOperationException("Type '" + obj.GetType().Name + "' does not have any properties with a 'Column' attribute.");
-            return ret;
-        }
-
-        private List<T> DataTableToObjectList<T>(DataTable table) where T : class, new()
+        /// <summary>
+        /// Convert a DataTable to an object list for initialized tables and types.  
+        /// </summary>
+        /// <typeparam name="T">Type.</typeparam>
+        /// <param name="table">DataTable.</param>
+        /// <returns>List of the specified type.</returns>
+        public List<T> DataTableToObjectList<T>(DataTable table) where T : class, new()
         {
             List<T> ret = new List<T>();
 
@@ -670,13 +612,25 @@ namespace Watson.ORM.SqlServer
             return ret;
         }
 
-        private T DataTableToObject<T>(DataTable table) where T : class, new()
+        /// <summary>
+        /// Convert a DataTable to an object for an initialized table and type.
+        /// </summary>
+        /// <typeparam name="T">Type.</typeparam>
+        /// <param name="table">DataTable.</param>
+        /// <returns>Object of the specified type.</returns>
+        public T DataTableToObject<T>(DataTable table) where T : class, new()
         {
             if (table == null || table.Rows == null || table.Rows.Count < 1) return null;
             return DataRowToObject<T>(table.Rows[0]);
         }
 
-        private T DataRowToObject<T>(DataRow row) where T : class, new()
+        /// <summary>
+        /// Convert a DataRow to an object for an initialized table and type.
+        /// </summary>
+        /// <typeparam name="T">Type.</typeparam>
+        /// <param name="row">DataRow.</param>
+        /// <returns>Object of the specified type.</returns>
+        public T DataRowToObject<T>(DataRow row) where T : class, new()
         {
             if (row == null) return null;
 
@@ -743,31 +697,70 @@ namespace Watson.ORM.SqlServer
             return ret;
         }
 
-        private DataType DbTypeConverter(DataTypes dt)
-        {
-            switch (dt)
-            {
-                case DataTypes.Varchar:
-                    return DataType.Varchar;
-                case DataTypes.Nvarchar:
-                    return DataType.Nvarchar;
-                case DataTypes.Int:
-                    return DataType.Int;
-                case DataTypes.Long:
-                    return DataType.Long;
-                case DataTypes.Decimal:
-                    return DataType.Decimal;
-                case DataTypes.Double:
-                    return DataType.Double;
-                case DataTypes.DateTime:
-                    return DataType.DateTime;
-                case DataTypes.Blob:
-                    return DataType.Blob;
-                default:
-                    throw new ArgumentException("Unknown data type '" + dt.ToString() + "'.");
-            }
-        }
+        #endregion
 
+        #region Private-Conversion-Methods
+
+        private Dictionary<string, object> ObjectToDictionary(object obj)
+        {
+            if (obj == null) throw new ArgumentNullException(nameof(obj));
+
+            string tableName = _TypeMetadataMgr.GetTableNameFromObject(obj);
+            if (String.IsNullOrEmpty(tableName)) throw new InvalidOperationException("Type '" + obj.GetType().Name + "' does not have a 'Table' attribute.");
+            List<Column> columns = new List<Column>();
+
+            Dictionary<string, object> ret = new Dictionary<string, object>();
+
+            PropertyInfo[] properties = obj.GetType().GetProperties();
+            foreach (PropertyInfo prop in properties)
+            {
+                object[] attrs = prop.GetCustomAttributes(true);
+                foreach (object attr in attrs)
+                {
+                    ColumnAttribute colAttr = attr as ColumnAttribute;
+                    if (colAttr != null)
+                    {
+                        object val = prop.GetValue(obj);
+                        if (val != null && !colAttr.PrimaryKey)
+                        {
+                            switch (colAttr.Type)
+                            {
+                                case DataTypes.Enum:
+                                case DataTypes.Boolean:
+                                case DataTypes.Int:
+                                    ret.Add(colAttr.Name, Convert.ToInt32(val));
+                                    break;
+                                case DataTypes.DateTime:
+                                    ret.Add(colAttr.Name, _Database.Timestamp(Convert.ToDateTime(val)));
+                                    break;
+                                case DataTypes.Blob:
+                                    ret.Add(colAttr.Name, val);
+                                    break;
+                                case DataTypes.Double:
+                                    ret.Add(colAttr.Name, Convert.ToDouble(val));
+                                    break;
+                                case DataTypes.Decimal:
+                                    ret.Add(colAttr.Name, Convert.ToDecimal(val));
+                                    break;
+                                case DataTypes.Long:
+                                    ret.Add(colAttr.Name, Convert.ToInt64(val));
+                                    break;
+                                case DataTypes.Nvarchar:
+                                case DataTypes.Varchar:
+                                    ret.Add(colAttr.Name, val.ToString());
+                                    break;
+                                default:
+                                    throw new ArgumentException("Unknown data type '" + colAttr.Type.ToString() + "'.");
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (ret.Count < 1) throw new InvalidOperationException("Type '" + obj.GetType().Name + "' does not have any properties with a 'Column' attribute.");
+            return ret;
+        }
+         
         #endregion 
     }
 }

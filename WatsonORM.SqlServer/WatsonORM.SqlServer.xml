@@ -29,6 +29,11 @@
             Direct access to the underlying database client.
             </summary>
         </member>
+        <member name="P:Watson.ORM.SqlServer.WatsonORM.IsInitialized">
+            <summary>
+            Indicates if the database has been initialized.
+            </summary>
+        </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.#ctor(Watson.ORM.Core.DatabaseSettings)">
             <summary>
             Instantiate the object.  Once constructed, call InitializeDatabase() and InitializeTable() for each table if needed.
@@ -49,6 +54,7 @@
         <member name="M:Watson.ORM.SqlServer.WatsonORM.InitializeTable(System.Type)">
             <summary>
             Create table (if it doesn't exist) for a given class.
+            Adding a table that has already been added will throw an ArgumentException.
             </summary>
             <param name="t">Class for which a table should be created.</param>
         </member>
@@ -75,6 +81,7 @@
         <member name="M:Watson.ORM.SqlServer.WatsonORM.InsertMany``1(System.Collections.Generic.List{``0})">
             <summary>
             INSERT multiple records.
+            This operation will iteratively call Insert on each individual object.
             </summary>
             <typeparam name="T">Type of object.</typeparam>
             <param name="objs">List of objects.</param>
@@ -120,6 +127,7 @@
         <member name="M:Watson.ORM.SqlServer.WatsonORM.SelectByPrimaryKey``1(System.Object)">
             <summary>
             SELECT an object by id.
+            This operation will return null if the object does not exist.
             </summary>
             <typeparam name="T">Type of object.</typeparam>
             <param name="id">Id.</param>
@@ -127,7 +135,8 @@
         </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.SelectFirst``1(Watson.ORM.Core.DbExpression)">
             <summary>
-            SELECT an object using a filter.
+            SELECT the first instance of an object matching a given expression.
+            This operation will return null if the object does not exist.
             </summary>
             <typeparam name="T">Type of filter.</typeparam>
             <param name="expr">Expression by which SELECT should be filtered (i.e. WHERE clause).</param> 
@@ -136,6 +145,7 @@
         <member name="M:Watson.ORM.SqlServer.WatsonORM.SelectMany``1(Watson.ORM.Core.DbExpression)">
             <summary>
             SELECT multiple rows.
+            This operation will return an empty list if no matching objects are found.
             </summary>
             <typeparam name="T">Type of object.</typeparam>
             <param name="expr">Expression.</param>
@@ -143,12 +153,20 @@
         </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.SelectMany``1(System.Nullable{System.Int32},System.Nullable{System.Int32},Watson.ORM.Core.DbExpression)">
             <summary>
-            SELECT multiple rows.
+            SELECT multiple rows with pagination.
+            This operation will return an empty list if no matching objects are found.
             </summary> 
             <param name="indexStart">Index start.</param>
             <param name="maxResults">Maximum number of results to retrieve.</param> 
             <param name="expr">Filter to apply when SELECTing rows (i.e. WHERE clause).</param>
             <returns>List of objects.</returns>
+        </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.GetTableName(System.Type)">
+            <summary>
+            Retrieve the table name for a given type.
+            </summary>
+            <param name="type">Type.</param>
+            <returns>Table name.</returns>
         </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.GetColumnName``1(System.String)">
             <summary>
@@ -158,6 +176,31 @@
             <param name="propName">Property name.</param>
             <returns>Column name.</returns>
         </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.Exists``1(Watson.ORM.Core.DbExpression)">
+            <summary>
+            Check if objects of a given type exist that match the supplied expression.
+            </summary> 
+            <typeparam name="T">Type.</typeparam>
+            <param name="expr">Expression.</param>
+            <returns>True if exists.</returns>
+        </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.Count``1(Watson.ORM.Core.DbExpression)">
+            <summary>
+            Determine the number of objects of a given type that exist that match the supplied expression.
+            </summary> 
+            <typeparam name="T">Type.</typeparam>
+            <param name="expr">Expression.</param>
+            <returns>Number of matching records.</returns>
+        </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.Sum``1(System.String,Watson.ORM.Core.DbExpression)">
+            <summary>
+            Add the contents of the specified column from objects that match the supplied expression.
+            </summary>
+            <typeparam name="T">Type.</typeparam>
+            <param name="columnName"></param>
+            <param name="expr">Expression.</param>
+            <returns></returns>
+        </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.Query(System.String)">
             <summary>
             Execute a query directly against the database.
@@ -165,11 +208,50 @@
             <param name="query">Query.</param>
             <returns>DataTable.</returns>
         </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.Timestamp(System.DateTime)">
+            <summary>
+            Retrieve a timestamp formatted for the database.
+            </summary>
+            <param name="dt">DateTime.</param>
+            <returns>Formatted DateTime string.</returns>
+        </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.Sanitize(System.String)">
+            <summary>
+            Returns a sanitized string useful in a raw query.
+            If null is supplied, null is returned.
+            </summary>
+            <param name="str">String.</param>
+            <returns>String.</returns>
+        </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.Dispose(System.Boolean)">
             <summary>
             Dispose of the object and release background workers.
             </summary>
             <param name="disposing">Indicate if child resources should be disposed.</param>
+        </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.DataTableToObjectList``1(System.Data.DataTable)">
+            <summary>
+            Convert a DataTable to an object list for initialized tables and types.  
+            </summary>
+            <typeparam name="T">Type.</typeparam>
+            <param name="table">DataTable.</param>
+            <returns>List of the specified type.</returns>
+        </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.DataTableToObject``1(System.Data.DataTable)">
+            <summary>
+            Convert a DataTable to an object for an initialized table and type.
+            </summary>
+            <typeparam name="T">Type.</typeparam>
+            <param name="table">DataTable.</param>
+            <returns>Object of the specified type.</returns>
+        </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.DataRowToObject``1(System.Data.DataRow)">
+            <summary>
+            Convert a DataRow to an object for an initialized table and type.
+            </summary>
+            <typeparam name="T">Type.</typeparam>
+            <param name="row">DataRow.</param>
+            <returns>Object of the specified type.</returns>
         </member>
     </members>
 </doc>
