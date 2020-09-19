@@ -172,7 +172,16 @@ namespace Test.Sqlite
                 selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect6);
                 Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
                 foreach (Person curr in selectedList1) Console.WriteLine("  | " + curr.ToString());
-                 
+
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
+                Console.WriteLine("| Selecting by reverse ID order");
+                DbExpression eSelect7 = new DbExpression("id", DbOperators.GreaterThan, 0);
+                DbResultOrder[] resultOrder = new DbResultOrder[1];
+                resultOrder[0] = new DbResultOrder("id", DbOrderDirection.Descending);
+                selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect7, resultOrder);
+                Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
+                foreach (Person curr in selectedList1) Console.WriteLine("  | " + curr.ToString());
+
                 #endregion
 
                 #region Delete-Records

@@ -137,6 +137,7 @@
             <summary>
             SELECT the first instance of an object matching a given expression.
             This operation will return null if the object does not exist.
+            The ordering used in the underlying query is ascending based on primary key column.
             </summary>
             <typeparam name="T">Type of filter.</typeparam>
             <param name="expr">Expression by which SELECT should be filtered (i.e. WHERE clause).</param> 
@@ -146,6 +147,7 @@
             <summary>
             SELECT multiple rows.
             This operation will return an empty list if no matching objects are found.
+            The ordering used in the underlying query is ascending based on primary key column.
             </summary>
             <typeparam name="T">Type of object.</typeparam>
             <param name="expr">Expression.</param>
@@ -155,10 +157,22 @@
             <summary>
             SELECT multiple rows with pagination.
             This operation will return an empty list if no matching objects are found.
+            The ordering used in the underlying query is ascending based on primary key column.
             </summary> 
             <param name="indexStart">Index start.</param>
             <param name="maxResults">Maximum number of results to retrieve.</param> 
             <param name="expr">Filter to apply when SELECTing rows (i.e. WHERE clause).</param>
+            <returns>List of objects.</returns>
+        </member>
+        <member name="M:Watson.ORM.Postgresql.WatsonORM.SelectMany``1(System.Nullable{System.Int32},System.Nullable{System.Int32},Watson.ORM.Core.DbExpression,Watson.ORM.Core.DbResultOrder[])">
+            <summary>
+            SELECT multiple rows with pagination.
+            This operation will return an empty list if no matching objects are found. 
+            </summary> 
+            <param name="indexStart">Index start.</param>
+            <param name="maxResults">Maximum number of results to retrieve.</param> 
+            <param name="expr">Filter to apply when SELECTing rows (i.e. WHERE clause).</param>
+            <param name="resultOrder">Specify on which columns and in which direction results should be ordered.</param>
             <returns>List of objects.</returns>
         </member>
         <member name="M:Watson.ORM.Postgresql.WatsonORM.GetTableName(System.Type)">

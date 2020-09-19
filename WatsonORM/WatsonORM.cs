@@ -508,7 +508,7 @@ namespace Watson.ORM
         /// </summary>
         /// <typeparam name="T">Type of object.</typeparam>
         /// <param name="expr">Expression.</param>
-        public void DeleteMany<T>(DbExpression expr) where T : class, new()
+        public void DeleteMany<T>(DbExpression expr)where T : class, new()
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
 
@@ -541,7 +541,7 @@ namespace Watson.ORM
         /// <typeparam name="T">Type of object.</typeparam>
         /// <param name="id">Id.</param>
         /// <returns>Object.</returns>
-        public T SelectByPrimaryKey<T>(object id) where T : class, new()
+        public T SelectByPrimaryKey<T>(object id)where T : class, new()
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
 
@@ -570,11 +570,12 @@ namespace Watson.ORM
         /// <summary>
         /// SELECT the first instance of an object matching a given expression.
         /// This operation will return null if the object does not exist.
+        /// The ordering used in the underlying query is ascending based on primary key column.
         /// </summary>
         /// <typeparam name="T">Type of filter.</typeparam>
         /// <param name="expr">Expression by which SELECT should be filtered (i.e. WHERE clause).</param> 
         /// <returns>Object.</returns>
-        public T SelectFirst<T>(DbExpression expr) where T : class, new()
+        public T SelectFirst<T>(DbExpression expr)where T : class, new()
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
 
@@ -603,11 +604,12 @@ namespace Watson.ORM
         /// <summary>
         /// SELECT multiple rows.
         /// This operation will return an empty list if no matching objects are found.
+        /// The ordering used in the underlying query is ascending based on primary key column.
         /// </summary>
         /// <typeparam name="T">Type of object.</typeparam>
         /// <param name="expr">Expression.</param>
         /// <returns>List of objects.</returns>
-        public List<T> SelectMany<T>(DbExpression expr) where T : class, new()
+        public List<T> SelectMany<T>(DbExpression expr)where T : class, new()
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
 
@@ -636,6 +638,7 @@ namespace Watson.ORM
         /// <summary>
         /// SELECT multiple rows with pagination.
         /// This operation will return an empty list if no matching objects are found.
+        /// The ordering used in the underlying query is ascending based on primary key column.
         /// </summary> 
         /// <param name="indexStart">Index start.</param>
         /// <param name="maxResults">Maximum number of results to retrieve.</param> 
@@ -660,6 +663,41 @@ namespace Watson.ORM
             else if (_Sqlite != null)
             {
                 return _Sqlite.SelectMany<T>(indexStart, maxResults, expr);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
+        }
+
+        /// <summary>
+        /// SELECT multiple rows with pagination.
+        /// This operation will return an empty list if no matching objects are found.
+        /// </summary> 
+        /// <param name="indexStart">Index start.</param>
+        /// <param name="maxResults">Maximum number of results to retrieve.</param> 
+        /// <param name="expr">Filter to apply when SELECTing rows (i.e. WHERE clause).</param>
+        /// <param name="resultOrder">Specify on which columns and in which direction results should be ordered.</param>
+        /// <returns>List of objects.</returns>
+        public List<T> SelectMany<T>(int? indexStart, int? maxResults, DbExpression expr, DbResultOrder[] resultOrder) where T : class, new()
+        {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
+
+            if (_Mysql != null)
+            {
+                return _Mysql.SelectMany<T>(indexStart, maxResults, expr, resultOrder);
+            }
+            else if (_Postgresql != null)
+            {
+                return _Postgresql.SelectMany<T>(indexStart, maxResults, expr, resultOrder);
+            }
+            else if (_SqlServer != null)
+            {
+                return _SqlServer.SelectMany<T>(indexStart, maxResults, expr, resultOrder);
+            }
+            else if (_Sqlite != null)
+            {
+                return _Sqlite.SelectMany<T>(indexStart, maxResults, expr, resultOrder);
             }
             else
             {

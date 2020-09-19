@@ -28,6 +28,7 @@ For a sample app exercising this library, refer to the ```Test``` project contai
 
 - Dependency update
 - New APIs: Exists, Count, Sum
+- Select with ordering
 
 ## Simple Example
 
@@ -80,6 +81,11 @@ people = orm.SelectMany<Person>(e2);
 // Retrieve 50 records starting at record number 10
 people = orm.SelectMany<Person>(10, 50, e2);
 
+// Select many with descending order
+DbResultOrder[] resultOrder = new DbResultOrder[1];
+resultOrder[0] = new DbResultOrder("id", DbOrderDirection.Descending);
+people = orm.SelectMany<Person>(null, null, e2, resultOrder);
+
 // Update
 inserted.FirstName = "Jason";
 Person updated = orm.Update<Person>(inserted);
@@ -90,13 +96,17 @@ orm.Delete<Person>(updated);
  
 ## Pagination with SelectMany
 
-```SelectMany``` can be paginated by using the method with signature ```(int? indexStart, int? maxResults, DbExpression expr)```.  ```indexStart``` is the number of records to skip, and ```maxResults``` is the number of records to retrieve.  
+```SelectMany``` can be paginated by using the method with either signature ```(int? indexStart, int? maxResults, DbExpression expr)``` or ```(int? indexStart, int? maxResults, DbExpression expr, DbResultOrder[] resultOrder)```.  ```indexStart``` is the number of records to skip, and ```maxResults``` is the number of records to retrieve.  
 
 Paginated results are always ordered by the primary key column value in ascending order, i.e. ```ORDER BY id ASC``` in the ```Person``` example above.
 
 ## Using Sqlite
 
 Sqlite may not work out of the box with .NET Framework. In order to use Sqlite with .NET Framework, you'll need to manually copy the runtimes folder into your project output directory. This directory is automatically created when building for .NET Core. To get this folder, build the Test.Sqlite project and navigate to the bin/debug/netcoreapp* directory. Then copy the runtimes folder into the project output directory of your .NET Framework application.
+
+## Using SQL Server
+
+In order to use pagination with SQL Server, the ```SelectMany``` method containing the ```DbResultOrder[] resultOrder``` parameter must be used.
 
 ## Version history
 
