@@ -184,6 +184,23 @@ namespace Test.Sqlite
 
                 #endregion
 
+                #region Exception
+
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
+                Console.WriteLine("| Catching exception and displaying query");
+
+                try
+                {
+                    _Orm.Query("SELECT * FROM person (((");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Exception: " + e.Message);
+                    Console.WriteLine("Query    : " + e.Data["Query"]);
+                }
+
+                #endregion
+
                 #region Delete-Records
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
