@@ -5,7 +5,7 @@
     <AssemblyName>WatsonORM.Core</AssemblyName>
     <RootNamespace>Watson.ORM.Core</RootNamespace>
     <Description>Do not install this package directly.  Core classes and static methods supporting WatsonORM packages.</Description>
-    <Version>1.3.0.13</Version>
+    <Version>1.3.0.14</Version>
     <Authors>Joel Christner</Authors>
     <Copyright>(c)2020 Joel Christner</Copyright>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
@@ -27,7 +27,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DatabaseWrapper.Core" Version="3.2.0.5" />
+    <PackageReference Include="DatabaseWrapper.Core" Version="3.2.0.6" />
   </ItemGroup>
 
   <ItemGroup>

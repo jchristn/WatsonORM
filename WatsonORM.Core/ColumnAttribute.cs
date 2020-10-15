@@ -12,7 +12,7 @@ namespace Watson.ORM.Core
         /// <summary>
         /// Name of the column.
         /// </summary>
-        public string Name 
+        public string Name
         { 
             get
             {
@@ -86,26 +86,13 @@ namespace Watson.ORM.Core
         {
             if (String.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
             if (primaryKey && isNullable) throw new ArgumentException("Primary key columns cannot be nullable.");
-
-            List<DataTypes> lengthAndPrecisionRequired = new List<DataTypes>
-            {
-                DataTypes.Decimal,
-                DataTypes.Double
-            };
-
-            if (lengthAndPrecisionRequired.Contains(dataType))
+             
+            if (_LengthAndPrecisionRequired.Contains(dataType))
             {
                 throw new InvalidOperationException("For column '" + name + "', please use a column attribute that includes both maximum length and precision.");
             }
 
-            List<DataTypes> lengthRequired = new List<DataTypes>
-            {
-                DataTypes.Nvarchar,
-                DataTypes.Varchar,
-                DataTypes.Enum,
-            };
-
-            if (lengthRequired.Contains(dataType))
+            if (_LengthRequired.Contains(dataType))
             {
                 throw new InvalidOperationException("For column '" + name + "', please use a column attribute that includes a maximum length.");
             }
@@ -129,14 +116,8 @@ namespace Watson.ORM.Core
             if (String.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
             if (primaryKey && isNullable) throw new ArgumentException("Primary key columns cannot be nullable.");
             if (maxLength < 1) throw new ArgumentException("Column '" + name + "' must have a maximum length greater than zero.");
-
-            List<DataTypes> invalidTypes = new List<DataTypes>
-            {
-                DataTypes.Decimal,
-                DataTypes.Double
-            };
-
-            if (invalidTypes.Contains(dataType))
+             
+            if (_LengthAndPrecisionRequired.Contains(dataType))
             {
                 throw new InvalidOperationException("For column '" + name + "', please use a column attribute that includes both maximum length and precision.");
             }
@@ -178,5 +159,18 @@ namespace Watson.ORM.Core
         private int? _MaxLength = null;
         private int? _Precision = null;
         private bool _Nullable = true;
+
+        private List<DataTypes> _LengthAndPrecisionRequired = new List<DataTypes>
+        {
+            DataTypes.Decimal,
+            DataTypes.Double
+        };
+
+        private List<DataTypes> _LengthRequired = new List<DataTypes>
+        {
+            DataTypes.Nvarchar,
+            DataTypes.Varchar,
+            DataTypes.Enum,
+        };
     }
 }
