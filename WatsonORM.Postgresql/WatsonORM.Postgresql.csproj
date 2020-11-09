@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netcoreapp2.0;net461</TargetFrameworks>
     <RootNamespace>Watson.ORM.Postgresql</RootNamespace>
-    <Version>1.3.0.14</Version>
+    <Version>1.3.0.16</Version>
     <Authors>Joel Christner</Authors>
     <Company>Joel Christner</Company>
     <Description>WatsonORM is a lightweight and easy to use object-relational mapper (ORM) for PostgreSQL in C# for .NET Core, .NET Framework, and .NET Standard built on top of DatabaseWrapper.  Refer to other WatsonORM packages if you need support for other database types.</Description>
@@ -23,7 +23,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>C:\code\Watson\WatsonORM-1.1\WatsonORM.Postgresql\WatsonORM.Postgresql.xml</DocumentationFile>
+    <DocumentationFile>WatsonORM.Postgresql.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DatabaseWrapper.Postgresql" Version="3.2.2.6" />
+    <PackageReference Include="DatabaseWrapper.Postgresql" Version="3.2.2.8" />
     <PackageReference Include="WatsonORM.Core" Version="1.3.0.14" />
   </ItemGroup>
 
