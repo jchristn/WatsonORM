@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netcoreapp2.0;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp2.0;netcoreapp3.0;netcoreapp3.1;net461;net5.0</TargetFrameworks>
+    <Version>1.3.0.19</Version>
     <AssemblyName>WatsonORM.Core</AssemblyName>
     <RootNamespace>Watson.ORM.Core</RootNamespace>
     <Description>Do not install this package directly.  Core classes and static methods supporting WatsonORM packages.</Description>
-    <Version>1.3.0.14</Version>
     <Authors>Joel Christner</Authors>
     <Copyright>(c)2020 Joel Christner</Copyright>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
@@ -19,15 +19,15 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>C:\Code\Watson\WatsonORM-1.1\WatsonORM.Core\WatsonORM.Core.xml</DocumentationFile>
+    <DocumentationFile>WatsonORM.Core.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>C:\code\Watson\WatsonORM-1.1\WatsonORM.Core\WatsonORM.Core.xml</DocumentationFile>
+    <DocumentationFile>WatsonORM.Core.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DatabaseWrapper.Core" Version="3.2.0.6" />
+    <PackageReference Include="DatabaseWrapper.Core" Version="3.2.2.10" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netcoreapp2.0;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp2.0;netcoreapp3.0;netcoreapp3.1;net461;net5.0</TargetFrameworks>
+    <Version>1.3.0.19</Version>
     <Authors>Joel Christner</Authors>
     <Company>Joel Christner</Company>
     <Product>WatsonORM</Product>
@@ -16,7 +17,6 @@
     <PackageIconUrl>https://raw.githubusercontent.com/jchristn/WatsonORM/master/assets/watson.ico</PackageIconUrl>
     <PackageId>WatsonORM</PackageId>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.3.0.17</Version>
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
@@ -39,10 +39,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="WatsonORM.Mysql" Version="1.3.0.17" />
-    <PackageReference Include="WatsonORM.Postgresql" Version="1.3.0.17" />
-    <PackageReference Include="WatsonORM.Sqlite" Version="1.3.0.17" />
-    <PackageReference Include="WatsonORM.SqlServer" Version="1.3.0.17" />
+    <PackageReference Include="WatsonORM.Mysql" Version="1.3.0.19" />
+    <PackageReference Include="WatsonORM.Postgresql" Version="1.3.0.19" />
+    <PackageReference Include="WatsonORM.Sqlite" Version="1.3.0.19" />
+    <PackageReference Include="WatsonORM.SqlServer" Version="1.3.0.19" />
   </ItemGroup>
 
 </Project>

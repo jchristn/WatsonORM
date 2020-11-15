@@ -48,17 +48,6 @@
             <param name="dataType">The data type of the column.</param> 
             <param name="isNullable">Indicates whether or not the column allows a null value.</param>
         </member>
-        <member name="M:Watson.ORM.Core.ColumnAttribute.#ctor(System.String,System.Boolean,Watson.ORM.Core.DataTypes,System.Int32,System.Int32,System.Boolean)">
-            <summary>
-            Links a class property to a column in a WatsonORM-managed database table.
-            </summary>
-            <param name="name">Name of the column.</param>
-            <param name="primaryKey">Indicates whether or not the column is a primary key.</param>
-            <param name="dataType">The data type of the column.</param>
-            <param name="maxLength">The maximum length of the column.</param>
-            <param name="precision">The decimal precision of the column.</param>
-            <param name="isNullable">Indicates whether or not the column allows a null value.</param>
-        </member>
         <member name="M:Watson.ORM.Core.ColumnAttribute.#ctor(System.String,System.Boolean,Watson.ORM.Core.DataTypes,System.Int32,System.Boolean)">
             <summary>
             Links a class property to a column in a WatsonORM-managed database table.
@@ -69,24 +58,16 @@
             <param name="maxLength">The maximum length of the column.</param>
             <param name="isNullable">Indicates whether or not the column allows a null value.</param>
         </member>
-        <member name="T:Watson.ORM.Core.Common">
+        <member name="M:Watson.ORM.Core.ColumnAttribute.#ctor(System.String,System.Boolean,Watson.ORM.Core.DataTypes,System.Int32,System.Int32,System.Boolean)">
             <summary>
-            Common methods shared amongst WatsonORM modules.
+            Links a class property to a column in a WatsonORM-managed database table.
             </summary>
-        </member>
-        <member name="M:Watson.ORM.Core.Common.DbOperatorsConverter(Watson.ORM.Core.DbOperators)">
-            <summary>
-            Convert a WatsonORM DbOperators to a DatabaseWrapper Core Operators.
-            </summary>
-            <param name="oper">WatsonORM DbOperators.</param>
-            <returns>DatabaseWrapper Core Operators.</returns>
-        </member>
-        <member name="M:Watson.ORM.Core.Common.DbExpressionConverter(Watson.ORM.Core.DbExpression)">
-            <summary>
-            Convert a WatsonORM DbExpression to a DatabaseWrapper Expression.
-            </summary>
-            <param name="expr">WatsonORM DbExpression.</param>
-            <returns>DatabaseWrapper Core Expression.</returns>
+            <param name="name">Name of the column.</param>
+            <param name="primaryKey">Indicates whether or not the column is a primary key.</param>
+            <param name="dataType">The data type of the column.</param>
+            <param name="maxLength">The maximum length of the column.</param>
+            <param name="precision">The decimal precision of the column.</param>
+            <param name="isNullable">Indicates whether or not the column allows a null value.</param>
         </member>
         <member name="T:Watson.ORM.Core.DatabaseSettings">
             <summary>
@@ -131,6 +112,11 @@
         <member name="P:Watson.ORM.Core.DatabaseSettings.DatabaseName">
             <summary>
             The name of the database.
+            </summary>
+        </member>
+        <member name="M:Watson.ORM.Core.DatabaseSettings.#ctor">
+            <summary>
+            Instantiate the object.
             </summary>
         </member>
         <member name="M:Watson.ORM.Core.DatabaseSettings.#ctor(System.String)">
@@ -381,9 +367,19 @@
             Value starts with the specified value
             </summary>
         </member>
+        <member name="F:Watson.ORM.Core.DbOperators.StartsWithNot">
+            <summary>
+            Value does not start with the specified value
+            </summary>
+        </member>
         <member name="F:Watson.ORM.Core.DbOperators.EndsWith">
             <summary>
             Value ends with the specified value
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbOperators.EndsWithNot">
+            <summary>
+            Value does not end with the specified value
             </summary>
         </member>
         <member name="F:Watson.ORM.Core.DbOperators.GreaterThan">
@@ -415,6 +411,55 @@
             <summary>
             Value is not null
             </summary>
+        </member>
+        <member name="T:Watson.ORM.Core.DbOrderDirection">
+            <summary>
+            Direction by which results should be returned.
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbOrderDirection.Ascending">
+            <summary>
+            Return results in ascending order.
+            </summary>
+        </member>
+        <member name="F:Watson.ORM.Core.DbOrderDirection.Descending">
+            <summary>
+            Return results in descending order.
+            </summary>
+        </member>
+        <member name="T:Watson.ORM.Core.DbResultOrder">
+            <summary>
+            Describe on which columns and in which direction results should be ordered.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.DbResultOrder.ColumnName">
+            <summary>
+            Column name on which to order results.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.DbResultOrder.Direction">
+            <summary>
+            Direction by which results should be returned.
+            </summary>
+        </member>
+        <member name="M:Watson.ORM.Core.DbResultOrder.#ctor">
+            <summary>
+            Instantiate the object.
+            </summary>
+        </member>
+        <member name="M:Watson.ORM.Core.DbResultOrder.#ctor(System.String,Watson.ORM.Core.DbOrderDirection)">
+            <summary>
+            Instantiate the object.
+            </summary>
+            <param name="columnName">Column name on which to order results.</param>
+            <param name="direction">Direction by which results should be returned.</param>
+        </member>
+        <member name="M:Watson.ORM.Core.DbResultOrder.ConvertToResultOrder(Watson.ORM.Core.DbResultOrder[])">
+            <summary>
+            Convert a WatsonORM DbResultOrder[] to a DatabaseWrapper ResultOrder[].
+            </summary>
+            <param name="resultOrder">DbResultOrder array.</param>
+            <returns>ResultOrder array.</returns>
         </member>
         <member name="T:Watson.ORM.Core.DbTypes">
             <summary>
@@ -695,6 +740,25 @@
             <param name="t">Type.</param>
             <param name="columnName">Column name.</param>
             <returns>Property name.</returns>
+        </member>
+        <member name="T:Watson.ORM.Core.WatsonORMCommon">
+            <summary>
+            Common methods shared amongst WatsonORM modules.
+            </summary>
+        </member>
+        <member name="M:Watson.ORM.Core.WatsonORMCommon.DbOperatorsConverter(Watson.ORM.Core.DbOperators)">
+            <summary>
+            Convert a WatsonORM DbOperators to a DatabaseWrapper Core Operators.
+            </summary>
+            <param name="oper">WatsonORM DbOperators.</param>
+            <returns>DatabaseWrapper Core Operators.</returns>
+        </member>
+        <member name="M:Watson.ORM.Core.WatsonORMCommon.DbExpressionConverter(Watson.ORM.Core.DbExpression)">
+            <summary>
+            Convert a WatsonORM DbExpression to a DatabaseWrapper Expression.
+            </summary>
+            <param name="expr">WatsonORM DbExpression.</param>
+            <returns>DatabaseWrapper Core Expression.</returns>
         </member>
     </members>
 </doc>
