@@ -87,6 +87,14 @@
             <param name="objs">List of objects.</param>
             <returns>List of objects.</returns>
         </member>
+        <member name="M:Watson.ORM.Postgresql.WatsonORM.InsertMultiple``1(System.Collections.Generic.List{``0})">
+            <summary>
+            INSERT multiple records.
+            This operation performs the INSERT using a single database query, and does not return a list of inserted objects.
+            </summary>
+            <typeparam name="T">Type of object.</typeparam>
+            <param name="objs">List of objects.</param>
+        </member>
         <member name="M:Watson.ORM.Postgresql.WatsonORM.Update``1(``0)">
             <summary>
             UPDATE an object.

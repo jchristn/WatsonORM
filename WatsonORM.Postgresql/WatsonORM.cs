@@ -246,9 +246,7 @@ namespace Watson.ORM.Postgresql
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (obj == null) throw new ArgumentNullException(nameof(obj));
 
-            string tableName = _TypeMetadataMgr.GetTableNameFromObject(obj); 
-            string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T));
-            string primaryKeyPropertyName = _TypeMetadataMgr.GetPrimaryKeyPropertyName(typeof(T)); 
+            string tableName = _TypeMetadataMgr.GetTableNameFromObject(obj);
 
             Dictionary<string, object> insertVals = ObjectToDictionary(obj);
             DataTable result = _Database.Insert(tableName, insertVals);
@@ -268,8 +266,6 @@ namespace Watson.ORM.Postgresql
             if (objs == null || objs.Count < 1) throw new ArgumentNullException(nameof(objs));
 
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
-            string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T));
-            string primaryKeyPropertyName = _TypeMetadataMgr.GetPrimaryKeyPropertyName(typeof(T));
 
             List<T> ret = new List<T>();
             foreach (T obj in objs)
@@ -280,6 +276,28 @@ namespace Watson.ORM.Postgresql
             }
 
             return ret;
+        }
+
+        /// <summary>
+        /// INSERT multiple records.
+        /// This operation performs the INSERT using a single database query, and does not return a list of inserted objects.
+        /// </summary>
+        /// <typeparam name="T">Type of object.</typeparam>
+        /// <param name="objs">List of objects.</param>
+        public void InsertMultiple<T>(List<T> objs) where T : class, new()
+        {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
+            if (objs == null || objs.Count < 1) throw new ArgumentNullException(nameof(objs));
+
+            string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
+
+            List<Dictionary<string, object>> dicts = new List<Dictionary<string, object>>();
+            foreach (T obj in objs)
+            {
+                dicts.Add(ObjectToDictionary(obj));
+            }
+
+            _Database.InsertMultiple(tableName, dicts);
         }
 
         /// <summary>
@@ -786,7 +804,11 @@ namespace Watson.ORM.Postgresql
                                     break;
                                 default:
                                     throw new ArgumentException("Unknown data type '" + colAttr.Type.ToString() + "'.");
-                            }                            
+                            }
+                        }
+                        else if (val == null && !colAttr.PrimaryKey)
+                        {
+                            ret.Add(colAttr.Name, null);
                         }
                     }
                 }

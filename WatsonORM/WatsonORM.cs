@@ -378,6 +378,40 @@ namespace Watson.ORM
         }
 
         /// <summary>
+        /// INSERT multiple records.
+        /// This operation performs the INSERT using a single database query, and does not return a list of inserted objects.
+        /// </summary>
+        /// <typeparam name="T">Type of object.</typeparam>
+        /// <param name="objs">List of objects.</param>
+        public void InsertMultiple<T>(List<T> objs) where T : class, new()
+        {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
+
+            if (_Mysql != null)
+            {
+                _Mysql.InsertMultiple<T>(objs);
+            }
+            else if (_Postgresql != null)
+            {
+                _Postgresql.InsertMultiple<T>(objs);
+            }
+            else if (_SqlServer != null)
+            {
+                _SqlServer.InsertMultiple<T>(objs);
+            }
+            else if (_Sqlite != null)
+            {
+                _Sqlite.InsertMultiple<T>(objs);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
+
+            return;
+        }
+
+        /// <summary>
         /// UPDATE an object.
         /// </summary>
         /// <typeparam name="T">Type of object.</typeparam>
