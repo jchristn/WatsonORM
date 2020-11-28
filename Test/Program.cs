@@ -83,7 +83,7 @@ namespace Test
 
                 #endregion
 
-                #region Create-and-Store-Records
+                #region Insert-Records
                  
                 Person p1 = new Person("Abraham", "Lincoln", Convert.ToDateTime("1/1/1980"), null, 42, null, "initial notes p1", PersonType.Human, null, false);
                 Person p2 = new Person("Ronald", "Reagan", Convert.ToDateTime("2/2/1981"), Convert.ToDateTime("3/3/1982"), 43, 43, "initial notes p2", PersonType.Cat, PersonType.Cat, true);
@@ -105,6 +105,19 @@ namespace Test
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Creating p4");
                 p4 = _Orm.Insert<Person>(p4);
+
+                #endregion
+
+                #region Insert-Multiple-Records
+
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
+                Console.WriteLine("| Creating p5 through p8");
+                Person p5 = new Person("Jason", "Christner", Convert.ToDateTime("4/21/2020"), null, 1, null, "initial notes p5", PersonType.Human, null, false);
+                Person p6 = new Person("Maria", "Sanchez", Convert.ToDateTime("10/10/1982"), Convert.ToDateTime("10/10/1982"), 38, null, "initial notes p6", PersonType.Cat, PersonType.Cat, true);
+                Person p7 = new Person("Eddie", "Van Halen", Convert.ToDateTime("3/3/1982"), null, 44, null, "initial notes p7", PersonType.Dog, PersonType.Dog, false);
+                Person p8 = new Person("Steve", "Vai", Convert.ToDateTime("4/4/1983"), Convert.ToDateTime("5/5/1983"), 45, null, "initial notes p8", PersonType.Human, null, true);
+                List<Person> people = new List<Person> { p5, p6, p7, p8 };
+                _Orm.InsertMultiple<Person>(people);
 
                 #endregion
 
