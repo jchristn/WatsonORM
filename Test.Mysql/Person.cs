@@ -4,7 +4,7 @@ using System.Text;
 using Watson.ORM;
 using Watson.ORM.Core;
  
-namespace Test
+namespace Test.Mysql
 {
     [Table("person")]
     public class Person

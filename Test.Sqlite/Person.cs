@@ -30,7 +30,7 @@ namespace Test.Sqlite
         [Column("nullableage", false, DataTypes.Int, true)]
         public int? NullableAge { get; set; }
 
-        [Column("notes", false, DataTypes.Nvarchar, true)]
+        [Column("notes", false, DataTypes.Nvarchar, 256, true)]
         public string Notes { get; set; }
 
         [Column("persontype", false, DataTypes.Nvarchar, 8, false)]

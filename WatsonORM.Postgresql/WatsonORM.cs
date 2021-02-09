@@ -198,7 +198,37 @@ namespace Watson.ORM.Postgresql
             if (columns == null || columns.Count < 1) 
                 throw new InvalidOperationException("Type '" + t.Name + "' does not have any properties with a 'Column' attribute.");
 
-            if (!_Database.TableExists(tableName)) _Database.CreateTable(tableName, columns);
+            if (!_Database.TableExists(tableName))
+            {
+                _Database.CreateTable(tableName, columns);
+            }
+            else
+            {
+                List<Column> existingColumns = _Database.DescribeTable(tableName);
+
+                foreach (Column column in columns)
+                {
+                    if (!existingColumns.Exists(c => c.Name.Equals(column.Name)))
+                    {
+                        throw new InvalidOperationException("Table '" + tableName + "' exists but column '" + column.Name + "' does not.");
+                    }
+                }
+
+                List<string> existingColumnNames = existingColumns.Select(c => c.Name).ToList();
+                List<string> definedColumnNames = columns.Select(c => c.Name).ToList();
+                List<string> delta = existingColumnNames.Except(definedColumnNames).ToList();
+                if (delta != null && delta.Count > 0)
+                {
+                    string deltaStr = "";
+                    foreach (string currDelta in delta)
+                    {
+                        if (!String.IsNullOrEmpty(deltaStr)) deltaStr = deltaStr + ", ";
+                        deltaStr += currDelta;
+                    }
+
+                    _Logger?.Invoke(_Header + "table " + tableName + " contains additional columns not decorated in the class definition: " + deltaStr);
+                }
+            }
 
             _TypeMetadataMgr.Add(t, new TypeMetadata(tableName, primaryKeyPropertyName, columns));
 

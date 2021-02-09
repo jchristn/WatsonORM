@@ -17,7 +17,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatsonORM.Mysql", "WatsonOR
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{11702967-8092-4CAA-94D8-F4DB17BAA7C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Sqlite", "Test.Sqlite\Test.Sqlite.csproj", "{5EDFF837-3C89-47D1-AD87-7F831ED8AE0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Sqlite", "Test.Sqlite\Test.Sqlite.csproj", "{5EDFF837-3C89-47D1-AD87-7F831ED8AE0F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Mysql", "Test.Mysql\Test.Mysql.csproj", "{22F901B6-04B3-49C0-9A5F-87C52DCC9CA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Postgresql", "Test.Postgresql\Test.Postgresql.csproj", "{E842FA31-3CAA-4AB5-BC87-81DF52C4A3FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.SqlServer", "Test.SqlServer\Test.SqlServer.csproj", "{958B798D-A666-4460-8AD9-CA54B244796A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +63,18 @@ Global
 		{5EDFF837-3C89-47D1-AD87-7F831ED8AE0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EDFF837-3C89-47D1-AD87-7F831ED8AE0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EDFF837-3C89-47D1-AD87-7F831ED8AE0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22F901B6-04B3-49C0-9A5F-87C52DCC9CA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22F901B6-04B3-49C0-9A5F-87C52DCC9CA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22F901B6-04B3-49C0-9A5F-87C52DCC9CA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22F901B6-04B3-49C0-9A5F-87C52DCC9CA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E842FA31-3CAA-4AB5-BC87-81DF52C4A3FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E842FA31-3CAA-4AB5-BC87-81DF52C4A3FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E842FA31-3CAA-4AB5-BC87-81DF52C4A3FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E842FA31-3CAA-4AB5-BC87-81DF52C4A3FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{958B798D-A666-4460-8AD9-CA54B244796A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{958B798D-A666-4460-8AD9-CA54B244796A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{958B798D-A666-4460-8AD9-CA54B244796A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{958B798D-A666-4460-8AD9-CA54B244796A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
