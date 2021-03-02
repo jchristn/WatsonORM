@@ -102,28 +102,32 @@ namespace Test.Postgresql
                 pSelected = _Orm.SelectFirst<Person>(eSelect3);
                 Console.WriteLine("| Selected: " + pSelected.ToString());
 
-                #endregion 
+                #endregion
 
                 #region Update-Records
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Updating p1");
                 p1.Notes = "updated notes p1";
+                p1.NullableType = null;
                 p1 = _Orm.Update<Person>(p1);
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Updating p2");
                 p2.Notes = "updated notes p2";
+                p2.NullableType = null;
                 p2 = _Orm.Update<Person>(p2);
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Updating p3");
                 p3.Notes = "updated notes p3";
+                p3.NullableType = null;
                 p3 = _Orm.Update<Person>(p3);
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Updating p4");
                 p4.Notes = "updated notes p4";
+                p4.NullableType = null;
                 p4 = _Orm.Update<Person>(p4);
 
                 #endregion

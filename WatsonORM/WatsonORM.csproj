@@ -2,18 +2,18 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp3.1;net461;net5.0</TargetFrameworks>
-    <Version>1.3.0.23</Version>
+    <Version>1.3.1</Version>
     <Authors>Joel Christner</Authors>
     <Company>Joel Christner</Company>
     <Product>WatsonORM</Product>
     <Description>WatsonORM is a lightweight and easy to use object-relational mapper (ORM) in C# for .NET Core, .NET Framework, and .NET Standard built on top of DatabaseWrapper.  WatsonORM supports Microsoft SQL Server, MySQL, PostgreSQL, and Sqlite databases.  Refer to other WatsonORM packages if you only need support for a single database type.</Description>
-    <Copyright>(c)2020 Joel Christner</Copyright>
+    <Copyright>(c)2021 Joel Christner</Copyright>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/jchristn/watsonorm</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jchristn/watsonorm</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
     <PackageTags>orm object relation relational mapper map database object data convert sql server mssql sqlite mysql pgsql postgres postgresql dynamic query builder datarow datatable key foreign</PackageTags>
-    <PackageReleaseNotes>Dependency update, new APIs: Exists, Sum, Count</PackageReleaseNotes>
+    <PackageReleaseNotes>Dependency update</PackageReleaseNotes>
     <PackageIconUrl></PackageIconUrl>
     <PackageId>WatsonORM</PackageId>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -44,10 +44,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="WatsonORM.Mysql" Version="1.3.0.23" />
-    <PackageReference Include="WatsonORM.Postgresql" Version="1.3.0.22" />
-    <PackageReference Include="WatsonORM.Sqlite" Version="1.3.0.23" />
-    <PackageReference Include="WatsonORM.SqlServer" Version="1.3.0.23" />
+    <PackageReference Include="WatsonORM.Mysql" Version="1.3.1" />
+    <PackageReference Include="WatsonORM.Postgresql" Version="1.3.1" />
+    <PackageReference Include="WatsonORM.Sqlite" Version="1.3.1" />
+    <PackageReference Include="WatsonORM.SqlServer" Version="1.3.1" />
   </ItemGroup>
 
   <ItemGroup>
