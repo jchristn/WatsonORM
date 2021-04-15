@@ -2,10 +2,11 @@
 
 ## Current Version
 
-v1.3.0
+v1.3.x
 
 - Dependency update
 - New APIs: Exists, Count, Sum
+- Better support for DateTimeOffset
 
 ## Previous Versions
 

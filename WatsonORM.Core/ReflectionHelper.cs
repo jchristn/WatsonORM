@@ -26,11 +26,11 @@ namespace Watson.ORM.Core
          */
 
         /// <summary>
-            /// Determine if an object has an attribute.
-            /// </summary>
-            /// <param name="obj">Object.</param>
-            /// <param name="attr">Attribute.</param>
-            /// <returns>True if the attribute exists.</returns>
+        /// Determine if an object has an attribute.
+        /// </summary>
+        /// <param name="obj">Object.</param>
+        /// <param name="attr">Attribute.</param>
+        /// <returns>True if the attribute exists.</returns>
         public static bool HasAttribute(object obj, Attribute attr)
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
@@ -327,6 +327,8 @@ namespace Watson.ORM.Core
                     return DataType.Double;
                 case DataTypes.DateTime:
                     return DataType.DateTime;
+                case DataTypes.DateTimeOffset:
+                    return DataType.DateTimeOffset;
                 case DataTypes.Blob:
                     return DataType.Blob;
                 default:

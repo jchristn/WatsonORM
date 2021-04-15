@@ -11,9 +11,19 @@ namespace Watson.ORM.Core
     /// </summary>
     public class TypeMetadataManager
     {
+        #region Public-Members
+
+        #endregion
+
+        #region Private-Members
+
         private readonly object _MetadataLock = new object();
         private Dictionary<Type, TypeMetadata> _Metadata = new Dictionary<Type, TypeMetadata>();
-        
+
+        #endregion
+
+        #region Constructors-and-Factories
+
         /// <summary>
         /// Instantiate the object.
         /// </summary>
@@ -21,6 +31,10 @@ namespace Watson.ORM.Core
         {
 
         }
+
+        #endregion
+
+        #region Public-Methods
 
         /// <summary>
         /// Add a TypeMetadata entry for a given Type.
@@ -190,6 +204,12 @@ namespace Watson.ORM.Core
             }
 
             throw new ArgumentException("No property found for column name '" + columnName + "'.");
-        } 
+        }
+
+        #endregion
+
+        #region Private-Methods
+
+        #endregion
     }
 }

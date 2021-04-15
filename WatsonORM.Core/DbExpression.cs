@@ -10,6 +10,31 @@ namespace Watson.ORM.Core
     /// </summary>
     public class DbExpression
     {
+        #region Public-Members
+
+        /// <summary>
+        /// The left term of the expression; can either be a string term or a nested DbExpression.
+        /// </summary>
+        public object LeftTerm { get; set; } = null;
+
+        /// <summary>
+        /// The operator.
+        /// </summary>
+        public DbOperators Operator { get; set; } = DbOperators.Equals;
+
+        /// <summary>
+        /// The right term of the expression; can either be an object for comparison or a nested DbExpression.
+        /// </summary>
+        public object RightTerm { get; set; } = null;
+
+        #endregion
+
+        #region Private-Members
+
+        #endregion
+
+        #region Constructors-and-Factories
+
         /// <summary>
         /// A structure in the form of term-operator-term that defines a boolean operation within a WHERE clause.
         /// </summary>
@@ -45,21 +70,10 @@ namespace Watson.ORM.Core
             return PrependAndClause(startOfBetween, endOfBetween);
         }
 
-        /// <summary>
-        /// The left term of the expression; can either be a string term or a nested DbExpression.
-        /// </summary>
-        public object LeftTerm;
+        #endregion
 
-        /// <summary>
-        /// The operator.
-        /// </summary>
-        public DbOperators Operator;
+        #region Public-Methods
 
-        /// <summary>
-        /// The right term of the expression; can either be an object for comparison or a nested DbExpression.
-        /// </summary>
-        public object RightTerm;
-        
         /// <summary>
         /// Display DbExpression in a human-readable string.
         /// </summary>
@@ -284,5 +298,11 @@ namespace Watson.ORM.Core
                 return ret;
             }
         }
+
+        #endregion
+
+        #region Private-Methods
+
+        #endregion
     }
 }

@@ -29,6 +29,7 @@ For a sample app exercising this library, refer to the ```Test``` project contai
 - Dependency update
 - New APIs: Exists, Count, Sum
 - Select with ordering
+- Better support for DateTimeOffset
 
 ## Simple Example
 
@@ -107,6 +108,10 @@ Sqlite may not work out of the box with .NET Framework. In order to use Sqlite w
 ## Using SQL Server
 
 In order to use pagination with SQL Server, the ```SelectMany``` method containing the ```DbResultOrder[] resultOrder``` parameter must be used.
+
+## Using MySQL
+
+While the ```DateTimeOffset``` type can be used in objects, with MySQL the offset is not persisted.  It is recommended that you store UTC timestamps using the ```DateTime``` type instead.
 
 ## Version history
 

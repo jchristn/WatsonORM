@@ -24,6 +24,12 @@ namespace Test.Mysql
         [Column("nullablebirthdate", false, DataTypes.DateTime, true)]
         public DateTime? NullableBirthdate { get; set; }
 
+        [Column("localtime", false, DataTypes.DateTimeOffset, false)]
+        public DateTimeOffset LocalTime { get; set; }
+
+        [Column("nullablelocaltime", false, DataTypes.DateTimeOffset, true)]
+        public DateTimeOffset? NullableLocalTime { get; set; }
+
         [Column("age", false, DataTypes.Int, false)]
         public int Age { get; set; }
 
@@ -48,14 +54,16 @@ namespace Test.Mysql
         }
 
         public Person(
-            string first, 
-            string last, 
-            DateTime birthDate, 
+            string first,
+            string last,
+            DateTime birthDate,
             DateTime? nullableBirthDate,
+            DateTimeOffset localTime,
+            DateTimeOffset? nullableLocalTime,
             int age,
             int? nullableAge,
-            string notes, 
-            PersonType personType, 
+            string notes,
+            PersonType personType,
             PersonType? nullablePersonType,
             bool isHandsome)
         {
@@ -63,6 +71,8 @@ namespace Test.Mysql
             LastName = last;
             Birthdate = birthDate;
             NullableBirthdate = nullableBirthDate;
+            LocalTime = localTime;
+            NullableLocalTime = nullableLocalTime;
             Age = age;
             NullableAge = nullableAge;
             Notes = notes;
@@ -78,6 +88,7 @@ namespace Test.Mysql
                 "ID " + Id + Environment.NewLine +
                 "   Name        : " + FirstName + " " + LastName + Environment.NewLine +
                 "   Birthdate   : " + Birthdate.ToString() + " nullable " + (NullableBirthdate != null ? NullableBirthdate.ToString() : "(null)") + Environment.NewLine +
+                "   Local time  : " + LocalTime.ToString() + " nullable " + (NullableLocalTime != null ? NullableLocalTime.ToString() : "(null)") + Environment.NewLine +
                 "   Age         : " + Age + " nullable " + (NullableAge != null ? NullableAge.ToString() : "(null)") + Environment.NewLine +
                 "   Type        : " + Type.ToString() + " nullable " + NullableType + Environment.NewLine +
                 "   Notes       : " + Notes + Environment.NewLine +

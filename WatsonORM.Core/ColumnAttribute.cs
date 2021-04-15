@@ -9,6 +9,8 @@ namespace Watson.ORM.Core
     /// </summary>
     public class ColumnAttribute : Attribute
     {
+        #region Public-Members
+
         /// <summary>
         /// Name of the column.
         /// </summary>
@@ -74,6 +76,34 @@ namespace Watson.ORM.Core
                 return _Nullable;
             }
         }
+
+        #endregion
+
+        #region Private-Members
+
+        private string _Name = null;
+        private bool _PrimaryKey = false;
+        private DataTypes _Type = DataTypes.Nvarchar;
+        private int? _MaxLength = null;
+        private int? _Precision = null;
+        private bool _Nullable = true;
+
+        private List<DataTypes> _LengthAndPrecisionRequired = new List<DataTypes>
+        {
+            DataTypes.Decimal,
+            DataTypes.Double
+        };
+
+        private List<DataTypes> _LengthRequired = new List<DataTypes>
+        {
+            DataTypes.Nvarchar,
+            DataTypes.Varchar,
+            DataTypes.Enum,
+        };
+
+        #endregion
+
+        #region Constructors-and-Factories
 
         /// <summary>
         /// Links a class property to a column in a WatsonORM-managed database table.
@@ -153,24 +183,14 @@ namespace Watson.ORM.Core
             _Nullable = isNullable;
         }
 
-        private string _Name = null;
-        private bool _PrimaryKey = false;
-        private DataTypes _Type = DataTypes.Nvarchar;
-        private int? _MaxLength = null;
-        private int? _Precision = null;
-        private bool _Nullable = true;
+        #endregion
 
-        private List<DataTypes> _LengthAndPrecisionRequired = new List<DataTypes>
-        {
-            DataTypes.Decimal,
-            DataTypes.Double
-        };
+        #region Public-Methods
 
-        private List<DataTypes> _LengthRequired = new List<DataTypes>
-        {
-            DataTypes.Nvarchar,
-            DataTypes.Varchar,
-            DataTypes.Enum,
-        };
+        #endregion
+
+        #region Private-Methods
+
+        #endregion
     }
 }

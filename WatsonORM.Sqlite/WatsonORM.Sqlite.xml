@@ -237,6 +237,13 @@
             <param name="dt">DateTime.</param>
             <returns>Formatted DateTime string.</returns>
         </member>
+        <member name="M:Watson.ORM.Sqlite.WatsonORM.TimestampOffset(System.DateTimeOffset)">
+            <summary>
+            Retrieve a timestamp with offset formatted for the database.
+            </summary>
+            <param name="dt">DateTimeOffset.</param>
+            <returns>Formatted DateTime string.</returns>
+        </member>
         <member name="M:Watson.ORM.Sqlite.WatsonORM.Sanitize(System.String)">
             <summary>
             Returns a sanitized string useful in a raw query.

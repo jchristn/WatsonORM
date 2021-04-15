@@ -208,6 +208,11 @@
             Timestamp
             </summary>
         </member>
+        <member name="F:Watson.ORM.Core.DataTypes.DateTimeOffset">
+            <summary>
+            Timestamp with offset
+            </summary>
+        </member>
         <member name="F:Watson.ORM.Core.DataTypes.Blob">
             <summary>
             Blob
@@ -216,6 +221,21 @@
         <member name="T:Watson.ORM.Core.DbExpression">
             <summary>
             Boolean expression.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.DbExpression.LeftTerm">
+            <summary>
+            The left term of the expression; can either be a string term or a nested DbExpression.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.DbExpression.Operator">
+            <summary>
+            The operator.
+            </summary>
+        </member>
+        <member name="P:Watson.ORM.Core.DbExpression.RightTerm">
+            <summary>
+            The right term of the expression; can either be an object for comparison or a nested DbExpression.
             </summary>
         </member>
         <member name="M:Watson.ORM.Core.DbExpression.#ctor">
@@ -237,21 +257,6 @@
             </summary>
             <param name="left">The left term of the expression; can either be a string term or a nested DbExpression.</param>
             <param name="right">The right term of the expression; must be a List with two values where the first value is the lower value and the second value is the upper value.</param>
-        </member>
-        <member name="F:Watson.ORM.Core.DbExpression.LeftTerm">
-            <summary>
-            The left term of the expression; can either be a string term or a nested DbExpression.
-            </summary>
-        </member>
-        <member name="F:Watson.ORM.Core.DbExpression.Operator">
-            <summary>
-            The operator.
-            </summary>
-        </member>
-        <member name="F:Watson.ORM.Core.DbExpression.RightTerm">
-            <summary>
-            The right term of the expression; can either be an object for comparison or a nested DbExpression.
-            </summary>
         </member>
         <member name="M:Watson.ORM.Core.DbExpression.ToString">
             <summary>

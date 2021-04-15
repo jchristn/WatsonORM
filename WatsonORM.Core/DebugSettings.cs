@@ -9,23 +9,32 @@ namespace Watson.ORM.Core
     /// </summary>
     public class DebugSettings
     {
+        #region Public-Members
+
         /// <summary>
         /// Enable or disable debugging of database queries.
         /// </summary>
-        public bool DatabaseQueries { get; set; }
+        public bool DatabaseQueries { get; set; } = false;
 
         /// <summary>
         /// Enable or disable debugging of database results.
         /// </summary>
-        public bool DatabaseResults { get; set; }
+        public bool DatabaseResults { get; set; } = false;
+
+        #endregion
+
+        #region Private-Members
+
+        #endregion
+
+        #region Constructors-and-Factories
 
         /// <summary>
         /// Instantiate the object.
         /// </summary>
         public DebugSettings()
         {
-            DatabaseQueries = false;
-            DatabaseResults = false;
+
         }
 
         /// <summary>
@@ -38,5 +47,15 @@ namespace Watson.ORM.Core
             DatabaseQueries = dbQueries;
             DatabaseResults = dbResults;
         }
+
+        #endregion
+
+        #region Public-Methods
+
+        #endregion
+
+        #region Private-Methods
+
+        #endregion
     }
 }

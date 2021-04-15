@@ -10,20 +10,30 @@ namespace Watson.ORM.Core
     /// </summary>
     public class TypeMetadata
     {
+        #region Public-Members
+
         /// <summary>
         /// The name of the database table.
         /// </summary>
-        public string TableName { get; set; }
-        
+        public string TableName { get; set; } = null;
+
         /// <summary>
         /// Property name of the primary key field.
         /// </summary>
-        public string PrimaryKeyPropertyName { get; set; }
+        public string PrimaryKeyPropertyName { get; set; } = null;
 
         /// <summary>
         /// Columns in the table.
         /// </summary>
-        public List<Column> Columns { get; set; }
+        public List<Column> Columns { get; set; } = new List<Column>();
+
+        #endregion
+
+        #region Private-Members
+
+        #endregion
+
+        #region Constructors-and-Factories
 
         /// <summary>
         /// Instantiate the object.
@@ -37,5 +47,15 @@ namespace Watson.ORM.Core
             PrimaryKeyPropertyName = primaryKeyPropertyName;
             Columns = columns;
         }
+
+        #endregion
+
+        #region Public-Methods
+
+        #endregion
+
+        #region Private-Methods
+
+        #endregion
     }
 }

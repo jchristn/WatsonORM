@@ -11,23 +11,32 @@ namespace Watson.ORM.Core
     /// </summary>
     public class DbResultOrder
     {
+        #region Public-Members
+
         /// <summary>
         /// Column name on which to order results.
         /// </summary>
-        public string ColumnName { get; set; }
+        public string ColumnName { get; set; } = null;
 
         /// <summary>
         /// Direction by which results should be returned.
         /// </summary>
-        public DbOrderDirection Direction { get; set; }
+        public DbOrderDirection Direction { get; set; } = DbOrderDirection.Ascending;
+
+        #endregion
+
+        #region Private-Members
+
+        #endregion
+
+        #region Constructors-and-Factories
 
         /// <summary>
         /// Instantiate the object.
         /// </summary>
         public DbResultOrder()
         {
-            ColumnName = null;
-            Direction = DbOrderDirection.Ascending;
+
         }
 
         /// <summary>
@@ -41,6 +50,10 @@ namespace Watson.ORM.Core
             ColumnName = columnName;
             Direction = direction;
         }
+
+        #endregion
+
+        #region Public-Methods
 
         /// <summary>
         /// Convert a WatsonORM DbResultOrder[] to a DatabaseWrapper ResultOrder[].
@@ -64,5 +77,11 @@ namespace Watson.ORM.Core
             }
             return ret;
         }
+
+        #endregion
+
+        #region Private-Methods
+
+        #endregion
     }
 }

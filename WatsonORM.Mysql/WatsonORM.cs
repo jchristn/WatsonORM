@@ -638,6 +638,17 @@ namespace Watson.ORM.Mysql
         }
 
         /// <summary>
+        /// Retrieve a timestamp with offset formatted for the database.
+        /// </summary>
+        /// <param name="dt">DateTimeOffset.</param>
+        /// <returns>Formatted DateTime string.</returns>
+        public string TimestampOffset(DateTimeOffset dt)
+        {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
+            return _Database.TimestampOffset(dt);
+        }
+
+        /// <summary>
         /// Returns a sanitized string useful in a raw query.
         /// If null is supplied, null is returned.
         /// </summary>
@@ -748,7 +759,14 @@ namespace Watson.ORM.Mysql
                             }
                             else
                             {
-                                property.SetValue(ret, Convert.ChangeType(val, underlyingType));
+                                if (col.Type == DataType.DateTimeOffset)
+                                {
+                                    property.SetValue(ret, new DateTimeOffset(Convert.ToDateTime(val.ToString())));
+                                }
+                                else
+                                {
+                                    property.SetValue(ret, Convert.ChangeType(val, underlyingType));
+                                }
                             }
                         }
                         else
@@ -763,7 +781,14 @@ namespace Watson.ORM.Mysql
                             }
                             else
                             {
-                                property.SetValue(ret, Convert.ChangeType(val, propType));
+                                if (col.Type == DataType.DateTimeOffset)
+                                {
+                                    property.SetValue(ret, new DateTimeOffset(Convert.ToDateTime(val.ToString())));
+                                }
+                                else
+                                {
+                                    property.SetValue(ret, Convert.ChangeType(val, propType));
+                                }
                             }
                         }
                     }
@@ -810,6 +835,9 @@ namespace Watson.ORM.Mysql
                                     break;
                                 case DataTypes.DateTime:
                                     ret.Add(colAttr.Name, _Database.Timestamp(Convert.ToDateTime(val)));
+                                    break;
+                                case DataTypes.DateTimeOffset:
+                                    ret.Add(colAttr.Name, _Database.TimestampOffset((DateTimeOffset)(val)));
                                     break;
                                 case DataTypes.Blob:
                                     ret.Add(colAttr.Name, val);

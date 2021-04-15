@@ -962,6 +962,37 @@ namespace Watson.ORM
         }
 
         /// <summary>
+        /// Retrieve a timestamp with offset formatted for the database.
+        /// </summary>
+        /// <param name="dt">DateTimeOffset.</param>
+        /// <returns>Formatted DateTime string.</returns>
+        public string TimestampOffset(DateTimeOffset dt)
+        {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
+
+            if (_Mysql != null)
+            {
+                return _Mysql.TimestampOffset(dt);
+            }
+            else if (_Postgresql != null)
+            {
+                return _Postgresql.TimestampOffset(dt);
+            }
+            else if (_SqlServer != null)
+            {
+                return _SqlServer.TimestampOffset(dt);
+            }
+            else if (_Sqlite != null)
+            {
+                return _Sqlite.TimestampOffset(dt);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
+        }
+
+        /// <summary>
         /// Returns a sanitized string useful in a raw query.
         /// If null is supplied, null is returned.
         /// </summary>

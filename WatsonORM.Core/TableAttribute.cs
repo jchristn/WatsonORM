@@ -9,6 +9,8 @@ namespace Watson.ORM.Core
     /// </summary>
     public class TableAttribute : Attribute
     {
+        #region Public-Members
+
         /// <summary>
         /// Table name.
         /// </summary>
@@ -20,7 +22,15 @@ namespace Watson.ORM.Core
             }
         }
 
+        #endregion
+
+        #region Private-Members
+
         private string _TableName = null;
+
+        #endregion
+
+        #region Constructors-and-Factories
 
         /// <summary>
         /// Links a class to a WatsonORM-managed database table.
@@ -31,6 +41,16 @@ namespace Watson.ORM.Core
             if (String.IsNullOrEmpty(tableName)) throw new ArgumentNullException(nameof(tableName));
 
             _TableName = tableName;
-        } 
+        }
+
+        #endregion
+
+        #region Public-Methods
+
+        #endregion
+
+        #region Private-Methods
+
+        #endregion
     }
 }
