@@ -222,6 +222,42 @@ namespace Watson.ORM
         }
 
         /// <summary>
+        /// Validate a table to determine if any errors or warnings exist.
+        /// </summary>
+        /// <param name="t">Class for which a table should be validated.</param>
+        /// <param name="errors">List of human-readable errors.</param>
+        /// <param name="warnings">List of human-readable warnings.</param>
+        /// <returns>True if the table will initialize successfully.</returns>
+        public bool ValidateTable(Type t, out List<string> errors, out List<string> warnings)
+        {
+            if (t == null) throw new ArgumentNullException(nameof(t));
+
+            errors = new List<string>();
+            warnings = new List<string>();
+
+            if (_Mysql != null)
+            {
+                return _Mysql.ValidateTable(t, out errors, out warnings);
+            }
+            else if (_Postgresql != null)
+            {
+                return _Postgresql.ValidateTable(t, out errors, out warnings);
+            }
+            else if (_SqlServer != null)
+            {
+                return _SqlServer.ValidateTable(t, out errors, out warnings);
+            }
+            else if (_Sqlite != null)
+            {
+                return _Sqlite.ValidateTable(t, out errors, out warnings);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
+        }
+
+        /// <summary>
         /// Create table (if it doesn't exist) for a given class.
         /// Adding a table that has already been added will throw an ArgumentException.
         /// </summary>

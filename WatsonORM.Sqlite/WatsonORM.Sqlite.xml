@@ -51,6 +51,15 @@
             If the client is already initialized, it will first be disposed.
             </summary>
         </member>
+        <member name="M:Watson.ORM.Sqlite.WatsonORM.ValidateTable(System.Type,System.Collections.Generic.List{System.String}@,System.Collections.Generic.List{System.String}@)">
+            <summary>
+            Validate a table to determine if any errors or warnings exist.
+            </summary>
+            <param name="t">Class for which a table should be validated.</param>
+            <param name="errors">List of human-readable errors.</param>
+            <param name="warnings">List of human-readable warnings.</param>
+            <returns>True if the table will initialize successfully.</returns>
+        </member>
         <member name="M:Watson.ORM.Sqlite.WatsonORM.InitializeTable(System.Type)">
             <summary>
             Create table (if it doesn't exist) for a given class.

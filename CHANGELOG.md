@@ -6,7 +6,9 @@ v1.3.x
 
 - Dependency update
 - New APIs: Exists, Count, Sum
+- Select with ordering
 - Better support for DateTimeOffset
+- ```ValidateTable``` APIs
 
 ## Previous Versions
 

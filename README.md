@@ -24,12 +24,13 @@ Core features:
 
 For a sample app exercising this library, refer to the ```Test``` project contained within the solution.
 
-## New in v1.3.0
+## New in v1.3
 
 - Dependency update
 - New APIs: Exists, Count, Sum
 - Select with ordering
 - Better support for DateTimeOffset
+- ```ValidateTable``` APIs
 
 ## Simple Example
 
@@ -100,6 +101,24 @@ orm.Delete<Person>(updated);
 ```SelectMany``` can be paginated by using the method with either signature ```(int? indexStart, int? maxResults, DbExpression expr)``` or ```(int? indexStart, int? maxResults, DbExpression expr, DbResultOrder[] resultOrder)```.  ```indexStart``` is the number of records to skip, and ```maxResults``` is the number of records to retrieve.  
 
 Paginated results are always ordered by the primary key column value in ascending order, i.e. ```ORDER BY id ASC``` in the ```Person``` example above.
+
+## Validating a Table
+
+If you wish to determine if there are any errors or warnings associated with a given ```type```, use the ```ValidateTable``` API:
+```csharp
+List<string> errors = new List<string>();
+List<string> warnings = new List<string>();
+
+bool success = orm.ValidateTable(typeof(Person), out errors, out warnings);
+
+if (errors != null && errors.Count > 0) 
+  foreach (string error in errors) 
+    Console.WriteLine(error);
+
+if (warnings != null && warnings.Count > 0) 
+  foreach (string warning in warnings) 
+    Console.WriteLine(warning);
+```
 
 ## Using Sqlite
 

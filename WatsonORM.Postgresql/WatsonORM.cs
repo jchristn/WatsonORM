@@ -176,6 +176,76 @@ namespace Watson.ORM.Postgresql
         }
 
         /// <summary>
+        /// Validate a table to determine if any errors or warnings exist.
+        /// </summary>
+        /// <param name="t">Class for which a table should be validated.</param>
+        /// <param name="errors">List of human-readable errors.</param>
+        /// <param name="warnings">List of human-readable warnings.</param>
+        /// <returns>True if the table will initialize successfully.</returns>
+        public bool ValidateTable(Type t, out List<string> errors, out List<string> warnings)
+        {
+            if (t == null) throw new ArgumentNullException(nameof(t));
+
+            errors = new List<string>();
+            warnings = new List<string>();
+
+            string tableName = ReflectionHelper.GetTableNameFromType(t);
+            string primaryKeyPropertyName = ReflectionHelper.GetPrimaryKeyPropertyName(t);
+            List<Column> columns = ReflectionHelper.GetColumnsFromType(t);
+
+            bool success = true;
+
+            if (String.IsNullOrEmpty(tableName))
+            {
+                errors.Add("Type '" + t.Name + "' does not have a 'Table' attribute.");
+                success = false;
+            }
+
+            if (String.IsNullOrEmpty(primaryKeyPropertyName))
+            {
+                errors.Add("Type '" + t.Name + "' with table name '" + tableName + "' does not have a property with the 'PrimaryKey' attribute.");
+                success = false;
+            }
+
+            if (columns == null || columns.Count < 1)
+            {
+                errors.Add("Type '" + t.Name + "' with table name '" + tableName + "' does not have any properties with a 'Column' attribute.");
+                success = false;
+            }
+
+            if (!_Database.TableExists(tableName))
+            {
+                warnings.Add("Type '" + t.Name + "' with table name '" + tableName + "' has not yet been created and will be created upon initialization.");
+            }
+            else
+            {
+                List<Column> existingColumns = _Database.DescribeTable(tableName);
+
+                foreach (Column column in columns)
+                {
+                    if (!existingColumns.Exists(c => c.Name.Equals(column.Name)))
+                    {
+                        errors.Add("Type '" + t.Name + "' with table name '" + tableName + "' exists but column '" + column.Name + "' does not.");
+                        success = false;
+                    }
+                }
+
+                List<string> existingColumnNames = existingColumns.Select(c => c.Name).ToList();
+                List<string> definedColumnNames = columns.Select(c => c.Name).ToList();
+                List<string> delta = existingColumnNames.Except(definedColumnNames).ToList();
+                if (delta != null && delta.Count > 0)
+                {
+                    foreach (string curr in delta)
+                    {
+                        warnings.Add("Type '" + t.Name + "' with table name '" + tableName + "' contains additional column '" + curr + "' which is not annotated in the type.");
+                    }
+                }
+            }
+
+            return success;
+        }
+
+        /// <summary>
         /// Create table (if it doesn't exist) for a given class.
         /// Adding a table that has already been added will throw an ArgumentException.
         /// </summary>
@@ -189,14 +259,14 @@ namespace Watson.ORM.Postgresql
             string primaryKeyPropertyName = ReflectionHelper.GetPrimaryKeyPropertyName(t);
             List<Column> columns = ReflectionHelper.GetColumnsFromType(t);
 
-            if (String.IsNullOrEmpty(tableName)) 
+            if (String.IsNullOrEmpty(tableName))
                 throw new InvalidOperationException("Type '" + t.Name + "' does not have a 'Table' attribute.");
 
             if (String.IsNullOrEmpty(primaryKeyPropertyName))
-                throw new InvalidOperationException("Type '" + t.Name + "' does not have a property with the 'PrimaryKey' attribute.");
+                throw new InvalidOperationException("Type '" + t.Name + "' with table name '" + tableName + "' does not have a property with the 'PrimaryKey' attribute.");
 
-            if (columns == null || columns.Count < 1) 
-                throw new InvalidOperationException("Type '" + t.Name + "' does not have any properties with a 'Column' attribute.");
+            if (columns == null || columns.Count < 1)
+                throw new InvalidOperationException("Type '" + t.Name + "' with table name '" + tableName + "' does not have any properties with a 'Column' attribute.");
 
             if (!_Database.TableExists(tableName))
             {
@@ -210,7 +280,7 @@ namespace Watson.ORM.Postgresql
                 {
                     if (!existingColumns.Exists(c => c.Name.Equals(column.Name)))
                     {
-                        throw new InvalidOperationException("Table '" + tableName + "' exists but column '" + column.Name + "' does not.");
+                        throw new InvalidOperationException("Type '" + t.Name + " with table name '" + tableName + "' exists but column '" + column.Name + "' does not.");
                     }
                 }
 
