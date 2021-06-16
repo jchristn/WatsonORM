@@ -30,7 +30,7 @@ For a sample app exercising this library, refer to the ```Test``` project contai
 - New APIs: Exists, Count, Sum
 - Select with ordering
 - Better support for DateTimeOffset
-- ```ValidateTable``` APIs
+- ```ValidateTable```, ```ValidateTables```, and ```InitializeTables``` APIs
 
 ## Simple Example
 
@@ -59,7 +59,8 @@ public class Person
 DatabaseSettings settings = new DatabaseSettings("./WatsonORM.db");
 WatsonORM orm = new WatsonORM(settings);
 orm.InitializeDatabase();
-orm.InitializeTable(typeof(Person));
+orm.InitializeTable(typeof(Person)); // initialize one table
+orm.InitializeTables(new List<Type> { typeof(Person) }); // initialize multiple tables
 
 // Insert 
 Person person = new Person { FirstName = "Joel" };
@@ -102,22 +103,31 @@ orm.Delete<Person>(updated);
 
 Paginated results are always ordered by the primary key column value in ascending order, i.e. ```ORDER BY id ASC``` in the ```Person``` example above.
 
-## Validating a Table
+## Validating One or More Tables
 
-If you wish to determine if there are any errors or warnings associated with a given ```type```, use the ```ValidateTable``` API:
+If you wish to determine if there are any errors or warnings associated with a given ```Type```, use either the ```ValidateTable``` or ```ValidateTables``` API:
 ```csharp
 List<string> errors = new List<string>();
 List<string> warnings = new List<string>();
 
+// validate a single table
 bool success = orm.ValidateTable(typeof(Person), out errors, out warnings);
 
-if (errors != null && errors.Count > 0) 
-  foreach (string error in errors) 
-    Console.WriteLine(error);
+// validate multiple tables
+bool success = orm.ValidateTables(new List<Type> 
+  {
+    typeof(Person),
+    typeof(Order),
+    typeof(Inventory)
+  },
+  out errors,
+  out warnings);
 
-if (warnings != null && warnings.Count > 0) 
-  foreach (string warning in warnings) 
-    Console.WriteLine(warning);
+if (errors.Count > 0) 
+  foreach (string error in errors) Console.WriteLine(error);
+
+if (warnings.Count > 0) 
+  foreach (string warning in warnings) Console.WriteLine(warning);
 ```
 
 ## Using Sqlite

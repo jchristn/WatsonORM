@@ -8,7 +8,7 @@ v1.3.x
 - New APIs: Exists, Count, Sum
 - Select with ordering
 - Better support for DateTimeOffset
-- ```ValidateTable``` APIs
+- ```ValidateTable```, ```ValidateTables```, and ```InitializeTables``` APIs
 
 ## Previous Versions
 

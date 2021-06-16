@@ -173,6 +173,43 @@ namespace Watson.ORM.Sqlite
         }
 
         /// <summary>
+        /// Validate a series of tables to determine if any errors or warnings exist.
+        /// </summary>
+        /// <param name="types">List of classes for which tables should be validated.</param>
+        /// <param name="errors">List of human-readable errors.</param>
+        /// <param name="warnings">List of human-readable warnings.</param>
+        /// <returns>True if the table will initialize successfully.</returns>
+        public bool ValidateTables(List<Type> types, out List<string> errors, out List<string> warnings)
+        {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
+            if (types == null) throw new ArgumentNullException(nameof(types));
+
+            errors = new List<string>();
+            warnings = new List<string>();
+
+            bool success = true;
+
+            foreach (Type type in types)
+            {
+                List<string> currErrors = new List<string>();
+                List<string> currWarnings = new List<string>();
+
+                success = success && ValidateTable(type, out currErrors, out currWarnings);
+
+                if (currErrors != null && currErrors.Count > 0)
+                {
+                    errors.AddRange(currErrors);
+                }
+                if (currWarnings != null && currWarnings.Count > 0)
+                {
+                    warnings.AddRange(currWarnings);
+                }
+            }
+
+            return success;
+        }
+
+        /// <summary>
         /// Validate a table to determine if any errors or warnings exist.
         /// </summary>
         /// <param name="t">Class for which a table should be validated.</param>
@@ -181,6 +218,7 @@ namespace Watson.ORM.Sqlite
         /// <returns>True if the table will initialize successfully.</returns>
         public bool ValidateTable(Type t, out List<string> errors, out List<string> warnings)
         {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (t == null) throw new ArgumentNullException(nameof(t));
 
             errors = new List<string>();
@@ -240,6 +278,17 @@ namespace Watson.ORM.Sqlite
             }
 
             return success;
+        }
+
+        /// <summary>
+        /// Create tables (if they don't exist) for a given set of classes.
+        /// </summary>
+        /// <param name="types">List of classes for which a table should be created.</param>
+        public void InitializeTables(List<Type> types)
+        {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
+            if (types == null) throw new ArgumentNullException(nameof(types));
+            foreach (Type type in types) InitializeTable(type);
         }
 
         /// <summary>

@@ -222,6 +222,42 @@ namespace Watson.ORM
         }
 
         /// <summary>
+        /// Validate tables to determine if any errors or warnings exist.
+        /// </summary>
+        /// <param name="types">List of classes for which tables should be validated.</param>
+        /// <param name="errors">List of human-readable errors.</param>
+        /// <param name="warnings">List of human-readable warnings.</param>
+        /// <returns>True if the table will initialize successfully.</returns>
+        public bool ValidateTables(List<Type> types, out List<string> errors, out List<string> warnings)
+        {
+            if (types == null) throw new ArgumentNullException(nameof(types));
+
+            errors = new List<string>();
+            warnings = new List<string>();
+
+            if (_Mysql != null)
+            {
+                return _Mysql.ValidateTables(types, out errors, out warnings);
+            }
+            else if (_Postgresql != null)
+            {
+                return _Postgresql.ValidateTables(types, out errors, out warnings);
+            }
+            else if (_SqlServer != null)
+            {
+                return _SqlServer.ValidateTables(types, out errors, out warnings);
+            }
+            else if (_Sqlite != null)
+            {
+                return _Sqlite.ValidateTables(types, out errors, out warnings);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
+        }
+
+        /// <summary>
         /// Validate a table to determine if any errors or warnings exist.
         /// </summary>
         /// <param name="t">Class for which a table should be validated.</param>
@@ -258,6 +294,37 @@ namespace Watson.ORM
         }
 
         /// <summary>
+        /// Create tables (if they don't exist) for a given set of classes.
+        /// Adding a table that has already been added will throw an ArgumentException.
+        /// </summary>
+        /// <param name="types">List of classes for which tables should be created.</param>
+        public void InitializeTables(List<Type> types)
+        {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
+
+            if (_Mysql != null)
+            {
+                _Mysql.InitializeTables(types);
+            }
+            else if (_Postgresql != null)
+            {
+                _Postgresql.InitializeTables(types);
+            }
+            else if (_SqlServer != null)
+            {
+                _SqlServer.InitializeTables(types);
+            }
+            else if (_Sqlite != null)
+            {
+                _Sqlite.InitializeTables(types);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
+        }
+
+        /// <summary>
         /// Create table (if it doesn't exist) for a given class.
         /// Adding a table that has already been added will throw an ArgumentException.
         /// </summary>
@@ -285,7 +352,7 @@ namespace Watson.ORM
             else
             {
                 throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
-            } 
+            }
         }
 
         /// <summary>
