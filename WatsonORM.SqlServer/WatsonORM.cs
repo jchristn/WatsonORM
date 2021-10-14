@@ -568,12 +568,12 @@ namespace Watson.ORM.SqlServer
         /// <summary>
         /// SELECT the first instance of an object matching a given expression.
         /// This operation will return null if the object does not exist.
-        /// The ordering used in the underlying query is ascending based on primary key column.
         /// </summary>
         /// <typeparam name="T">Type of filter.</typeparam>
         /// <param name="expr">Expression by which SELECT should be filtered (i.e. WHERE clause).</param> 
+        /// <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
         /// <returns>Object.</returns>
-        public T SelectFirst<T>(DbExpression expr) where T : class, new()
+        public T SelectFirst<T>(DbExpression expr, DbResultOrder[] ro = null) where T : class, new()
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (expr == null) throw new ArgumentNullException(nameof(expr));
@@ -585,8 +585,17 @@ namespace Watson.ORM.SqlServer
             Expression e = WatsonORMCommon.DbExpressionConverter(expr);
             e.PrependAnd(primaryKeyColumnName, WatsonORMCommon.DbOperatorsConverter(DbOperators.IsNotNull), null);
 
-            ResultOrder[] resultOrder = new ResultOrder[1];
-            resultOrder[0] = new ResultOrder(primaryKeyColumnName, OrderDirection.Ascending);
+            ResultOrder[] resultOrder = null;
+
+            if (ro == null)
+            {
+                resultOrder = new ResultOrder[1];
+                resultOrder[0] = new ResultOrder(primaryKeyColumnName, OrderDirection.Ascending);
+            }
+            else
+            {
+                resultOrder = DbResultOrder.ConvertToResultOrder(ro);
+            }
 
             DataTable result = _Database.Select(tableName, null, 1, null, e, resultOrder);
             if (result == null || result.Rows.Count < 1) return null;
@@ -596,12 +605,12 @@ namespace Watson.ORM.SqlServer
         /// <summary>
         /// SELECT multiple rows.
         /// This operation will return an empty list if no matching objects are found.
-        /// The ordering used in the underlying query is ascending based on primary key column.
         /// </summary>
         /// <typeparam name="T">Type of object.</typeparam>
         /// <param name="expr">Expression.</param>
+        /// <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
         /// <returns>List of objects.</returns>
-        public List<T> SelectMany<T>(DbExpression expr)where T : class, new()
+        public List<T> SelectMany<T>(DbExpression expr, DbResultOrder[] ro = null) where T : class, new()
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (expr == null) throw new ArgumentNullException(nameof(expr));
@@ -612,8 +621,17 @@ namespace Watson.ORM.SqlServer
             Expression e = WatsonORMCommon.DbExpressionConverter(expr);
             e.PrependAnd(primaryKeyColumnName, WatsonORMCommon.DbOperatorsConverter(DbOperators.IsNotNull), null);
 
-            ResultOrder[] resultOrder = new ResultOrder[1];
-            resultOrder[0] = new ResultOrder(primaryKeyColumnName, OrderDirection.Ascending);
+            ResultOrder[] resultOrder = null;
+
+            if (ro == null)
+            {
+                resultOrder = new ResultOrder[1];
+                resultOrder[0] = new ResultOrder(primaryKeyColumnName, OrderDirection.Ascending);
+            }
+            else
+            {
+                resultOrder = DbResultOrder.ConvertToResultOrder(ro);
+            }
 
             DataTable result = _Database.Select(tableName, null, null, null, e, resultOrder);
             return DataTableToObjectList<T>(result);
@@ -622,13 +640,13 @@ namespace Watson.ORM.SqlServer
         /// <summary>
         /// SELECT multiple rows with pagination.
         /// This operation will return an empty list if no matching objects are found.
-        /// The ordering used in the underlying query is ascending based on primary key column.
         /// </summary> 
         /// <param name="indexStart">Index start.</param>
         /// <param name="maxResults">Maximum number of results to retrieve.</param> 
         /// <param name="expr">Filter to apply when SELECTing rows (i.e. WHERE clause).</param>
+        /// <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
         /// <returns>List of objects.</returns>
-        public List<T> SelectMany<T>(int? indexStart, int? maxResults, DbExpression expr) where T : class, new()
+        public List<T> SelectMany<T>(int? indexStart, int? maxResults, DbExpression expr, DbResultOrder[] ro = null) where T : class, new()
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (expr == null) throw new ArgumentNullException(nameof(expr));
@@ -640,36 +658,19 @@ namespace Watson.ORM.SqlServer
             Expression e = WatsonORMCommon.DbExpressionConverter(expr);
             e.PrependAnd(primaryKeyColumnName, WatsonORMCommon.DbOperatorsConverter(DbOperators.IsNotNull), null);
 
-            DbResultOrder[] resultOrder = new DbResultOrder[1];
-            resultOrder[0] = new DbResultOrder(primaryKeyColumnName, DbOrderDirection.Ascending);
+            ResultOrder[] resultOrder = null;
 
-            DataTable result = _Database.Select(tableName, indexStart, maxResults, null, e, DbResultOrder.ConvertToResultOrder(resultOrder));
-            return DataTableToObjectList<T>(result);
-        }
+            if (ro == null)
+            {
+                resultOrder = new ResultOrder[1];
+                resultOrder[0] = new ResultOrder(primaryKeyColumnName, OrderDirection.Ascending);
+            }
+            else
+            {
+                resultOrder = DbResultOrder.ConvertToResultOrder(ro);
+            }
 
-        /// <summary>
-        /// SELECT multiple rows with pagination.
-        /// This operation will return an empty list if no matching objects are found. 
-        /// </summary> 
-        /// <param name="indexStart">Index start.</param>
-        /// <param name="maxResults">Maximum number of results to retrieve.</param> 
-        /// <param name="expr">Filter to apply when SELECTing rows (i.e. WHERE clause).</param>
-        /// <param name="resultOrder">Specify on which columns and in which direction results should be ordered.</param>
-        /// <returns>List of objects.</returns>
-        public List<T> SelectMany<T>(int? indexStart, int? maxResults, DbExpression expr, DbResultOrder[] resultOrder) where T : class, new()
-        {
-            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
-            if (expr == null) throw new ArgumentNullException(nameof(expr));
-            if (resultOrder == null || resultOrder.Length < 1) throw new ArgumentNullException(nameof(resultOrder));
-
-            string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
-            string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T));
-            string primaryKeyPropertyName = _TypeMetadataMgr.GetPrimaryKeyPropertyName(typeof(T));
-
-            Expression e = WatsonORMCommon.DbExpressionConverter(expr);
-            e.PrependAnd(primaryKeyColumnName, WatsonORMCommon.DbOperatorsConverter(DbOperators.IsNotNull), null);
-             
-            DataTable result = _Database.Select(tableName, indexStart, maxResults, null, e, DbResultOrder.ConvertToResultOrder(resultOrder));
+            DataTable result = _Database.Select(tableName, indexStart, maxResults, null, e, resultOrder);
             return DataTableToObjectList<T>(result);
         }
 
@@ -880,6 +881,10 @@ namespace Watson.ORM.SqlServer
                             {
                                 property.SetValue(ret, (Enum.Parse(underlyingType, val.ToString())));
                             }
+                            else if (underlyingType == typeof(DateTimeOffset))
+                            {
+                                property.SetValue(ret, DateTimeOffset.Parse(val.ToString()));
+                            }
                             else
                             {
                                 property.SetValue(ret, Convert.ChangeType(val, underlyingType));
@@ -894,6 +899,10 @@ namespace Watson.ORM.SqlServer
                             else if (propType.IsEnum)
                             {
                                 property.SetValue(ret, (Enum.Parse(propType, val.ToString())));
+                            }
+                            else if (propType == typeof(DateTimeOffset))
+                            {
+                                property.SetValue(ret, DateTimeOffset.Parse(val.ToString()));
                             }
                             else
                             {

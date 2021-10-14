@@ -707,30 +707,30 @@ namespace Watson.ORM
         /// <summary>
         /// SELECT the first instance of an object matching a given expression.
         /// This operation will return null if the object does not exist.
-        /// The ordering used in the underlying query is ascending based on primary key column.
         /// </summary>
         /// <typeparam name="T">Type of filter.</typeparam>
         /// <param name="expr">Expression by which SELECT should be filtered (i.e. WHERE clause).</param> 
+        /// <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
         /// <returns>Object.</returns>
-        public T SelectFirst<T>(DbExpression expr)where T : class, new()
+        public T SelectFirst<T>(DbExpression expr, DbResultOrder[] ro = null) where T : class, new()
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
 
             if (_Mysql != null)
             {
-                return _Mysql.SelectFirst<T>(expr);
+                return _Mysql.SelectFirst<T>(expr, ro);
             }
             else if (_Postgresql != null)
             {
-                return _Postgresql.SelectFirst<T>(expr);
+                return _Postgresql.SelectFirst<T>(expr, ro);
             }
             else if (_SqlServer != null)
             {
-                return _SqlServer.SelectFirst<T>(expr);
+                return _SqlServer.SelectFirst<T>(expr, ro);
             }
             else if (_Sqlite != null)
             {
-                return _Sqlite.SelectFirst<T>(expr);
+                return _Sqlite.SelectFirst<T>(expr, ro);
             }
             else
             {
@@ -741,65 +741,30 @@ namespace Watson.ORM
         /// <summary>
         /// SELECT multiple rows.
         /// This operation will return an empty list if no matching objects are found.
-        /// The ordering used in the underlying query is ascending based on primary key column.
         /// </summary>
         /// <typeparam name="T">Type of object.</typeparam>
         /// <param name="expr">Expression.</param>
+        /// <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
         /// <returns>List of objects.</returns>
-        public List<T> SelectMany<T>(DbExpression expr)where T : class, new()
+        public List<T> SelectMany<T>(DbExpression expr, DbResultOrder[] ro = null) where T : class, new()
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
 
             if (_Mysql != null)
             {
-                return _Mysql.SelectMany<T>(expr);
+                return _Mysql.SelectMany<T>(expr, ro);
             }
             else if (_Postgresql != null)
             {
-                return _Postgresql.SelectMany<T>(expr);
+                return _Postgresql.SelectMany<T>(expr, ro);
             }
             else if (_SqlServer != null)
             {
-                return _SqlServer.SelectMany<T>(expr);
+                return _SqlServer.SelectMany<T>(expr, ro);
             }
             else if (_Sqlite != null)
             {
-                return _Sqlite.SelectMany<T>(expr);
-            }
-            else
-            {
-                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
-            }
-        }
-
-        /// <summary>
-        /// SELECT multiple rows with pagination.
-        /// This operation will return an empty list if no matching objects are found.
-        /// The ordering used in the underlying query is ascending based on primary key column.
-        /// </summary> 
-        /// <param name="indexStart">Index start.</param>
-        /// <param name="maxResults">Maximum number of results to retrieve.</param> 
-        /// <param name="expr">Filter to apply when SELECTing rows (i.e. WHERE clause).</param>
-        /// <returns>List of objects.</returns>
-        public List<T> SelectMany<T>(int? indexStart, int? maxResults, DbExpression expr) where T : class, new()
-        {
-            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
-
-            if (_Mysql != null)
-            {
-                return _Mysql.SelectMany<T>(indexStart, maxResults, expr);
-            }
-            else if (_Postgresql != null)
-            {
-                return _Postgresql.SelectMany<T>(indexStart, maxResults, expr);
-            }
-            else if (_SqlServer != null)
-            {
-                return _SqlServer.SelectMany<T>(indexStart, maxResults, expr);
-            }
-            else if (_Sqlite != null)
-            {
-                return _Sqlite.SelectMany<T>(indexStart, maxResults, expr);
+                return _Sqlite.SelectMany<T>(expr, ro);
             }
             else
             {
@@ -814,27 +779,27 @@ namespace Watson.ORM
         /// <param name="indexStart">Index start.</param>
         /// <param name="maxResults">Maximum number of results to retrieve.</param> 
         /// <param name="expr">Filter to apply when SELECTing rows (i.e. WHERE clause).</param>
-        /// <param name="resultOrder">Specify on which columns and in which direction results should be ordered.</param>
+        /// <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
         /// <returns>List of objects.</returns>
-        public List<T> SelectMany<T>(int? indexStart, int? maxResults, DbExpression expr, DbResultOrder[] resultOrder) where T : class, new()
+        public List<T> SelectMany<T>(int? indexStart, int? maxResults, DbExpression expr, DbResultOrder[] ro = null) where T : class, new()
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
 
             if (_Mysql != null)
             {
-                return _Mysql.SelectMany<T>(indexStart, maxResults, expr, resultOrder);
+                return _Mysql.SelectMany<T>(indexStart, maxResults, expr, ro);
             }
             else if (_Postgresql != null)
             {
-                return _Postgresql.SelectMany<T>(indexStart, maxResults, expr, resultOrder);
+                return _Postgresql.SelectMany<T>(indexStart, maxResults, expr, ro);
             }
             else if (_SqlServer != null)
             {
-                return _SqlServer.SelectMany<T>(indexStart, maxResults, expr, resultOrder);
+                return _SqlServer.SelectMany<T>(indexStart, maxResults, expr, ro);
             }
             else if (_Sqlite != null)
             {
-                return _Sqlite.SelectMany<T>(indexStart, maxResults, expr, resultOrder);
+                return _Sqlite.SelectMany<T>(indexStart, maxResults, expr, ro);
             }
             else
             {

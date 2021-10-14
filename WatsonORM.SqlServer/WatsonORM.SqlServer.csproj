@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp3.1;net461;net5.0</TargetFrameworks>
     <RootNamespace>Watson.ORM.SqlServer</RootNamespace>
-    <Version>1.3.5</Version>
+    <Version>1.3.5.1</Version>
     <Authors>Joel Christner</Authors>
     <Description>WatsonORM is a lightweight and easy to use object-relational mapper (ORM) for SQL Server in C# for .NET Core, .NET Framework, and .NET Standard built on top of DatabaseWrapper.  Refer to other WatsonORM packages if you need support for other database types.</Description>
     <Copyright>(c)2021 Joel Christner</Copyright>
@@ -13,7 +13,7 @@
     <RepositoryUrl>https://github.com/jchristn/watsonorm</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
     <PackageTags>orm object relation relational mapper map database object data convert sql server mssql sqlite mysql pgsql postgres postgresql dynamic query builder datarow datatable key foreign</PackageTags>
-    <PackageReleaseNotes>ValidateTable, ValidateTables, and InitializeTables APIs</PackageReleaseNotes>
+    <PackageReleaseNotes>Minor method signature rework to allow result order to be included in any select query.</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIcon>watson.png</PackageIcon>
   </PropertyGroup>

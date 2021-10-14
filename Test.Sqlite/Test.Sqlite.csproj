@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Test.Core\Test.Core.csproj" />
     <ProjectReference Include="..\WatsonORM.Sqlite\WatsonORM.Sqlite.csproj" />
   </ItemGroup>
 

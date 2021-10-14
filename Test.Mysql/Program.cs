@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using Newtonsoft.Json;
+using Test.Core;
 using Watson.ORM.Core;
 using Watson.ORM.Mysql;
 
@@ -70,6 +71,34 @@ namespace Test.Mysql
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Creating p4");
                 p4 = _Orm.Insert<Person>(p4);
+
+                #endregion
+
+                #region Insert-Multiple-Records
+
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
+                Console.WriteLine("| Creating p5 through p8");
+                Person p5 = new Person("Jason", "Christner", Convert.ToDateTime("4/21/2020"), null, localTime, null, 1, null, "initial notes p5", PersonType.Human, null, false);
+                Person p6 = new Person("Maria", "Sanchez", Convert.ToDateTime("10/10/1982"), Convert.ToDateTime("10/10/1982"), localTime, localTime, 38, null, "initial notes p6", PersonType.Cat, PersonType.Cat, true);
+                Person p7 = new Person("Eddie", "Van Halen", Convert.ToDateTime("3/3/1982"), null, localTime, null, 44, null, "initial notes p7", PersonType.Dog, PersonType.Dog, false);
+                Person p8 = new Person("Steve", "Vai", Convert.ToDateTime("4/4/1983"), Convert.ToDateTime("5/5/1983"), localTime, localTime, 45, null, "initial notes p8", PersonType.Human, null, true);
+                List<Person> people = new List<Person> { p5, p6, p7, p8 };
+                _Orm.InsertMultiple<Person>(people);
+
+                #endregion
+
+                #region Exists-Count-Sum
+
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
+                DbExpression existsExpression = new DbExpression(_Orm.GetColumnName<Person>(nameof(Person.Id)), DbOperators.GreaterThan, 0);
+                Console.WriteLine("| Checking existence of records: " + _Orm.Exists<Person>(existsExpression));
+
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
+                DbExpression countExpression = new DbExpression(_Orm.GetColumnName<Person>(nameof(Person.Id)), DbOperators.GreaterThan, 2);
+                Console.WriteLine("| Checking count of records: " + _Orm.Count<Person>(countExpression));
+
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
+                Console.WriteLine("| Checking sum of ages: " + _Orm.Sum<Person>(_Orm.GetColumnName<Person>(nameof(Person.Age)), existsExpression));
 
                 #endregion
 

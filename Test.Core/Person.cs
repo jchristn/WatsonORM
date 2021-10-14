@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text; 
-using Watson.ORM;
+using System.Text;
 using Watson.ORM.Core;
  
-namespace Test.Mysql
+namespace Test.Core
 {
     [Table("person")]
     public class Person

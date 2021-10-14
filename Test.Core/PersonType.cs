@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Watson.ORM;
 
-namespace Test.Sqlite
+namespace Test.Core
 {  
     public enum PersonType
     {

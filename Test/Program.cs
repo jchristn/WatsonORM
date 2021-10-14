@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using Newtonsoft.Json;
+using Test.Core;
 using Watson.ORM;
 using Watson.ORM.Core;
 
@@ -83,12 +84,13 @@ namespace Test
 
                 #endregion
 
-                #region Insert-Records
-                 
-                Person p1 = new Person("Abraham", "Lincoln", Convert.ToDateTime("1/1/1980"), null, 42, null, "initial notes p1", PersonType.Human, null, false);
-                Person p2 = new Person("Ronald", "Reagan", Convert.ToDateTime("2/2/1981"), Convert.ToDateTime("3/3/1982"), 43, 43, "initial notes p2", PersonType.Cat, PersonType.Cat, true);
-                Person p3 = new Person("George", "Bush", Convert.ToDateTime("3/3/1982"), null, 44, null, "initial notes p3", PersonType.Dog, PersonType.Dog, false);
-                Person p4 = new Person("Barack", "Obama", Convert.ToDateTime("4/4/1983"), Convert.ToDateTime("5/5/1983"), 45, null, "initial notes p4", PersonType.Human, null, true);
+                #region Create-and-Store-Records
+
+                DateTimeOffset localTime = new DateTimeOffset(Convert.ToDateTime("1/1/2021"));
+                Person p1 = new Person("Abraham", "Lincoln", Convert.ToDateTime("1/1/1980"), null, localTime, null, 42, null, "initial notes p1", PersonType.Human, null, false);
+                Person p2 = new Person("Ronald", "Reagan", Convert.ToDateTime("2/2/1981"), Convert.ToDateTime("3/3/1982"), localTime, localTime, 43, 43, "initial notes p2", PersonType.Cat, PersonType.Cat, true);
+                Person p3 = new Person("George", "Bush", Convert.ToDateTime("3/3/1982"), null, localTime, null, 44, null, "initial notes p3", PersonType.Dog, PersonType.Dog, false);
+                Person p4 = new Person("Barack", "Obama", Convert.ToDateTime("4/4/1983"), Convert.ToDateTime("5/5/1983"), localTime, localTime, 45, null, "initial notes p4", PersonType.Human, null, true);
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Creating p1");
@@ -112,10 +114,10 @@ namespace Test
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Creating p5 through p8");
-                Person p5 = new Person("Jason", "Christner", Convert.ToDateTime("4/21/2020"), null, 1, null, "initial notes p5", PersonType.Human, null, false);
-                Person p6 = new Person("Maria", "Sanchez", Convert.ToDateTime("10/10/1982"), Convert.ToDateTime("10/10/1982"), 38, null, "initial notes p6", PersonType.Cat, PersonType.Cat, true);
-                Person p7 = new Person("Eddie", "Van Halen", Convert.ToDateTime("3/3/1982"), null, 44, null, "initial notes p7", PersonType.Dog, PersonType.Dog, false);
-                Person p8 = new Person("Steve", "Vai", Convert.ToDateTime("4/4/1983"), Convert.ToDateTime("5/5/1983"), 45, null, "initial notes p8", PersonType.Human, null, true);
+                Person p5 = new Person("Jason", "Christner", Convert.ToDateTime("4/21/2020"), null, localTime, null, 1, null, "initial notes p5", PersonType.Human, null, false);
+                Person p6 = new Person("Maria", "Sanchez", Convert.ToDateTime("10/10/1982"), Convert.ToDateTime("10/10/1982"), localTime, localTime, 38, null, "initial notes p6", PersonType.Cat, PersonType.Cat, true);
+                Person p7 = new Person("Eddie", "Van Halen", Convert.ToDateTime("3/3/1982"), null, localTime, null, 44, null, "initial notes p7", PersonType.Dog, PersonType.Dog, false);
+                Person p8 = new Person("Steve", "Vai", Convert.ToDateTime("4/4/1983"), Convert.ToDateTime("5/5/1983"), localTime, localTime, 45, null, "initial notes p8", PersonType.Human, null, true);
                 List<Person> people = new List<Person> { p5, p6, p7, p8 };
                 _Orm.InsertMultiple<Person>(people);
 
@@ -166,28 +168,32 @@ namespace Test
                 pSelected = _Orm.SelectFirst<Person>(eSelect3);
                 Console.WriteLine("| Selected: " + pSelected.ToString());
 
-                #endregion 
+                #endregion
 
                 #region Update-Records
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Updating p1");
                 p1.Notes = "updated notes p1";
+                p1.NullableType = null;
                 p1 = _Orm.Update<Person>(p1);
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Updating p2");
                 p2.Notes = "updated notes p2";
+                p2.NullableType = null;
                 p2 = _Orm.Update<Person>(p2);
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Updating p3");
                 p3.Notes = "updated notes p3";
+                p3.NullableType = null;
                 p3 = _Orm.Update<Person>(p3);
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Updating p4");
                 p4.Notes = "updated notes p4";
+                p4.NullableType = null;
                 p4 = _Orm.Update<Person>(p4);
 
                 #endregion
@@ -283,7 +289,7 @@ namespace Test
                 Console.WriteLine("| Deleting p3 and p4");
                 DbExpression eDelete = new DbExpression("id", DbOperators.GreaterThan, 2);
                 _Orm.DeleteMany<Person>(eDelete);
-                 
+
                 #endregion
             }
             catch (Exception e)

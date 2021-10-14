@@ -1,13 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFrameworks>netcoreapp3.1;net461;net5.0</TargetFrameworks>
+    <ApplicationIcon />
+    <OutputType>Library</OutputType>
+    <StartupObject />
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Test.Core\Test.Core.csproj" />
-    <ProjectReference Include="..\WatsonORM.SqlServer\WatsonORM.SqlServer.csproj" />
+    <ProjectReference Include="..\WatsonORM.Core\WatsonORM.Core.csproj" />
   </ItemGroup>
 
 </Project>
