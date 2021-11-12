@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Watson.ORM.Core;
  
-namespace Test.Core
+namespace Test.Sqlite
 {
     [Table("person")]
     public class Person

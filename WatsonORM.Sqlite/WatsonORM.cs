@@ -326,7 +326,7 @@ namespace Watson.ORM.Sqlite
                 {
                     if (!existingColumns.Exists(c => c.Name.Equals(column.Name)))
                     {
-                        throw new InvalidOperationException("Type '" + t.Name + " with table name '" + tableName + "' exists but column '" + column.Name + "' does not.");
+                        throw new InvalidOperationException("Type '" + t.Name + "' with table name '" + tableName + "' exists but column '" + column.Name + "' does not.");
                     }
                 }
 

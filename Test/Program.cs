@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using Newtonsoft.Json;
-using Test.Core;
 using Watson.ORM;
 using Watson.ORM.Core;
 
