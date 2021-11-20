@@ -960,7 +960,8 @@ namespace Watson.ORM.SqlServer
                                     ret.Add(colAttr.Name, _Database.TimestampOffset((DateTimeOffset)(val)));
                                     break;
                                 case DataTypes.Blob:
-                                    ret.Add(colAttr.Name, val);
+                                    if (!(val is byte[])) throw new ArgumentException("The value provided for column '" + colAttr.Name + "' must be of type byte[].");
+                                    ret.Add(colAttr.Name, (byte[])val);
                                     break;
                                 case DataTypes.Double:
                                     ret.Add(colAttr.Name, Convert.ToDouble(val));

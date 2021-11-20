@@ -12,7 +12,7 @@ namespace Test.SqlServer
     {
         static string _Username = null;
         static string _Password = null;
-
+        static byte[] _FileBytes = File.ReadAllBytes("./headshot.png");
         static DatabaseSettings _Settings = null;
         static WatsonORM _Orm = null;
 
@@ -50,10 +50,10 @@ namespace Test.SqlServer
                 #region Create-and-Store-Records
 
                 DateTimeOffset localTime = new DateTimeOffset(Convert.ToDateTime("1/1/2021"));
-                Person p1 = new Person("Abraham", "Lincoln", Convert.ToDateTime("1/1/1980"), null, localTime, null, 42, null, "initial notes p1", PersonType.Human, null, false);
-                Person p2 = new Person("Ronald", "Reagan", Convert.ToDateTime("2/2/1981"), Convert.ToDateTime("3/3/1982"), localTime, localTime, 43, 43, "initial notes p2", PersonType.Cat, PersonType.Cat, true);
-                Person p3 = new Person("George", "Bush", Convert.ToDateTime("3/3/1982"), null, localTime, null, 44, null, "initial notes p3", PersonType.Dog, PersonType.Dog, false);
-                Person p4 = new Person("Barack", "Obama", Convert.ToDateTime("4/4/1983"), Convert.ToDateTime("5/5/1983"), localTime, localTime, 45, null, "initial notes p4", PersonType.Human, null, true);
+                Person p1 = new Person("Abraham", "Lincoln", Convert.ToDateTime("1/1/1980"), null, localTime, null, 42, null, "initial notes p1", PersonType.Human, null, false, _FileBytes);
+                Person p2 = new Person("Ronald", "Reagan", Convert.ToDateTime("2/2/1981"), Convert.ToDateTime("3/3/1982"), localTime, localTime, 43, 43, "initial notes p2", PersonType.Cat, PersonType.Cat, true, _FileBytes);
+                Person p3 = new Person("George", "Bush", Convert.ToDateTime("3/3/1982"), null, localTime, null, 44, null, "initial notes p3", PersonType.Dog, PersonType.Dog, false, _FileBytes);
+                Person p4 = new Person("Barack", "Obama", Convert.ToDateTime("4/4/1983"), Convert.ToDateTime("5/5/1983"), localTime, localTime, 45, null, "initial notes p4", PersonType.Human, null, true, _FileBytes);
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Creating p1");
@@ -70,6 +70,19 @@ namespace Test.SqlServer
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Creating p4");
                 p4 = _Orm.Insert<Person>(p4);
+
+                #endregion
+
+                #region Insert-Multiple-Records
+
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
+                Console.WriteLine("| Creating p5 through p8");
+                Person p5 = new Person("Jason", "Christner", Convert.ToDateTime("4/21/2020"), null, localTime, null, 1, null, "initial notes p5", PersonType.Human, null, false, _FileBytes);
+                Person p6 = new Person("Maria", "Sanchez", Convert.ToDateTime("10/10/1982"), Convert.ToDateTime("10/10/1982"), localTime, localTime, 38, null, "initial notes p6", PersonType.Cat, PersonType.Cat, true, _FileBytes);
+                Person p7 = new Person("Eddie", "Van Halen", Convert.ToDateTime("3/3/1982"), null, localTime, null, 44, null, "initial notes p7", PersonType.Dog, PersonType.Dog, false, _FileBytes);
+                Person p8 = new Person("Steve", "Vai", Convert.ToDateTime("4/4/1983"), Convert.ToDateTime("5/5/1983"), localTime, localTime, 45, null, "initial notes p8", PersonType.Human, null, true, _FileBytes);
+                List<Person> people = new List<Person> { p5, p6, p7, p8 };
+                _Orm.InsertMultiple<Person>(people);
 
                 #endregion
 

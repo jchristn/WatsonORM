@@ -9,43 +9,46 @@ namespace Test
     public class Person
     {
         [Column("id", true, DataTypes.Int, false)]
-        public int Id { get; set; }
+        public int Id { get; set; } = 0;
 
         [Column("firstname", false, DataTypes.Nvarchar, 64, false)]
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = null;
 
         [Column("lastname", false, DataTypes.Nvarchar, 64, false)]
-        public string LastName { get; set; }
+        public string LastName { get; set; } = null;
 
         [Column("birthdate", false, DataTypes.DateTime, false)]
-        public DateTime Birthdate { get; set; }
-        
+        public DateTime Birthdate { get; set; } = DateTime.Now.ToUniversalTime();
+
         [Column("nullablebirthdate", false, DataTypes.DateTime, true)]
-        public DateTime? NullableBirthdate { get; set; }
+        public DateTime? NullableBirthdate { get; set; } = null;
 
         [Column("localtime", false, DataTypes.DateTimeOffset, false)]
-        public DateTimeOffset LocalTime { get; set; }
+        public DateTimeOffset LocalTime { get; set; } = new DateTimeOffset(DateTime.Now.ToUniversalTime());
 
         [Column("nullablelocaltime", false, DataTypes.DateTimeOffset, true)]
-        public DateTimeOffset? NullableLocalTime { get; set; }
+        public DateTimeOffset? NullableLocalTime { get; set; } = null;
 
         [Column("age", false, DataTypes.Int, false)]
-        public int Age { get; set; }
+        public int Age { get; set; } = 42;
 
         [Column("nullableage", false, DataTypes.Int, true)]
-        public int? NullableAge { get; set; }
+        public int? NullableAge { get; set; } = null;
 
         [Column("notes", false, DataTypes.Nvarchar, 256, true)]
-        public string Notes { get; set; }
+        public string Notes { get; set; } = null;
 
         [Column("persontype", false, DataTypes.Nvarchar, 8, false)]
-        public PersonType Type { get; set; }
+        public PersonType Type { get; set; } = PersonType.Human;
 
         [Column("nullablepersontype", false, DataTypes.Nvarchar, 8, true)]
-        public PersonType? NullableType { get; set; }
+        public PersonType? NullableType { get; set; } = null;
 
         [Column("ishandsome", false, DataTypes.Boolean, false)]
-        public bool IsHandsome { get; set; }
+        public bool IsHandsome { get; set; } = true;
+
+        [Column("picture", false, DataTypes.Blob, true)]
+        public byte[] Picture { get; set; } = null;
 
         public Person()
         {
@@ -64,7 +67,8 @@ namespace Test
             string notes,
             PersonType personType,
             PersonType? nullablePersonType,
-            bool isHandsome)
+            bool isHandsome,
+            byte[] picture)
         {
             FirstName = first;
             LastName = last;
@@ -78,6 +82,7 @@ namespace Test
             Type = personType;
             NullableType = nullablePersonType;
             IsHandsome = isHandsome;
+            Picture = picture;
         }
 
         public override string ToString()
@@ -91,7 +96,8 @@ namespace Test
                 "   Age         : " + Age + " nullable " + (NullableAge != null ? NullableAge.ToString() : "(null)") + Environment.NewLine +
                 "   Type        : " + Type.ToString() + " nullable " + NullableType + Environment.NewLine +
                 "   Notes       : " + Notes + Environment.NewLine +
-                "   Handsome    : " + IsHandsome;
-        } 
+                "   Handsome    : " + IsHandsome + Environment.NewLine +
+                "   Picture     : " + (Picture != null ? Picture.Length + " bytes" : "(null)");
+        }
     }
 }
