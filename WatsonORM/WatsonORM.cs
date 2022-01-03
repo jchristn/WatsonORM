@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DatabaseWrapper;
 using DatabaseWrapper.Core;
+using ExpressionTree;
 using Watson.ORM.Core;
 using Watson.ORM.Mysql;
 using Watson.ORM.Postgresql;
@@ -24,33 +25,9 @@ namespace Watson.ORM
         #region Public-Members
 
         /// <summary>
-        /// Debug settings.
-        /// </summary>
-        public DebugSettings Debug
-        {
-            get
-            {
-                return _Debug;
-            }
-            set
-            {
-                if (value == null) _Debug = new DebugSettings();
-
-                if (_Mysql != null) _Mysql.Debug = _Debug;
-                else if (_Postgresql != null) _Postgresql.Debug = _Debug;
-                else if (_Sqlite != null) _Sqlite.Debug = _Debug;
-                else if (_SqlServer != null) _SqlServer.Debug = _Debug;
-                else
-                {
-                    throw new InvalidOperationException("No database client is initialized.");
-                } 
-            }
-        }
-
-        /// <summary>
         /// Database settings.
         /// </summary>
-        public Watson.ORM.Core.DatabaseSettings Settings
+        public DatabaseSettings Settings
         {
             get
             {
@@ -129,11 +106,10 @@ namespace Watson.ORM
 
         private bool _Initialized = false;
         private Action<string> _Logger = null;
-        private DebugSettings _Debug = new DebugSettings();
         private string _Header = "[WatsonORM] ";
         private CancellationTokenSource _TokenSource = new CancellationTokenSource();
         private CancellationToken _Token;
-        private Watson.ORM.Core.DatabaseSettings _Settings = null;
+        private DatabaseSettings _Settings = null;
 
         private Watson.ORM.Mysql.WatsonORM _Mysql = null;
         private Watson.ORM.Postgresql.WatsonORM _Postgresql = null;
@@ -148,7 +124,7 @@ namespace Watson.ORM
         /// Instantiate the object.  Once constructed, call InitializeDatabase() and InitializeTable() for each table if needed.
         /// </summary>
         /// <param name="settings">Database settings.</param>
-        public WatsonORM(Watson.ORM.Core.DatabaseSettings settings)
+        public WatsonORM(DatabaseSettings settings)
         {
             if (settings == null) throw new ArgumentNullException(nameof(settings));
 
@@ -196,19 +172,19 @@ namespace Watson.ORM
 
             switch (_Settings.Type)
             {
-                case Core.DbTypes.Mysql:
+                case DbTypes.Mysql:
                     _Mysql = new Mysql.WatsonORM(_Settings);
                     _Mysql.InitializeDatabase();
                     break;
-                case Core.DbTypes.Postgresql:
+                case DbTypes.Postgresql:
                     _Postgresql = new Postgresql.WatsonORM(_Settings);
                     _Postgresql.InitializeDatabase();
                     break;
-                case Core.DbTypes.SqlServer:
+                case DbTypes.SqlServer:
                     _SqlServer = new SqlServer.WatsonORM(_Settings);
                     _SqlServer.InitializeDatabase();
                     break;
-                case Core.DbTypes.Sqlite:
+                case DbTypes.Sqlite:
                     _Sqlite = new Sqlite.WatsonORM(_Settings);
                     _Sqlite.InitializeDatabase();
                     break;
@@ -552,7 +528,7 @@ namespace Watson.ORM
         /// <typeparam name="T">Type of object.</typeparam>
         /// <param name="expr">Expression.</param>
         /// <param name="updateVals">Update values.</param>
-        public void UpdateMany<T>(DbExpression expr, Dictionary<string, object> updateVals)
+        public void UpdateMany<T>(Expr expr, Dictionary<string, object> updateVals)
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
 
@@ -645,7 +621,7 @@ namespace Watson.ORM
         /// </summary>
         /// <typeparam name="T">Type of object.</typeparam>
         /// <param name="expr">Expression.</param>
-        public void DeleteMany<T>(DbExpression expr)where T : class, new()
+        public void DeleteMany<T>(Expr expr)where T : class, new()
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
 
@@ -712,7 +688,7 @@ namespace Watson.ORM
         /// <param name="expr">Expression by which SELECT should be filtered (i.e. WHERE clause).</param> 
         /// <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
         /// <returns>Object.</returns>
-        public T SelectFirst<T>(DbExpression expr, DbResultOrder[] ro = null) where T : class, new()
+        public T SelectFirst<T>(Expr expr, ResultOrder[] ro = null) where T : class, new()
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
 
@@ -746,7 +722,7 @@ namespace Watson.ORM
         /// <param name="expr">Expression.</param>
         /// <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
         /// <returns>List of objects.</returns>
-        public List<T> SelectMany<T>(DbExpression expr, DbResultOrder[] ro = null) where T : class, new()
+        public List<T> SelectMany<T>(Expr expr, ResultOrder[] ro = null) where T : class, new()
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
 
@@ -781,7 +757,7 @@ namespace Watson.ORM
         /// <param name="expr">Filter to apply when SELECTing rows (i.e. WHERE clause).</param>
         /// <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
         /// <returns>List of objects.</returns>
-        public List<T> SelectMany<T>(int? indexStart, int? maxResults, DbExpression expr, DbResultOrder[] ro = null) where T : class, new()
+        public List<T> SelectMany<T>(int? indexStart, int? maxResults, Expr expr, ResultOrder[] ro = null) where T : class, new()
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
 
@@ -876,7 +852,7 @@ namespace Watson.ORM
         /// <typeparam name="T">Type.</typeparam>
         /// <param name="expr">Expression.</param>
         /// <returns>True if exists.</returns>
-        public bool Exists<T>(DbExpression expr)
+        public bool Exists<T>(Expr expr)
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
 
@@ -908,7 +884,7 @@ namespace Watson.ORM
         /// <typeparam name="T">Type.</typeparam>
         /// <param name="expr">Expression.</param>
         /// <returns>Number of matching records.</returns>
-        public long Count<T>(DbExpression expr)
+        public long Count<T>(Expr expr)
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
 
@@ -941,7 +917,7 @@ namespace Watson.ORM
         /// <param name="columnName"></param>
         /// <param name="expr">Expression.</param>
         /// <returns></returns>
-        public decimal Sum<T>(string columnName, DbExpression expr)
+        public decimal Sum<T>(string columnName, Expr expr)
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
 

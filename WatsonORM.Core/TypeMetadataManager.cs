@@ -17,7 +17,7 @@ namespace Watson.ORM.Core
 
         #region Private-Members
 
-        private readonly object _MetadataLock = new object();
+        private readonly object _Lock = new object();
         private Dictionary<Type, TypeMetadata> _Metadata = new Dictionary<Type, TypeMetadata>();
 
         #endregion
@@ -43,7 +43,10 @@ namespace Watson.ORM.Core
         /// <param name="md">TypeMetadata.</param>
         public void Add(Type t, TypeMetadata md)
         {
-            lock (_MetadataLock)
+            if (t == null) throw new ArgumentNullException(nameof(t));
+            if (md == null) throw new ArgumentNullException(nameof(md));
+
+            lock (_Lock)
             {
                 _Metadata.Add(t, md);
             }
@@ -58,7 +61,7 @@ namespace Watson.ORM.Core
         {
             if (t == null) throw new ArgumentNullException(nameof(t));
 
-            lock (_MetadataLock)
+            lock (_Lock)
             {
                 if (_Metadata.ContainsKey(t)) return _Metadata[t];
             }
@@ -132,6 +135,8 @@ namespace Watson.ORM.Core
         /// <returns>Value.</returns>
         public object GetPrimaryKeyValue(object obj, string propName)
         {
+            if (obj == null) throw new ArgumentNullException(nameof(obj));
+            if (String.IsNullOrEmpty(propName)) throw new ArgumentNullException(nameof(propName));
             object val = GetPropertyValue(obj, propName);
             if (val == null) throw new InvalidOperationException("Property '" + propName + "' cannot be null if decorated as a primary key.");
             return val;
@@ -145,6 +150,8 @@ namespace Watson.ORM.Core
         /// <returns>Value.</returns>
         public object GetPropertyValue(object obj, string propName)
         {
+            if (obj == null) throw new ArgumentNullException(nameof(obj));
+            if (String.IsNullOrEmpty(propName)) throw new ArgumentNullException(nameof(propName));
             return obj.GetType().GetProperty(propName).GetValue(obj, null);
         }
 

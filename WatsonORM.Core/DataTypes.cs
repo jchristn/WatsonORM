@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Converters;
 using System.Runtime.Serialization;
 
 namespace Watson.ORM.Core
@@ -11,7 +8,6 @@ namespace Watson.ORM.Core
     /// <summary>
     /// Type of data contained in the column.
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
     public enum DataTypes
     {
         /// <summary>

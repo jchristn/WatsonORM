@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp3.1;net461;net5.0;net6.0</TargetFrameworks>
-    <Version>1.3.5.4</Version>
+    <TargetFrameworks>netstandard2.1;netcoreapp3.1;net461;net5.0;net6.0</TargetFrameworks>
+    <Version>2.0.0.1</Version>
     <Authors>Joel Christner</Authors>
     <Company>Joel Christner</Company>
     <Product>WatsonORM</Product>
@@ -13,11 +13,11 @@
     <RepositoryUrl>https://github.com/jchristn/watsonorm</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
     <PackageTags>orm object relation relational mapper map database object data convert sql server mssql sqlite mysql pgsql postgres postgresql dynamic query builder datarow datatable key foreign</PackageTags>
-    <PackageReleaseNotes>.NET 6 support</PackageReleaseNotes>
+    <PackageReleaseNotes>Breaking changes caused by dependency update</PackageReleaseNotes>
     <PackageIconUrl></PackageIconUrl>
     <PackageId>WatsonORM</PackageId>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
@@ -46,10 +46,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="WatsonORM.Mysql" Version="1.3.5.4" />
-    <PackageReference Include="WatsonORM.Postgresql" Version="1.3.5.4" />
-    <PackageReference Include="WatsonORM.Sqlite" Version="1.3.5.4" />
-    <PackageReference Include="WatsonORM.SqlServer" Version="1.3.5.4" />
+    <PackageReference Include="WatsonORM.Mysql" Version="2.0.0.1" />
+    <PackageReference Include="WatsonORM.Postgresql" Version="2.0.0.1" />
+    <PackageReference Include="WatsonORM.Sqlite" Version="2.0.0.1" />
+    <PackageReference Include="WatsonORM.SqlServer" Version="2.0.0.1" />
   </ItemGroup>
 
   <ItemGroup>

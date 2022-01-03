@@ -19,11 +19,6 @@
             Method to invoke when sending log messages.
             </summary>
         </member>
-        <member name="P:Watson.ORM.SqlServer.WatsonORM.Debug">
-            <summary>
-            Debug settings.
-            </summary>
-        </member>
         <member name="P:Watson.ORM.SqlServer.WatsonORM.Database">
             <summary>
             Direct access to the underlying database client.
@@ -34,7 +29,7 @@
             Indicates if the database has been initialized.
             </summary>
         </member>
-        <member name="M:Watson.ORM.SqlServer.WatsonORM.#ctor(Watson.ORM.Core.DatabaseSettings)">
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.#ctor(DatabaseWrapper.Core.DatabaseSettings)">
             <summary>
             Instantiate the object.  Once constructed, call InitializeDatabase() and InitializeTable() for each table if needed.
             </summary>
@@ -127,7 +122,7 @@
             <param name="obj">Object to UPDATE.</param>
             <returns>UPDATEd object.</returns>
         </member>
-        <member name="M:Watson.ORM.SqlServer.WatsonORM.UpdateMany``1(Watson.ORM.Core.DbExpression,System.Collections.Generic.Dictionary{System.String,System.Object})">
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.UpdateMany``1(ExpressionTree.Expr,System.Collections.Generic.Dictionary{System.String,System.Object})">
             <summary>
             UPDATE multiple rows.
             </summary>
@@ -149,7 +144,7 @@
             <typeparam name="T">Type of object.</typeparam>
             <param name="id">Id value.</param>
         </member>
-        <member name="M:Watson.ORM.SqlServer.WatsonORM.DeleteMany``1(Watson.ORM.Core.DbExpression)">
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.DeleteMany``1(ExpressionTree.Expr)">
             <summary>
             DELETE objects by an Expression..
             </summary>
@@ -165,7 +160,7 @@
             <param name="id">Id.</param>
             <returns>Object.</returns>
         </member>
-        <member name="M:Watson.ORM.SqlServer.WatsonORM.SelectFirst``1(Watson.ORM.Core.DbExpression,Watson.ORM.Core.DbResultOrder[])">
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.SelectFirst``1(ExpressionTree.Expr,DatabaseWrapper.Core.ResultOrder[])">
             <summary>
             SELECT the first instance of an object matching a given expression.
             This operation will return null if the object does not exist.
@@ -175,7 +170,7 @@
             <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
             <returns>Object.</returns>
         </member>
-        <member name="M:Watson.ORM.SqlServer.WatsonORM.SelectMany``1(Watson.ORM.Core.DbExpression,Watson.ORM.Core.DbResultOrder[])">
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.SelectMany``1(ExpressionTree.Expr,DatabaseWrapper.Core.ResultOrder[])">
             <summary>
             SELECT multiple rows.
             This operation will return an empty list if no matching objects are found.
@@ -185,7 +180,7 @@
             <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
             <returns>List of objects.</returns>
         </member>
-        <member name="M:Watson.ORM.SqlServer.WatsonORM.SelectMany``1(System.Nullable{System.Int32},System.Nullable{System.Int32},Watson.ORM.Core.DbExpression,Watson.ORM.Core.DbResultOrder[])">
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.SelectMany``1(System.Nullable{System.Int32},System.Nullable{System.Int32},ExpressionTree.Expr,DatabaseWrapper.Core.ResultOrder[])">
             <summary>
             SELECT multiple rows with pagination.
             This operation will return an empty list if no matching objects are found.
@@ -211,7 +206,7 @@
             <param name="propName">Property name.</param>
             <returns>Column name.</returns>
         </member>
-        <member name="M:Watson.ORM.SqlServer.WatsonORM.Exists``1(Watson.ORM.Core.DbExpression)">
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.Exists``1(ExpressionTree.Expr)">
             <summary>
             Check if objects of a given type exist that match the supplied expression.
             </summary> 
@@ -219,7 +214,7 @@
             <param name="expr">Expression.</param>
             <returns>True if exists.</returns>
         </member>
-        <member name="M:Watson.ORM.SqlServer.WatsonORM.Count``1(Watson.ORM.Core.DbExpression)">
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.Count``1(ExpressionTree.Expr)">
             <summary>
             Determine the number of objects of a given type that exist that match the supplied expression.
             </summary> 
@@ -227,7 +222,7 @@
             <param name="expr">Expression.</param>
             <returns>Number of matching records.</returns>
         </member>
-        <member name="M:Watson.ORM.SqlServer.WatsonORM.Sum``1(System.String,Watson.ORM.Core.DbExpression)">
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.Sum``1(System.String,ExpressionTree.Expr)">
             <summary>
             Add the contents of the specified column from objects that match the supplied expression.
             </summary>

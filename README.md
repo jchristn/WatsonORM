@@ -24,18 +24,16 @@ Core features:
 
 For a sample app exercising this library, refer to the ```Test``` project contained within the solution.
 
-## New in v1.3
+## New in v2.0
 
-- Dependency update
-- New APIs: Exists, Count, Sum
-- Select with ordering
-- Better support for DateTimeOffset
-- ```ValidateTable```, ```ValidateTables```, and ```InitializeTables``` APIs
+- Breaking changes due to dependency update
+- Leveraging ```ExpressionTree``` package, replacing ```DbExpression``` and ```DbOperators```
 
 ## Simple Example
 
 This example uses ```Sqlite```.  For ```SqlServer```, ```Mysql```, or ```Postgresql```, you must make sure the database exists.  Tables will be automatically created in this example.  Refer to the ```Test``` project for a complete example.
 ```csharp
+using ExpressionTree;
 using Watson.ORM;
 using Watson.ORM.Core;
 
@@ -70,11 +68,11 @@ Person inserted = orm.Insert<Person>(person);
 Person selected = orm.SelectByPrimaryKey<Person>(1); 
 
 // Select many by column name
-DbExpression e1 = new DbExpression("id", DbOperators.GreaterThan, 0);
+Expr e1 = new Expr("id", OperatorEnum.GreaterThan, 0);
 List<Person> people = orm.SelectMany<Person>(e1);
 
 // Select many by property
-DbExpression e2 = new DbExpression(
+Expr e2 = new Expr(
   orm.GetColumnName<Person>(nameof(Person.Id)),
   DbOperators.GreaterThan,
   0);
@@ -85,8 +83,8 @@ people = orm.SelectMany<Person>(e2);
 people = orm.SelectMany<Person>(10, 50, e2);
 
 // Select many with descending order
-DbResultOrder[] resultOrder = new DbResultOrder[1];
-resultOrder[0] = new DbResultOrder("id", DbOrderDirection.Descending);
+ResultOrder[] resultOrder = new ResultOrder[1];
+resultOrder[0] = new ResultOrder("id", OrderDirection.Descending);
 people = orm.SelectMany<Person>(null, null, e2, resultOrder);
 
 // Update
@@ -99,7 +97,7 @@ orm.Delete<Person>(updated);
  
 ## Pagination with SelectMany
 
-```SelectMany``` can be paginated by using the method with either signature ```(int? indexStart, int? maxResults, DbExpression expr)``` or ```(int? indexStart, int? maxResults, DbExpression expr, DbResultOrder[] resultOrder)```.  ```indexStart``` is the number of records to skip, and ```maxResults``` is the number of records to retrieve.  
+```SelectMany``` can be paginated by using the method with either signature ```(int? indexStart, int? maxResults, Expr expr)``` or ```(int? indexStart, int? maxResults, Expr expr, ResultOrder[] resultOrder)```.  ```indexStart``` is the number of records to skip, and ```maxResults``` is the number of records to retrieve.  
 
 Paginated results are always ordered by the primary key column value in ascending order, i.e. ```ORDER BY id ASC``` in the ```Person``` example above.
 
@@ -132,11 +130,11 @@ if (warnings.Count > 0)
 
 ## Using Sqlite
 
-Sqlite may not work out of the box with .NET Framework. In order to use Sqlite with .NET Framework, you'll need to manually copy the runtimes folder into your project output directory. This directory is automatically created when building for .NET Core. To get this folder, build the Test.Sqlite project and navigate to the bin/debug/netcoreapp* directory. Then copy the runtimes folder into the project output directory of your .NET Framework application.
+Sqlite may not work out of the box with .NET Framework. In order to use Sqlite with .NET Framework, you'll need to manually copy the ```runtimes``` folder into your project output directory. This directory is automatically created when building for .NET Core. To get this folder, build the Test.Sqlite project and navigate to the ```bin/[debug||release]/[netcoreapp*||net5.0||net6.0]``` directory. Then copy the runtimes folder into the project output directory of your .NET Framework application.
 
 ## Using SQL Server
 
-In order to use pagination with SQL Server, the ```SelectMany``` method containing the ```DbResultOrder[] resultOrder``` parameter must be used.
+In order to use pagination with SQL Server, the ```SelectMany``` method containing the ```ResultOrder[] resultOrder``` parameter must be used.
 
 ## Using MySQL
 

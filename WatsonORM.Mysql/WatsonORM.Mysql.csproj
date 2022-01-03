@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp3.1;net461;net5.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;netcoreapp3.1;net461;net5.0;net6.0</TargetFrameworks>
     <RootNamespace>Watson.ORM.Mysql</RootNamespace>
-    <Version>1.3.5.4</Version>
+    <Version>2.0.0.1</Version>
     <Authors>Joel Christner</Authors>
     <Description>WatsonORM is a lightweight and easy to use object-relational mapper (ORM) for MySQL in C# for .NET Core, .NET Framework, and .NET Standard built on top of DatabaseWrapper.  Refer to other WatsonORM packages if you need support for other database types.</Description>
     <Copyright>(c)2021 Joel Christner</Copyright>
@@ -13,9 +13,9 @@
     <RepositoryUrl>https://github.com/jchristn/watsonorm</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
     <PackageTags>orm object relation relational mapper map database object data convert sql server mssql sqlite mysql pgsql postgres postgresql dynamic query builder datarow datatable key foreign</PackageTags>
-    <PackageReleaseNotes>.NET 6 support</PackageReleaseNotes>
+    <PackageReleaseNotes>Breaking changes caused by dependency update</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageIcon>watson.png</PackageIcon>
   </PropertyGroup>
 
@@ -41,8 +41,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DatabaseWrapper.Mysql" Version="3.3.2.1" />
-    <PackageReference Include="WatsonORM.Core" Version="1.3.5.3" />
+    <PackageReference Include="DatabaseWrapper.Mysql" Version="4.0.0.1" />
+    <PackageReference Include="WatsonORM.Core" Version="2.0.0.3" />
   </ItemGroup>
 
   <ItemGroup>

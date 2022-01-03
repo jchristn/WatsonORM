@@ -2,6 +2,13 @@
 
 ## Current Version
 
+v2.0.0
+
+- Breaking changes due to dependency update
+- Leveraging ```ExpressionTree``` package, replacing ```DbExpression``` and ```DbOperators```
+
+## Previous Versions
+
 v1.3.x
 
 - Dependency update
@@ -9,8 +16,6 @@ v1.3.x
 - Select with ordering
 - Better support for DateTimeOffset
 - ```ValidateTable```, ```ValidateTables```, and ```InitializeTables``` APIs
-
-## Previous Versions
 
 v1.2.3
 

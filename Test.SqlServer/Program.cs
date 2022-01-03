@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using DatabaseWrapper.Core;
+using ExpressionTree;
 using Newtonsoft.Json;
 using Watson.ORM.Core;
 using Watson.ORM.SqlServer;
@@ -31,16 +33,8 @@ namespace Test.SqlServer
                 _Settings = new DatabaseSettings(DbTypes.SqlServer, "localhost", 1433, _Username, _Password, "test");
 
                 _Orm = new WatsonORM(_Settings);
-
                 _Orm.InitializeDatabase();
-
-                DebugSettings debug = new DebugSettings();
-                debug.DatabaseQueries = true;
-                debug.DatabaseResults = true;
-
                 _Orm.Logger = Logger;
-                _Orm.Debug = debug;
-
                 _Orm.InitializeTable(typeof(Person));
                 // _Orm.TruncateTable(typeof(Person));
                 Console.WriteLine("Using table: " + _Orm.GetTableName(typeof(Person)));
@@ -90,20 +84,20 @@ namespace Test.SqlServer
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting many by column name");
-                DbExpression eSelect1 = new DbExpression("id", DbOperators.GreaterThan, 0);
+                Expr eSelect1 = new Expr("id", OperatorEnum.GreaterThan, 0);
                 List<Person> selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect1);
                 Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
-                foreach (Person curr in selectedList1) Console.WriteLine("  | " + curr.ToString());
+                foreach (Person curr in selectedList1) Console.WriteLine(curr.ToString());
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting many by property name");
-                DbExpression eSelect2 = new DbExpression(
+                Expr eSelect2 = new Expr(
                     _Orm.GetColumnName<Person>(nameof(Person.FirstName)),
-                    DbOperators.Equals,
+                    OperatorEnum.Equals,
                     "Abraham");
                 List<Person> selectedList2 = _Orm.SelectMany<Person>(null, null, eSelect2);
                 Console.WriteLine("| Retrieved: " + selectedList2.Count + " records");
-                foreach (Person curr in selectedList2) Console.WriteLine("  | " + curr.ToString());
+                foreach (Person curr in selectedList2) Console.WriteLine(curr.ToString());
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting by ID");
@@ -112,7 +106,7 @@ namespace Test.SqlServer
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting first by column name");
-                DbExpression eSelect3 = new DbExpression("id", DbOperators.Equals, 4);
+                Expr eSelect3 = new Expr("id", OperatorEnum.Equals, 4);
                 pSelected = _Orm.SelectFirst<Person>(eSelect3);
                 Console.WriteLine("| Selected: " + pSelected.ToString());
 
@@ -162,7 +156,7 @@ namespace Test.SqlServer
                 Console.WriteLine("| Selecting many, test 1");
                 selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect1);
                 Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
-                foreach (Person curr in selectedList1) Console.WriteLine("  | " + curr.ToString());
+                foreach (Person curr in selectedList1) Console.WriteLine(curr.ToString());
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting by ID");
@@ -176,33 +170,33 @@ namespace Test.SqlServer
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting between, test 1");
-                DbExpression eSelect4 = DbExpression.Between("id", new List<object> { 2, 4 });
+                Expr eSelect4 = Expr.Between("id", new List<object> { 2, 4 });
                 selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect4);
                 Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
-                foreach (Person curr in selectedList1) Console.WriteLine("  | " + curr.ToString());
+                foreach (Person curr in selectedList1) Console.WriteLine(curr.ToString());
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting by persontype");
-                DbExpression eSelect5 = new DbExpression("persontype", DbOperators.Equals, PersonType.Dog);
+                Expr eSelect5 = new Expr("persontype", OperatorEnum.Equals, PersonType.Dog);
                 selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect5);
                 Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
-                foreach (Person curr in selectedList1) Console.WriteLine("  | " + curr.ToString());
+                foreach (Person curr in selectedList1) Console.WriteLine(curr.ToString());
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting handsome people");
-                DbExpression eSelect6 = new DbExpression("ishandsome", DbOperators.Equals, true);
+                Expr eSelect6 = new Expr("ishandsome", OperatorEnum.Equals, true);
                 selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect6);
                 Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
-                foreach (Person curr in selectedList1) Console.WriteLine("  | " + curr.ToString());
+                foreach (Person curr in selectedList1) Console.WriteLine(curr.ToString());
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting by reverse ID order");
-                DbExpression eSelect7 = new DbExpression("id", DbOperators.GreaterThan, 0);
-                DbResultOrder[] resultOrder = new DbResultOrder[1];
-                resultOrder[0] = new DbResultOrder("id", DbOrderDirection.Descending);
+                Expr eSelect7 = new Expr("id", OperatorEnum.GreaterThan, 0);
+                ResultOrder[] resultOrder = new ResultOrder[1];
+                resultOrder[0] = new ResultOrder("id", OrderDirection.Descending);
                 selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect7, resultOrder);
                 Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
-                foreach (Person curr in selectedList1) Console.WriteLine("  | " + curr.ToString());
+                foreach (Person curr in selectedList1) Console.WriteLine(curr.ToString());
 
                 #endregion
 
@@ -235,7 +229,7 @@ namespace Test.SqlServer
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Deleting p3 and p4");
-                DbExpression eDelete = new DbExpression("id", DbOperators.GreaterThan, 2);
+                Expr eDelete = new Expr("id", OperatorEnum.GreaterThan, 2);
                 _Orm.DeleteMany<Person>(eDelete);
 
                 #endregion

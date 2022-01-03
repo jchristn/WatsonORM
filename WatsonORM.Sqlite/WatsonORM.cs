@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DatabaseWrapper.Sqlite;
 using DatabaseWrapper.Core;
+using ExpressionTree;
 using Watson.ORM.Core;
 
 namespace Watson.ORM.Sqlite
@@ -22,7 +23,7 @@ namespace Watson.ORM.Sqlite
         /// <summary>
         /// Database settings.
         /// </summary>
-        public Watson.ORM.Core.DatabaseSettings Settings
+        public DatabaseSettings Settings
         {
             get
             {
@@ -46,40 +47,6 @@ namespace Watson.ORM.Sqlite
                 if (_Database != null)
                 {
                     _Database.Logger = value; 
-                }
-            }
-        }
-
-        /// <summary>
-        /// Debug settings.
-        /// </summary>
-        public DebugSettings Debug
-        {
-            get
-            {
-                return _Debug;
-            }
-            set
-            {
-                if (value == null)
-                { 
-                    _Debug = new DebugSettings();
-
-                    if (_Database != null)
-                    {
-                        _Database.LogQueries = false;
-                        _Database.LogResults = false;
-                    }
-                }
-                else
-                { 
-                    _Debug = value;
-
-                    if (_Database != null)
-                    { 
-                        _Database.LogQueries = value.DatabaseQueries;
-                        _Database.LogResults = value.DatabaseResults;
-                    }
                 }
             }
         }
@@ -112,11 +79,10 @@ namespace Watson.ORM.Sqlite
 
         private bool _Initialized = false;
         private Action<string> _Logger = null;
-        private DebugSettings _Debug = new DebugSettings();
         private string _Header = "[WatsonORM] ";
         private CancellationTokenSource _TokenSource = new CancellationTokenSource();
         private CancellationToken _Token;
-        private Watson.ORM.Core.DatabaseSettings _Settings = null;
+        private DatabaseSettings _Settings = null;
         private DatabaseClient _Database = null;
         private TypeMetadataManager _TypeMetadataMgr = new TypeMetadataManager();
 
@@ -128,14 +94,14 @@ namespace Watson.ORM.Sqlite
         /// Instantiate the object.  Once constructed, call InitializeDatabase() and InitializeTable() for each table if needed.
         /// </summary>
         /// <param name="settings">Database settings.</param>
-        public WatsonORM(Watson.ORM.Core.DatabaseSettings settings)
+        public WatsonORM(DatabaseSettings settings)
         {
             if (settings == null) throw new ArgumentNullException(nameof(settings));
 
             _Settings = settings;
             _Token = _TokenSource.Token;
 
-            if (_Settings.Type != Core.DbTypes.Sqlite) throw new ArgumentException("Database type in settings must be of type 'Sqlite'.");
+            if (_Settings.Type != DbTypes.Sqlite) throw new ArgumentException("Database type in settings must be of type 'Sqlite'.");
         }
 
         #endregion
@@ -164,11 +130,8 @@ namespace Watson.ORM.Sqlite
             }
 
             _Logger?.Invoke(_Header + "initializing database client: " + _Settings.Type.ToString() + " using file " + _Settings.Filename);
-
             _Database = new DatabaseClient(_Settings.Filename);
-
             _Logger?.Invoke(_Header + "initialization complete");
-
             _Initialized = true;
         }
 
@@ -411,7 +374,6 @@ namespace Watson.ORM.Sqlite
             if (objs == null || objs.Count < 1) throw new ArgumentNullException(nameof(objs));
 
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
-
             List<T> ret = new List<T>();
             foreach (T obj in objs)
             {
@@ -435,7 +397,6 @@ namespace Watson.ORM.Sqlite
             if (objs == null || objs.Count < 1) throw new ArgumentNullException(nameof(objs));
 
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
-
             List<Dictionary<string, object>> dicts = new List<Dictionary<string, object>>();
             foreach (T obj in objs)
             {
@@ -462,9 +423,9 @@ namespace Watson.ORM.Sqlite
             object primaryKeyValue = _TypeMetadataMgr.GetPrimaryKeyValue(obj, primaryKeyPropertyName);
             
             Dictionary<string, object> updateVals = ObjectToDictionary(obj);
-            Expression e = new Expression(primaryKeyColumnName, WatsonORMCommon.DbOperatorsConverter(DbOperators.Equals), primaryKeyValue);
-            _Database.Update(tableName, updateVals, e);
-            DataTable result = _Database.Select(tableName, null, null, null, e, null);
+            Expr expr = new Expr(primaryKeyColumnName, OperatorEnum.Equals, primaryKeyValue);
+            _Database.Update(tableName, updateVals, expr);
+            DataTable result = _Database.Select(tableName, null, null, null, expr, null);
             return DataTableToObject<T>(result);
         }
 
@@ -474,7 +435,7 @@ namespace Watson.ORM.Sqlite
         /// <typeparam name="T">Type of object.</typeparam>
         /// <param name="expr">Expression.</param>
         /// <param name="updateVals">Update values.</param>
-        public void UpdateMany<T>(DbExpression expr, Dictionary<string, object> updateVals)
+        public void UpdateMany<T>(Expr expr, Dictionary<string, object> updateVals)
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (expr == null) throw new ArgumentNullException(nameof(expr));
@@ -482,11 +443,8 @@ namespace Watson.ORM.Sqlite
 
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
             string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T));
-
-            Expression e = WatsonORMCommon.DbExpressionConverter(expr);
-            e.PrependAnd(primaryKeyColumnName, WatsonORMCommon.DbOperatorsConverter(DbOperators.IsNotNull), null);
-
-            _Database.Update(tableName, updateVals, e);
+            expr.PrependAnd(primaryKeyColumnName, OperatorEnum.IsNotNull, null);
+            _Database.Update(tableName, updateVals, WatsonORMHelper.PreprocessExpression(expr));
         }
 
         /// <summary>
@@ -503,9 +461,8 @@ namespace Watson.ORM.Sqlite
             string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T));
             string primaryKeyPropertyName = _TypeMetadataMgr.GetPrimaryKeyPropertyName(typeof(T)); 
             object primaryKeyValue = _TypeMetadataMgr.GetPrimaryKeyValue(obj, primaryKeyPropertyName);
-            
-            Expression e = new Expression(primaryKeyColumnName, WatsonORMCommon.DbOperatorsConverter(DbOperators.Equals), primaryKeyValue);
-            _Database.Delete(tableName, e);
+            Expr expr = new Expr(primaryKeyColumnName, OperatorEnum.Equals, primaryKeyValue);
+            _Database.Delete(tableName, expr);
         }
 
         /// <summary>
@@ -521,9 +478,8 @@ namespace Watson.ORM.Sqlite
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T)); 
             string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T));
             string primaryKeyPropertyName = _TypeMetadataMgr.GetPrimaryKeyPropertyName(typeof(T));
-
-            Expression e = new Expression(primaryKeyColumnName, WatsonORMCommon.DbOperatorsConverter(DbOperators.Equals), id);
-            _Database.Delete(tableName, e);
+            Expr expr = new Expr(primaryKeyColumnName, OperatorEnum.Equals, id);
+            _Database.Delete(tableName, expr);
         }
 
         /// <summary>
@@ -531,12 +487,12 @@ namespace Watson.ORM.Sqlite
         /// </summary>
         /// <typeparam name="T">Type of object.</typeparam>
         /// <param name="expr">Expression.</param>
-        public void DeleteMany<T>(DbExpression expr) where T : class, new()
+        public void DeleteMany<T>(Expr expr) where T : class, new()
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (expr == null) throw new ArgumentNullException(nameof(expr)); 
-            string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T)); 
-            _Database.Delete(tableName, WatsonORMCommon.DbExpressionConverter(expr));
+            string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
+            _Database.Delete(tableName, WatsonORMHelper.PreprocessExpression(expr));
         }
 
         /// <summary>
@@ -554,9 +510,8 @@ namespace Watson.ORM.Sqlite
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
             string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T));
             string primaryKeyPropertyName = _TypeMetadataMgr.GetPrimaryKeyPropertyName(typeof(T));
-
-            Expression e = new Expression(primaryKeyColumnName, WatsonORMCommon.DbOperatorsConverter(DbOperators.Equals), id);
-            DataTable result = _Database.Select(tableName, null, null, null, e, null);
+            Expr expr = new Expr(primaryKeyColumnName, OperatorEnum.Equals, id);
+            DataTable result = _Database.Select(tableName, null, null, null, expr, null);
             return DataTableToObject<T>(result);
         }
 
@@ -568,7 +523,7 @@ namespace Watson.ORM.Sqlite
         /// <param name="expr">Expression by which SELECT should be filtered (i.e. WHERE clause).</param> 
         /// <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
         /// <returns>Object.</returns>
-        public T SelectFirst<T>(DbExpression expr, DbResultOrder[] ro = null) where T : class, new()
+        public T SelectFirst<T>(Expr expr, ResultOrder[] ro = null) where T : class, new()
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (expr == null) throw new ArgumentNullException(nameof(expr));
@@ -576,12 +531,8 @@ namespace Watson.ORM.Sqlite
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
             string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T));
             string primaryKeyPropertyName = _TypeMetadataMgr.GetPrimaryKeyPropertyName(typeof(T));
-
-            Expression e = WatsonORMCommon.DbExpressionConverter(expr);
-            e.PrependAnd(primaryKeyColumnName, WatsonORMCommon.DbOperatorsConverter(DbOperators.IsNotNull), null);
-
+            expr.PrependAnd(primaryKeyColumnName, OperatorEnum.IsNotNull, null);
             ResultOrder[] resultOrder = null;
-
             if (ro == null)
             {
                 resultOrder = new ResultOrder[1];
@@ -589,10 +540,10 @@ namespace Watson.ORM.Sqlite
             }
             else
             {
-                resultOrder = DbResultOrder.ConvertToResultOrder(ro);
+                resultOrder = ro;
             }
 
-            DataTable result = _Database.Select(tableName, null, 1, null, e, resultOrder);
+            DataTable result = _Database.Select(tableName, null, 1, null, WatsonORMHelper.PreprocessExpression(expr), resultOrder);
             if (result == null || result.Rows.Count < 1) return null;
             return DataTableToObject<T>(result);
         }
@@ -605,19 +556,15 @@ namespace Watson.ORM.Sqlite
         /// <param name="expr">Expression.</param>
         /// <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
         /// <returns>List of objects.</returns>
-        public List<T> SelectMany<T>(DbExpression expr, DbResultOrder[] ro = null) where T : class, new()
+        public List<T> SelectMany<T>(Expr expr, ResultOrder[] ro = null) where T : class, new()
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (expr == null) throw new ArgumentNullException(nameof(expr));
 
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
             string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T));
-
-            Expression e = WatsonORMCommon.DbExpressionConverter(expr);
-            e.PrependAnd(primaryKeyColumnName, WatsonORMCommon.DbOperatorsConverter(DbOperators.IsNotNull), null);
-
+            expr.PrependAnd(primaryKeyColumnName, OperatorEnum.IsNotNull, null);
             ResultOrder[] resultOrder = null;
-
             if (ro == null)
             {
                 resultOrder = new ResultOrder[1];
@@ -625,10 +572,10 @@ namespace Watson.ORM.Sqlite
             }
             else
             {
-                resultOrder = DbResultOrder.ConvertToResultOrder(ro);
+                resultOrder = ro;
             }
 
-            DataTable result = _Database.Select(tableName, null, null, null, e, resultOrder);
+            DataTable result = _Database.Select(tableName, null, null, null, WatsonORMHelper.PreprocessExpression(expr), resultOrder);
             return DataTableToObjectList<T>(result);
         }
 
@@ -641,7 +588,7 @@ namespace Watson.ORM.Sqlite
         /// <param name="expr">Filter to apply when SELECTing rows (i.e. WHERE clause).</param>
         /// <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
         /// <returns>List of objects.</returns>
-        public List<T> SelectMany<T>(int? indexStart, int? maxResults, DbExpression expr, DbResultOrder[] ro = null) where T : class, new()
+        public List<T> SelectMany<T>(int? indexStart, int? maxResults, Expr expr, ResultOrder[] ro = null) where T : class, new()
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
             if (expr == null) throw new ArgumentNullException(nameof(expr));
@@ -649,12 +596,8 @@ namespace Watson.ORM.Sqlite
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
             string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T));
             string primaryKeyPropertyName = _TypeMetadataMgr.GetPrimaryKeyPropertyName(typeof(T));
-
-            Expression e = WatsonORMCommon.DbExpressionConverter(expr);
-            e.PrependAnd(primaryKeyColumnName, WatsonORMCommon.DbOperatorsConverter(DbOperators.IsNotNull), null);
-
+            expr.PrependAnd(primaryKeyColumnName, OperatorEnum.IsNotNull, null);
             ResultOrder[] resultOrder = null;
-
             if (ro == null)
             {
                 resultOrder = new ResultOrder[1];
@@ -662,10 +605,10 @@ namespace Watson.ORM.Sqlite
             }
             else
             {
-                resultOrder = DbResultOrder.ConvertToResultOrder(ro);
+                resultOrder = ro;
             }
 
-            DataTable result = _Database.Select(tableName, indexStart, maxResults, null, e, resultOrder);
+            DataTable result = _Database.Select(tableName, indexStart, maxResults, null, WatsonORMHelper.PreprocessExpression(expr), resultOrder);
             return DataTableToObjectList<T>(result);
         }
 
@@ -699,11 +642,10 @@ namespace Watson.ORM.Sqlite
         /// <typeparam name="T">Type.</typeparam>
         /// <param name="expr">Expression.</param>
         /// <returns>True if exists.</returns>
-        public bool Exists<T>(DbExpression expr)
+        public bool Exists<T>(Expr expr)
         {
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
-            Expression e = WatsonORMCommon.DbExpressionConverter(expr);
-            return _Database.Exists(tableName, e);
+            return _Database.Exists(tableName, WatsonORMHelper.PreprocessExpression(expr));
         }
 
         /// <summary>
@@ -712,11 +654,10 @@ namespace Watson.ORM.Sqlite
         /// <typeparam name="T">Type.</typeparam>
         /// <param name="expr">Expression.</param>
         /// <returns>Number of matching records.</returns>
-        public long Count<T>(DbExpression expr)
+        public long Count<T>(Expr expr)
         {
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
-            Expression e = WatsonORMCommon.DbExpressionConverter(expr);
-            return _Database.Count(tableName, e);
+            return _Database.Count(tableName, WatsonORMHelper.PreprocessExpression(expr));
         }
 
         /// <summary>
@@ -726,12 +667,11 @@ namespace Watson.ORM.Sqlite
         /// <param name="columnName"></param>
         /// <param name="expr">Expression.</param>
         /// <returns></returns>
-        public decimal Sum<T>(string columnName, DbExpression expr)
+        public decimal Sum<T>(string columnName, Expr expr)
         {
             if (String.IsNullOrEmpty(columnName)) throw new ArgumentNullException(nameof(columnName));
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
-            Expression e = WatsonORMCommon.DbExpressionConverter(expr);
-            return _Database.Sum(tableName, columnName, e);
+            return _Database.Sum(tableName, columnName, WatsonORMHelper.PreprocessExpression(expr));
         }
 
         /// <summary>

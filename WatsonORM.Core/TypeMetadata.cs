@@ -15,17 +15,17 @@ namespace Watson.ORM.Core
         /// <summary>
         /// The name of the database table.
         /// </summary>
-        public string TableName { get; set; } = null;
+        public string TableName { get; private set; } = null;
 
         /// <summary>
         /// Property name of the primary key field.
         /// </summary>
-        public string PrimaryKeyPropertyName { get; set; } = null;
+        public string PrimaryKeyPropertyName { get; private set; } = null;
 
         /// <summary>
         /// Columns in the table.
         /// </summary>
-        public List<Column> Columns { get; set; } = new List<Column>();
+        public List<Column> Columns { get; private set; } = new List<Column>();
 
         #endregion
 
@@ -43,6 +43,10 @@ namespace Watson.ORM.Core
         /// <param name="columns">Columns in the table.</param>
         public TypeMetadata(string tableName, string primaryKeyPropertyName, List<Column> columns)
         {
+            if (String.IsNullOrEmpty(tableName)) throw new ArgumentNullException(nameof(tableName));
+            if (String.IsNullOrEmpty(primaryKeyPropertyName)) throw new ArgumentNullException(nameof(primaryKeyPropertyName));
+            if (columns == null) throw new ArgumentNullException(nameof(columns));
+
             TableName = tableName;
             PrimaryKeyPropertyName = primaryKeyPropertyName;
             Columns = columns;
