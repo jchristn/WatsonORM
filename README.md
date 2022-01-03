@@ -34,6 +34,7 @@ For a sample app exercising this library, refer to the ```Test``` project contai
 This example uses ```Sqlite```.  For ```SqlServer```, ```Mysql```, or ```Postgresql```, you must make sure the database exists.  Tables will be automatically created in this example.  Refer to the ```Test``` project for a complete example.
 ```csharp
 using ExpressionTree;
+using DatabaseWrapper.Core;
 using Watson.ORM;
 using Watson.ORM.Core;
 
