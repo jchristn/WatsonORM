@@ -6,6 +6,7 @@ v2.0.0
 
 - Breaking changes due to dependency update
 - Leveraging ```ExpressionTree``` package, replacing ```DbExpression``` and ```DbOperators```
+- Passthrough of ```DatabaseSettings```, ```OrderDirection```, and ```ResultOrder``` from ```DatabaseWrapper```, eliminating proxy classes
 
 ## Previous Versions
 

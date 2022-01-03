@@ -28,6 +28,7 @@ For a sample app exercising this library, refer to the ```Test``` project contai
 
 - Breaking changes due to dependency update
 - Leveraging ```ExpressionTree``` package, replacing ```DbExpression``` and ```DbOperators```
+- Passthrough of ```DatabaseSettings```, ```OrderDirection```, and ```ResultOrder``` from ```DatabaseWrapper```, eliminating proxy classes
 
 ## Simple Example
 
