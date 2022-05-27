@@ -13,7 +13,7 @@
  
 ## Description
 
-WatsonORM is a lightweight and easy to use object-relational mapper (ORM) in C# for .NET Core built on top of DatabaseWrapper.  WatsonORM supports Microsoft SQL Server, Mysql, PostgreSQL, and Sqlite databases.  
+WatsonORM is a lightweight and easy to use object-relational mapper (ORM) in C# for .NET Core built on top of DatabaseWrapper.  WatsonORM supports Microsoft SQL Server, Mysql, MariaDB, PostgreSQL, and Sqlite databases, both on-premises and in the cloud.
 
 Core features:
 
@@ -141,6 +141,10 @@ In order to use pagination with SQL Server, the ```SelectMany``` method containi
 ## Using MySQL
 
 While the ```DateTimeOffset``` type can be used in objects, with MySQL the offset is not persisted.  It is recommended that you store UTC timestamps using the ```DateTime``` type instead.
+
+## Using MariaDB
+
+Use the MySQL constructor.  MySQL constraints apply.
 
 ## Version history
 

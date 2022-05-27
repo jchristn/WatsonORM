@@ -7,15 +7,18 @@ using ExpressionTree;
 using Newtonsoft.Json;
 using Watson.ORM;
 using Watson.ORM.Core;
+using GetSomeInput;
 
 namespace Test
 {
     class Program
     {
         static string _DbType = null;
-        static string _Filename = null;
-        static string _Username = null;
-        static string _Password = null;
+        static string _Hostname = "localhost";
+        static int _Port = 3306;
+        static string _Filename = "sqlite.db";
+        static string _Username = "root";
+        static string _Password = "password";
         static byte[] _FileBytes = File.ReadAllBytes("./headshot.png");
         static DatabaseSettings _Settings = null;
         static WatsonORM _Orm = null;
@@ -26,29 +29,33 @@ namespace Test
             {
                 #region Setup
 
-                Console.Write("DB type [sqlserver|mysql|postgresql|sqlite]: ");
-                _DbType = Console.ReadLine();
-                if (String.IsNullOrEmpty(_DbType)) return;
-                _DbType = _DbType.ToLower();
+                _DbType = Inputty.GetString("DB type [sqlserver|mysql|postgresql|sqlite]:", "mysql", false).ToLower();
 
                 if (_DbType.Equals("sqlserver") || _DbType.Equals("mysql") || _DbType.Equals("postgresql"))
                 {
-                    Console.Write("User: ");
-                    _Username = Console.ReadLine();
+                    _Username = Inputty.GetString("User:", _Username, false);
+                    _Password = Inputty.GetString("Pass:", _Password, false);
+                    _Hostname = Inputty.GetString("Host:", _Hostname, false);
 
-                    Console.Write("Password: ");
-                    _Password = Console.ReadLine();
+                    if (_DbType.Equals("sqlserver"))
+                        _Port = Inputty.GetInteger("Port:", 1433, true, true);
+
+                    if (_DbType.Equals("mysql"))
+                        _Port = Inputty.GetInteger("Port:", 3306, true, true);
+
+                    if (_DbType.Equals("postgresql"))
+                        _Port = Inputty.GetInteger("Port:", 5432, true, true);
 
                     switch (_DbType)
                     {
                         case "sqlserver":
-                            _Settings = new DatabaseSettings(DbTypes.SqlServer, "localhost", 1433, _Username, _Password, "test");
+                            _Settings = new DatabaseSettings(DbTypes.SqlServer, "localhost", _Port, _Username, _Password, "test");
                             break;
                         case "mysql":
-                            _Settings = new DatabaseSettings(DbTypes.Mysql, "localhost", 3306, _Username, _Password, "test");
+                            _Settings = new DatabaseSettings(DbTypes.Mysql, "localhost", _Port, _Username, _Password, "test");
                             break;
                         case "postgresql":
-                            _Settings = new DatabaseSettings(DbTypes.Postgresql, "localhost", 5432, _Username, _Password, "test");
+                            _Settings = new DatabaseSettings(DbTypes.Postgresql, "localhost", _Port, _Username, _Password, "test");
                             break;
                         default:
                             return;
@@ -56,10 +63,7 @@ namespace Test
                 }
                 else if (_DbType.Equals("sqlite"))
                 {
-                    Console.Write("Filename: ");
-                    _Filename = Console.ReadLine();
-                    if (String.IsNullOrEmpty(_Filename)) return;
-
+                    _Filename = Inputty.GetString("File:", _Filename, false);
                     _Settings = new DatabaseSettings(_Filename);
                 }
                 else
@@ -67,11 +71,14 @@ namespace Test
                     Console.WriteLine("Invalid database type.");
                     return;
                 }
-                
+
+                _Settings.Debug.Logger = Logger;
+                _Settings.Debug.EnableForQueries = true;
+                _Settings.Debug.EnableForResults = true;
+
                 _Orm = new WatsonORM(_Settings);
 
                 _Orm.InitializeDatabase();
-                _Orm.Logger = Logger;
                 _Orm.InitializeTable(typeof(Person));
                 _Orm.TruncateTable(typeof(Person));
                 Console.WriteLine("Using table: " + _Orm.GetTableName(typeof(Person)));

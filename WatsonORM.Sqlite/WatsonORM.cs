@@ -32,26 +32,6 @@ namespace Watson.ORM.Sqlite
         }
 
         /// <summary>
-        /// Method to invoke when sending log messages.
-        /// </summary>
-        public Action<string> Logger
-        {
-            get
-            {
-                return _Logger;
-            }
-            set
-            {
-                _Logger = value;
-
-                if (_Database != null)
-                {
-                    _Database.Logger = value; 
-                }
-            }
-        }
-
-        /// <summary>
         /// Direct access to the underlying database client.
         /// </summary>
         public DatabaseClient Database

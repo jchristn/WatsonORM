@@ -14,11 +14,6 @@
             Database settings.
             </summary>
         </member>
-        <member name="P:Watson.ORM.Sqlite.WatsonORM.Logger">
-            <summary>
-            Method to invoke when sending log messages.
-            </summary>
-        </member>
         <member name="P:Watson.ORM.Sqlite.WatsonORM.Database">
             <summary>
             Direct access to the underlying database client.

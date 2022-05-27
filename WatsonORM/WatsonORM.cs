@@ -36,30 +36,6 @@ namespace Watson.ORM
         }
 
         /// <summary>
-        /// Method to invoke when sending log messages.
-        /// </summary>
-        public Action<string> Logger
-        {
-            get
-            {
-                return _Logger;
-            }
-            set
-            {
-                _Logger = value; 
-
-                if (_Mysql != null) _Mysql.Logger = _Logger;
-                else if (_Postgresql != null) _Postgresql.Logger = _Logger; 
-                else if (_Sqlite != null) _Sqlite.Logger = _Logger; 
-                else if (_SqlServer != null) _SqlServer.Logger = _Logger; 
-                else
-                {
-                    throw new InvalidOperationException("No database client is initialized.");
-                }
-            }
-        }
-
-        /// <summary>
         /// Direct access to the underlying database client.
         /// </summary>
         public object Database

@@ -33,8 +33,11 @@ namespace Test.Postgresql
                 _Settings = new DatabaseSettings(DbTypes.Postgresql, "localhost", 5432, _Username, _Password, "test");
 
                 _Orm = new WatsonORM(_Settings);
+                _Orm.Settings.Debug.Logger = Logger;
+                _Orm.Settings.Debug.EnableForQueries = true;
+                _Orm.Settings.Debug.EnableForResults = true;
+
                 _Orm.InitializeDatabase();
-                _Orm.Logger = Logger;
                 _Orm.InitializeTable(typeof(Person));
                 _Orm.TruncateTable(typeof(Person));
                 Console.WriteLine("Using table: " + _Orm.GetTableName(typeof(Person)));

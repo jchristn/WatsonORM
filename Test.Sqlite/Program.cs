@@ -29,9 +29,11 @@ namespace Test.Sqlite
 
                 _Settings = new DatabaseSettings(_Filename); 
                 _Orm = new WatsonORM(_Settings);
+                _Orm.Settings.Debug.Logger = Logger;
+                _Orm.Settings.Debug.EnableForQueries = true;
+                _Orm.Settings.Debug.EnableForResults = true;
 
                 _Orm.InitializeDatabase();
-                _Orm.Logger = Logger;
                 _Orm.InitializeTable(typeof(Person));
                 _Orm.TruncateTable(typeof(Person));
                 Console.WriteLine("Using table: " + _Orm.GetTableName(typeof(Person)));
