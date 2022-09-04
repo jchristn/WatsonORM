@@ -1,67 +1,67 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;netcoreapp3.1;net461;net5.0;net6.0</TargetFrameworks>
-    <Version>2.0.1</Version>
-    <Authors>Joel Christner</Authors>
-    <Company>Joel Christner</Company>
-    <Product>WatsonORM</Product>
-    <Description>WatsonORM is a lightweight and easy to use object-relational mapper (ORM) in C# for .NET Core, .NET Framework, and .NET Standard built on top of DatabaseWrapper.  WatsonORM supports Microsoft SQL Server, MySQL, PostgreSQL, and Sqlite databases.  Refer to other WatsonORM packages if you only need support for a single database type.</Description>
-    <Copyright>(c)2021 Joel Christner</Copyright>
-    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-    <PackageProjectUrl>https://github.com/jchristn/watsonorm</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/jchristn/watsonorm</RepositoryUrl>
-    <RepositoryType>Github</RepositoryType>
-    <PackageTags>orm object relation relational mapper map database object data convert sql server mssql sqlite mysql pgsql postgres postgresql dynamic query builder datarow datatable key foreign</PackageTags>
-    <PackageReleaseNotes>Breaking changes caused by dependency update</PackageReleaseNotes>
-    <PackageIconUrl></PackageIconUrl>
-    <PackageId>WatsonORM</PackageId>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <ApplicationIcon />
-    <OutputType>Library</OutputType>
-    <StartupObject />
-    <RootNamespace>Watson.ORM</RootNamespace>
-    <PackageIcon>watson.png</PackageIcon>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.1;netcoreapp3.1;net461;net5.0;net6.0</TargetFrameworks>
+		<Version>2.0.1.1</Version>
+		<Authors>Joel Christner</Authors>
+		<Company>Joel Christner</Company>
+		<Product>WatsonORM</Product>
+		<Description>WatsonORM is a lightweight and easy to use object-relational mapper (ORM) in C# for .NET Core, .NET Framework, and .NET Standard built on top of DatabaseWrapper.  WatsonORM supports Microsoft SQL Server, MySQL, PostgreSQL, and Sqlite databases.  Refer to other WatsonORM packages if you only need support for a single database type.</Description>
+		<Copyright>(c)2022 Joel Christner</Copyright>
+		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+		<PackageProjectUrl>https://github.com/jchristn/watsonorm</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/jchristn/watsonorm</RepositoryUrl>
+		<RepositoryType>Github</RepositoryType>
+		<PackageTags>orm object relation relational mapper map database object data convert sql server mssql sqlite mysql pgsql postgres postgresql dynamic query builder datarow datatable key foreign</PackageTags>
+		<PackageReleaseNotes>Dependency update</PackageReleaseNotes>
+		<PackageIconUrl></PackageIconUrl>
+		<PackageId>WatsonORM</PackageId>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<ApplicationIcon />
+		<OutputType>Library</OutputType>
+		<StartupObject />
+		<RootNamespace>Watson.ORM</RootNamespace>
+		<PackageIcon>watson.png</PackageIcon>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>WatsonORM.xml</DocumentationFile>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DocumentationFile>WatsonORM.xml</DocumentationFile>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>WatsonORM.xml</DocumentationFile>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DocumentationFile>WatsonORM.xml</DocumentationFile>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Include="assets\watson.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-    <None Include="LICENSE.md">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="assets\watson.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="LICENSE.md">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="WatsonORM.Mysql" Version="2.0.1" />
-    <PackageReference Include="WatsonORM.Postgresql" Version="2.0.1" />
-    <PackageReference Include="WatsonORM.Sqlite" Version="2.0.1" />
-    <PackageReference Include="WatsonORM.SqlServer" Version="2.0.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="WatsonORM.Mysql" Version="2.0.1.1" />
+		<PackageReference Include="WatsonORM.Postgresql" Version="2.0.1.1" />
+		<PackageReference Include="WatsonORM.Sqlite" Version="2.0.1.1" />
+		<PackageReference Include="WatsonORM.SqlServer" Version="2.0.1.1" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="assets\watson.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\watson.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="WatsonORM.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="assets\watson.ico">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="assets\watson.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="WatsonORM.xml">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>

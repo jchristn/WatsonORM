@@ -1,59 +1,60 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;netcoreapp3.1;net461;net5.0;net6.0</TargetFrameworks>
-    <Version>2.0.1</Version>
-    <AssemblyName>WatsonORM.Core</AssemblyName>
-    <RootNamespace>Watson.ORM.Core</RootNamespace>
-    <Description>Do not install this package directly.  Core classes and static methods supporting WatsonORM packages.</Description>
-    <Authors>Joel Christner</Authors>
-    <Copyright>(c)2021 Joel Christner</Copyright>
-    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-    <PackageProjectUrl>https://github.com/jchristn/watsonorm</PackageProjectUrl>
-    <PackageIconUrl></PackageIconUrl>
-    <RepositoryUrl>https://github.com/jchristn/watsonorm</RepositoryUrl>
-    <RepositoryType>Github</RepositoryType>
-    <PackageTags>orm object relation relational mapper map database object data convert sql server mssql sqlite mysql pgsql postgres postgresql dynamic query builder datarow datatable key foreign</PackageTags>
-    <PackageReleaseNotes>Breaking changes caused by dependency update</PackageReleaseNotes>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageIcon>watson.png</PackageIcon>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.1;netcoreapp3.1;net461;net5.0;net6.0</TargetFrameworks>
+		<Version>2.0.1.1</Version>
+		<AssemblyName>WatsonORM.Core</AssemblyName>
+		<RootNamespace>Watson.ORM.Core</RootNamespace>
+		<Description>Do not install this package directly.  Core classes and static methods supporting WatsonORM packages.</Description>
+		<Authors>Joel Christner</Authors>
+		<Copyright>(c)2022 Joel Christner</Copyright>
+		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+		<PackageProjectUrl>https://github.com/jchristn/watsonorm</PackageProjectUrl>
+		<PackageIconUrl></PackageIconUrl>
+		<RepositoryUrl>https://github.com/jchristn/watsonorm</RepositoryUrl>
+		<RepositoryType>Github</RepositoryType>
+		<PackageTags>orm object relation relational mapper map database object data convert sql server mssql sqlite mysql pgsql postgres postgresql dynamic query builder datarow datatable key foreign</PackageTags>
+		<PackageReleaseNotes>Dependency update</PackageReleaseNotes>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<PackageIcon>watson.png</PackageIcon>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>WatsonORM.Core.xml</DocumentationFile>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DocumentationFile>WatsonORM.Core.xml</DocumentationFile>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>WatsonORM.Core.xml</DocumentationFile>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DocumentationFile>WatsonORM.Core.xml</DocumentationFile>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="DatabaseWrapper.Core" Version="4.1.3" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="DatabaseWrapper.Core" Version="4.1.3" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Include="assets\watson.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-    <None Include="LICENSE.md">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="assets\watson.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="LICENSE.md">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="assets\watson.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\watson.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="WatsonORM.Core.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="assets\watson.ico">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="assets\watson.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="WatsonORM.Core.xml">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	    <PackageReference Include="DatabaseWrapper.Core" Version="4.1.5" />
+</ItemGroup>
 
 </Project>
