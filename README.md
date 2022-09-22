@@ -69,9 +69,12 @@ Person inserted = orm.Insert<Person>(person);
 // Select
 Person selected = orm.SelectByPrimaryKey<Person>(1); 
 
+// Select all records
+List<Person> people = orm.SelectMany<Person>();
+
 // Select many by column name
 Expr e1 = new Expr("id", OperatorEnum.GreaterThan, 0);
-List<Person> people = orm.SelectMany<Person>(e1);
+people = orm.SelectMany<Person>(e1);
 
 // Select many by property
 Expr e2 = new Expr(

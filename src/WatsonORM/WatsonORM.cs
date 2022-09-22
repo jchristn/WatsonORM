@@ -128,21 +128,13 @@ namespace Watson.ORM
         public void InitializeDatabase()
         {
             if (_Mysql != null)
-            {
                 _Mysql.Dispose();
-            }
             else if (_Postgresql != null)
-            {
                 _Postgresql.Dispose();
-            }
             else if (_Sqlite != null)
-            {
                 _Sqlite.Dispose();
-            }
             else if (_SqlServer != null)
-            {
                 _SqlServer.Dispose();
-            }
 
             _Logger?.Invoke(_Header + "initializing database client: " + _Settings.Type.ToString() + " on " + _Settings.Hostname + ":" + _Settings.Port);
 
@@ -698,7 +690,7 @@ namespace Watson.ORM
         /// <param name="expr">Expression.</param>
         /// <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
         /// <returns>List of objects.</returns>
-        public List<T> SelectMany<T>(Expr expr, ResultOrder[] ro = null) where T : class, new()
+        public List<T> SelectMany<T>(Expr expr = null, ResultOrder[] ro = null) where T : class, new()
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
 
@@ -733,7 +725,7 @@ namespace Watson.ORM
         /// <param name="expr">Filter to apply when SELECTing rows (i.e. WHERE clause).</param>
         /// <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
         /// <returns>List of objects.</returns>
-        public List<T> SelectMany<T>(int? indexStart, int? maxResults, Expr expr, ResultOrder[] ro = null) where T : class, new()
+        public List<T> SelectMany<T>(int? indexStart, int? maxResults, Expr expr = null, ResultOrder[] ro = null) where T : class, new()
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
 
@@ -1169,6 +1161,10 @@ namespace Watson.ORM
                 throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
             }
         }
+
+        #endregion
+
+        #region Private-Methods
 
         #endregion
     }

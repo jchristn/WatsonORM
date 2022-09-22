@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.1;netcoreapp3.1;net461;net5.0;net6.0</TargetFrameworks>
 		<RootNamespace>Watson.ORM.SqlServer</RootNamespace>
-		<Version>2.0.1.1</Version>
+		<Version>2.0.1.2</Version>
 		<Authors>Joel Christner</Authors>
 		<Description>WatsonORM is a lightweight and easy to use object-relational mapper (ORM) for SQL Server in C# for .NET Core, .NET Framework, and .NET Standard built on top of DatabaseWrapper.  Refer to other WatsonORM packages if you need support for other database types.</Description>
 		<Copyright>(c)2022 Joel Christner</Copyright>

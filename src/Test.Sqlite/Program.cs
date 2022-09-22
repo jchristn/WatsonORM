@@ -81,6 +81,11 @@ namespace Test.Sqlite
 
                 #region Select
 
+                Console.WriteLine("| Selecting all records");
+                List<Person> all = _Orm.SelectMany<Person>();
+                Console.WriteLine("| Retrieved: " + all.Count + " records");
+                foreach (Person curr in all) Console.WriteLine(curr.ToString());
+
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting many by column name");
                 Expr eSelect1 = new Expr("id", OperatorEnum.GreaterThan, 0);

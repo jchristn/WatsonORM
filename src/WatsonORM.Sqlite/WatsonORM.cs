@@ -536,14 +536,16 @@ namespace Watson.ORM.Sqlite
         /// <param name="expr">Expression.</param>
         /// <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
         /// <returns>List of objects.</returns>
-        public List<T> SelectMany<T>(Expr expr, ResultOrder[] ro = null) where T : class, new()
+        public List<T> SelectMany<T>(Expr expr = null, ResultOrder[] ro = null) where T : class, new()
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
-            if (expr == null) throw new ArgumentNullException(nameof(expr));
 
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
             string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T));
-            expr.PrependAnd(primaryKeyColumnName, OperatorEnum.IsNotNull, null);
+
+            if (expr == null) expr = new Expr(primaryKeyColumnName, OperatorEnum.IsNotNull, null);
+            else expr.PrependAnd(primaryKeyColumnName, OperatorEnum.IsNotNull, null);
+
             ResultOrder[] resultOrder = null;
             if (ro == null)
             {
@@ -568,15 +570,17 @@ namespace Watson.ORM.Sqlite
         /// <param name="expr">Filter to apply when SELECTing rows (i.e. WHERE clause).</param>
         /// <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
         /// <returns>List of objects.</returns>
-        public List<T> SelectMany<T>(int? indexStart, int? maxResults, Expr expr, ResultOrder[] ro = null) where T : class, new()
+        public List<T> SelectMany<T>(int? indexStart, int? maxResults, Expr expr = null, ResultOrder[] ro = null) where T : class, new()
         {
             if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
-            if (expr == null) throw new ArgumentNullException(nameof(expr));
 
             string tableName = _TypeMetadataMgr.GetTableNameFromType(typeof(T));
             string primaryKeyColumnName = _TypeMetadataMgr.GetPrimaryKeyColumnName(typeof(T));
             string primaryKeyPropertyName = _TypeMetadataMgr.GetPrimaryKeyPropertyName(typeof(T));
-            expr.PrependAnd(primaryKeyColumnName, OperatorEnum.IsNotNull, null);
+
+            if (expr == null) expr = new Expr(primaryKeyColumnName, OperatorEnum.IsNotNull, null);
+            else expr.PrependAnd(primaryKeyColumnName, OperatorEnum.IsNotNull, null);
+
             ResultOrder[] resultOrder = null;
             if (ro == null)
             {
