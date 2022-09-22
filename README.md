@@ -30,6 +30,12 @@ For a sample app exercising this library, refer to the ```Test``` project contai
 - Leveraging ```ExpressionTree``` package, replacing ```DbExpression``` and ```DbOperators```
 - Passthrough of ```DatabaseSettings```, ```OrderDirection```, and ```ResultOrder``` from ```DatabaseWrapper```, eliminating proxy classes
 
+## Special Thanks
+
+We'd like to give special thanks to those who have contributed or helped make the library better!
+
+@Maclay74 @flo2000ace @MacKey-255
+
 ## Simple Example
 
 This example uses ```Sqlite```.  For ```SqlServer```, ```Mysql```, or ```Postgresql```, you must make sure the database exists.  Tables will be automatically created in this example.  Refer to the ```Test``` project for a complete example.
