@@ -868,6 +868,8 @@ namespace Watson.ORM.SqlServer
                     ColumnAttribute colAttr = attr as ColumnAttribute;
                     if (colAttr != null)
                     {
+                        if (String.IsNullOrEmpty(colAttr.Name)) colAttr.Name = prop.Name;
+
                         object val = prop.GetValue(obj);
                         if (val != null && !colAttr.PrimaryKey)
                         {

@@ -288,7 +288,7 @@ namespace Watson.ORM.Sqlite
                     _Logger?.Invoke(_Header + "table " + tableName + " contains additional columns not decorated in the class definition: " + deltaStr);
                 }
             }
-
+             
             _TypeMetadataMgr.Add(t, new TypeMetadata(tableName, primaryKeyPropertyName, columns));
 
             _Logger?.Invoke(_Header + "initialized table " + tableName + " for type " + t.Name + " with " + columns.Count + " column(s)");
@@ -861,7 +861,9 @@ namespace Watson.ORM.Sqlite
                 {
                     ColumnAttribute colAttr = attr as ColumnAttribute;
                     if (colAttr != null)
-                    { 
+                    {
+                        if (String.IsNullOrEmpty(colAttr.Name)) colAttr.Name = prop.Name;
+
                         object val = prop.GetValue(obj); 
                         if (val != null && ! colAttr.PrimaryKey)
                         { 

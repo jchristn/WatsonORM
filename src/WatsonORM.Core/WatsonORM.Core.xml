@@ -39,6 +39,57 @@
             Indicates whether or not the column allows a null value.
             </summary>
         </member>
+        <member name="M:Watson.ORM.Core.ColumnAttribute.#ctor(Watson.ORM.Core.DataTypes,System.Boolean)">
+            <summary>
+            Links a class property to a column in a WatsonORM-managed database table.
+            </summary>
+            <param name="dataType">The data type of the column.</param> 
+            <param name="isNullable">Indicates whether or not the column allows a null value.</param>
+        </member>
+        <member name="M:Watson.ORM.Core.ColumnAttribute.#ctor(Watson.ORM.Core.DataTypes,System.Int32,System.Boolean)">
+            <summary>
+            Links a class property to a column in a WatsonORM-managed database table.
+            </summary>
+            <param name="dataType">The data type of the column.</param>
+            <param name="maxLength">The maximum length of the column.</param>
+            <param name="isNullable">Indicates whether or not the column allows a null value.</param>
+        </member>
+        <member name="M:Watson.ORM.Core.ColumnAttribute.#ctor(Watson.ORM.Core.DataTypes,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Links a class property to a column in a WatsonORM-managed database table.
+            </summary>
+            <param name="dataType">The data type of the column.</param>
+            <param name="maxLength">The maximum length of the column.</param>
+            <param name="precision">The decimal precision of the column.</param>
+            <param name="isNullable">Indicates whether or not the column allows a null value.</param>
+        </member>
+        <member name="M:Watson.ORM.Core.ColumnAttribute.#ctor(System.Boolean,Watson.ORM.Core.DataTypes,System.Boolean)">
+            <summary>
+            Links a class property to a column in a WatsonORM-managed database table.
+            </summary>
+            <param name="primaryKey">Indicates whether or not the column is a primary key.</param>
+            <param name="dataType">The data type of the column.</param> 
+            <param name="isNullable">Indicates whether or not the column allows a null value.</param>
+        </member>
+        <member name="M:Watson.ORM.Core.ColumnAttribute.#ctor(System.Boolean,Watson.ORM.Core.DataTypes,System.Int32,System.Boolean)">
+            <summary>
+            Links a class property to a column in a WatsonORM-managed database table.
+            </summary>
+            <param name="primaryKey">Indicates whether or not the column is a primary key.</param>
+            <param name="dataType">The data type of the column.</param>
+            <param name="maxLength">The maximum length of the column.</param>
+            <param name="isNullable">Indicates whether or not the column allows a null value.</param>
+        </member>
+        <member name="M:Watson.ORM.Core.ColumnAttribute.#ctor(System.Boolean,Watson.ORM.Core.DataTypes,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Links a class property to a column in a WatsonORM-managed database table.
+            </summary>
+            <param name="primaryKey">Indicates whether or not the column is a primary key.</param>
+            <param name="dataType">The data type of the column.</param>
+            <param name="maxLength">The maximum length of the column.</param>
+            <param name="precision">The decimal precision of the column.</param>
+            <param name="isNullable">Indicates whether or not the column allows a null value.</param>
+        </member>
         <member name="M:Watson.ORM.Core.ColumnAttribute.#ctor(System.String,System.Boolean,Watson.ORM.Core.DataTypes,System.Boolean)">
             <summary>
             Links a class property to a column in a WatsonORM-managed database table.

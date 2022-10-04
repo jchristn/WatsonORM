@@ -176,7 +176,14 @@ namespace Watson.ORM.Core
                         ColumnAttribute colAttr = attr as ColumnAttribute;
                         if (colAttr != null)
                         {
-                            return colAttr.Name;
+                            if (!String.IsNullOrEmpty(colAttr.Name))
+                            {
+                                return colAttr.Name;
+                            }
+                            else
+                            {
+                                return prop.Name;
+                            }
                         }
                     }
                 }
@@ -205,7 +212,14 @@ namespace Watson.ORM.Core
                     ColumnAttribute colAttr = attr as ColumnAttribute;
                     if (colAttr != null)
                     {
-                        if (colAttr.Name.Equals(columnName)) return prop.Name;
+                        if (!String.IsNullOrEmpty(colAttr.Name))
+                        {
+                            if (colAttr.Name.Equals(columnName)) return prop.Name;
+                        }
+                        else
+                        {
+                            if (columnName.Equals(prop.Name)) return prop.Name;
+                        }
                     }
                 }
             }

@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.1;netcoreapp3.1;net461;net5.0;net6.0</TargetFrameworks>
-		<Version>2.0.1.1</Version>
+		<Version>2.0.2.2</Version>
 		<AssemblyName>WatsonORM.Core</AssemblyName>
 		<RootNamespace>Watson.ORM.Core</RootNamespace>
 		<Description>Do not install this package directly.  Core classes and static methods supporting WatsonORM packages.</Description>

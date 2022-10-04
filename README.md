@@ -29,6 +29,7 @@ For a sample app exercising this library, refer to the ```Test``` project contai
 - Breaking changes due to dependency update
 - Leveraging ```ExpressionTree``` package, replacing ```DbExpression``` and ```DbOperators```
 - Passthrough of ```DatabaseSettings```, ```OrderDirection```, and ```ResultOrder``` from ```DatabaseWrapper```, eliminating proxy classes
+- Simplified constructors for ```ColumnAttribute```
 
 ## Special Thanks
 
@@ -105,7 +106,29 @@ Person updated = orm.Update<Person>(inserted);
 // Delete
 orm.Delete<Person>(updated); 
 ```
- 
+
+## Column Naming
+
+Columns can be named *explicitly* by specifying the colum name in the ```Column``` attribute constructor.  Alternatively, constructors that don't include a name can be used, in which case the name of the property will be used as the column name.
+
+Example with explicit naming:
+```csharp
+[Column("id", true, DataTypes.Int, false)] // column name "id"
+public int Id { get; set; }
+
+[Column("firstname", false, DataTypes.Nvarchar, 64, false)] // column name "firstname"
+public string FirstName { get; set; }
+```
+
+Example without explicit naming:
+```csharp
+[Column(true, DataTypes.Int, false)] // column name "Id"
+public int Id { get; set; }
+
+[Column(DataTypes.Nvarchar, 64, false)] // column name "FirstName"
+public string FirstName { get; set; }
+```
+
 ## Pagination with SelectMany
 
 ```SelectMany``` can be paginated by using the method with either signature ```(int? indexStart, int? maxResults, Expr expr)``` or ```(int? indexStart, int? maxResults, Expr expr, ResultOrder[] resultOrder)```.  ```indexStart``` is the number of records to skip, and ```maxResults``` is the number of records to retrieve.  

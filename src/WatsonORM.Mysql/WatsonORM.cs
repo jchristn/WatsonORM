@@ -863,8 +863,11 @@ namespace Watson.ORM.Mysql
                 object[] attrs = prop.GetCustomAttributes(true);
                 foreach (object attr in attrs)
                 {
-                    if (attr is ColumnAttribute colAttr)
+                    ColumnAttribute colAttr = attr as ColumnAttribute;
+                    if (colAttr != null)
                     {
+                        if (String.IsNullOrEmpty(colAttr.Name)) colAttr.Name = prop.Name;
+
                         object val = prop.GetValue(obj); 
                         if (val != null && !colAttr.PrimaryKey)
                         {

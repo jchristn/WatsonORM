@@ -82,6 +82,8 @@ namespace Watson.ORM.Core
                     ColumnAttribute colAttr = attr as ColumnAttribute;
                     if (colAttr != null)
                     {
+                        if (String.IsNullOrEmpty(colAttr.Name)) colAttr.Name = prop.Name;
+
                         Column col = new Column(
                             colAttr.Name,
                             colAttr.PrimaryKey,
@@ -127,6 +129,8 @@ namespace Watson.ORM.Core
                     ColumnAttribute colAttr = attr as ColumnAttribute;
                     if (colAttr != null)
                     {
+                        if (String.IsNullOrEmpty(colAttr.Name)) colAttr.Name = prop.Name;
+
                         Column col = new Column(
                             colAttr.Name,
                             colAttr.PrimaryKey,
@@ -162,6 +166,8 @@ namespace Watson.ORM.Core
                     ColumnAttribute colAttr = attr as ColumnAttribute;
                     if (colAttr != null)
                     {
+                        if (String.IsNullOrEmpty(colAttr.Name)) colAttr.Name = prop.Name;
+
                         Column col = new Column(
                             colAttr.Name,
                             colAttr.PrimaryKey,
@@ -197,6 +203,8 @@ namespace Watson.ORM.Core
                     ColumnAttribute colAttr = attr as ColumnAttribute;
                     if (colAttr != null)
                     {
+                        if (String.IsNullOrEmpty(colAttr.Name)) colAttr.Name = prop.Name;
+
                         return colAttr.Name;
                     }
                 }
@@ -224,7 +232,9 @@ namespace Watson.ORM.Core
                 {
                     ColumnAttribute colAttr = attr as ColumnAttribute;
                     if (colAttr != null)
-                    { 
+                    {
+                        if (String.IsNullOrEmpty(colAttr.Name)) colAttr.Name = prop.Name;
+
                         if (colAttr.Name.Equals(columnName)) return prop.Name;
                     }
                 }
@@ -249,7 +259,12 @@ namespace Watson.ORM.Core
                 foreach (object attr in attrs)
                 {
                     ColumnAttribute colAttr = attr as ColumnAttribute;
-                    if (colAttr != null && colAttr.PrimaryKey) return colAttr.Name;
+                    if (colAttr != null && colAttr.PrimaryKey)
+                    {
+                        if (String.IsNullOrEmpty(colAttr.Name)) colAttr.Name = prop.Name;
+
+                        return colAttr.Name;
+                    }
                 }
             }
 
@@ -272,7 +287,12 @@ namespace Watson.ORM.Core
                 foreach (object attr in attrs)
                 {
                     ColumnAttribute colAttr = attr as ColumnAttribute;
-                    if (colAttr != null && colAttr.PrimaryKey) return prop.Name;
+                    if (colAttr != null && colAttr.PrimaryKey)
+                    {
+                        if (String.IsNullOrEmpty(colAttr.Name)) colAttr.Name = prop.Name;
+
+                        return prop.Name;
+                    }
                 }
             }
 

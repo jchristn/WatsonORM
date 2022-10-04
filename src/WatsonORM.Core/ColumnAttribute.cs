@@ -20,6 +20,10 @@ namespace Watson.ORM.Core
             {
                 return _Name;
             }
+            set
+            {
+                _Name = value;
+            }
         }
 
         /// <summary>
@@ -108,6 +112,137 @@ namespace Watson.ORM.Core
         /// <summary>
         /// Links a class property to a column in a WatsonORM-managed database table.
         /// </summary>
+        /// <param name="dataType">The data type of the column.</param> 
+        /// <param name="isNullable">Indicates whether or not the column allows a null value.</param>
+        public ColumnAttribute(DataTypes dataType, bool isNullable = true)
+        {
+            if (_LengthAndPrecisionRequired.Contains(dataType))
+            {
+                throw new InvalidOperationException("A column attribute that includes both maximum length and precision is required for columns of type " + dataType.ToString() + ".");
+            }
+
+            if (_LengthRequired.Contains(dataType))
+            {
+                throw new InvalidOperationException("A column attribute that includes a maximum length is required for columns of type " + dataType.ToString() + ".");
+            }
+
+            _PrimaryKey = false;
+            _Type = dataType;
+            _Nullable = isNullable;
+        }
+
+        /// <summary>
+        /// Links a class property to a column in a WatsonORM-managed database table.
+        /// </summary>
+        /// <param name="dataType">The data type of the column.</param>
+        /// <param name="maxLength">The maximum length of the column.</param>
+        /// <param name="isNullable">Indicates whether or not the column allows a null value.</param>
+        public ColumnAttribute(DataTypes dataType, int maxLength, bool isNullable = true)
+        {
+            if (maxLength < 1) throw new ArgumentException("Column must have a maximum length greater than zero.");
+
+            if (_LengthAndPrecisionRequired.Contains(dataType))
+            {
+                throw new InvalidOperationException("A column attribute that includes both maximum length and precision is required for columns of type " + dataType.ToString() + ".");
+            }
+
+            _PrimaryKey = false;
+            _Type = dataType;
+            _MaxLength = maxLength;
+            _Nullable = isNullable;
+        }
+
+        /// <summary>
+        /// Links a class property to a column in a WatsonORM-managed database table.
+        /// </summary>
+        /// <param name="dataType">The data type of the column.</param>
+        /// <param name="maxLength">The maximum length of the column.</param>
+        /// <param name="precision">The decimal precision of the column.</param>
+        /// <param name="isNullable">Indicates whether or not the column allows a null value.</param>
+        public ColumnAttribute(DataTypes dataType, int maxLength, int precision, bool isNullable = true)
+        {
+            if (maxLength < 1) throw new ArgumentException("Column must have a maximum length greater than zero.");
+            if (precision < 1) throw new ArgumentException("Column must have a precision greater than zero.");
+
+            _PrimaryKey = false;
+            _Type = dataType;
+            _MaxLength = maxLength;
+            _Precision = precision;
+            _Nullable = isNullable;
+        }
+
+        /// <summary>
+        /// Links a class property to a column in a WatsonORM-managed database table.
+        /// </summary>
+        /// <param name="primaryKey">Indicates whether or not the column is a primary key.</param>
+        /// <param name="dataType">The data type of the column.</param> 
+        /// <param name="isNullable">Indicates whether or not the column allows a null value.</param>
+        public ColumnAttribute(bool primaryKey, DataTypes dataType, bool isNullable)
+        {
+            if (primaryKey && isNullable) throw new ArgumentException("Primary key columns cannot be nullable.");
+
+            if (_LengthAndPrecisionRequired.Contains(dataType))
+            {
+                throw new InvalidOperationException("A column attribute that includes both maximum length and precision is required for columns of type " + dataType.ToString() + ".");
+            }
+
+            if (_LengthRequired.Contains(dataType))
+            {
+                throw new InvalidOperationException("A column attribute that includes a maximum length is required for columns of type " + dataType.ToString() + ".");
+            }
+
+            _PrimaryKey = primaryKey;
+            _Type = dataType;
+            _Nullable = isNullable;
+        }
+
+        /// <summary>
+        /// Links a class property to a column in a WatsonORM-managed database table.
+        /// </summary>
+        /// <param name="primaryKey">Indicates whether or not the column is a primary key.</param>
+        /// <param name="dataType">The data type of the column.</param>
+        /// <param name="maxLength">The maximum length of the column.</param>
+        /// <param name="isNullable">Indicates whether or not the column allows a null value.</param>
+        public ColumnAttribute(bool primaryKey, DataTypes dataType, int maxLength, bool isNullable)
+        {
+            if (primaryKey && isNullable) throw new ArgumentException("Primary key columns cannot be nullable.");
+            if (maxLength < 1) throw new ArgumentException("Column must have a maximum length greater than zero.");
+
+            if (_LengthAndPrecisionRequired.Contains(dataType))
+            {
+                throw new InvalidOperationException("A column attribute that includes both maximum length and precision is required for columns of type " + dataType.ToString() + ".");
+            }
+
+            _PrimaryKey = primaryKey;
+            _Type = dataType;
+            _MaxLength = maxLength;
+            _Nullable = isNullable;
+        }
+
+        /// <summary>
+        /// Links a class property to a column in a WatsonORM-managed database table.
+        /// </summary>
+        /// <param name="primaryKey">Indicates whether or not the column is a primary key.</param>
+        /// <param name="dataType">The data type of the column.</param>
+        /// <param name="maxLength">The maximum length of the column.</param>
+        /// <param name="precision">The decimal precision of the column.</param>
+        /// <param name="isNullable">Indicates whether or not the column allows a null value.</param>
+        public ColumnAttribute(bool primaryKey, DataTypes dataType, int maxLength, int precision, bool isNullable)
+        {
+            if (primaryKey && isNullable) throw new ArgumentException("Primary key columns cannot be nullable.");
+            if (maxLength < 1) throw new ArgumentException("Column must have a maximum length greater than zero.");
+            if (precision < 1) throw new ArgumentException("Column must have a precision greater than zero.");
+
+            _PrimaryKey = primaryKey;
+            _Type = dataType;
+            _MaxLength = maxLength;
+            _Precision = precision;
+            _Nullable = isNullable;
+        }
+
+        /// <summary>
+        /// Links a class property to a column in a WatsonORM-managed database table.
+        /// </summary>
         /// <param name="name">Name of the column.</param>
         /// <param name="primaryKey">Indicates whether or not the column is a primary key.</param>
         /// <param name="dataType">The data type of the column.</param> 
@@ -116,7 +251,7 @@ namespace Watson.ORM.Core
         {
             if (String.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
             if (primaryKey && isNullable) throw new ArgumentException("Primary key columns cannot be nullable.");
-             
+
             if (_LengthAndPrecisionRequired.Contains(dataType))
             {
                 throw new InvalidOperationException("For column '" + name + "', please use a column attribute that includes both maximum length and precision.");
@@ -129,8 +264,8 @@ namespace Watson.ORM.Core
 
             _Name = name;
             _PrimaryKey = primaryKey;
-            _Type = dataType; 
-            _Nullable = isNullable; 
+            _Type = dataType;
+            _Nullable = isNullable;
         }
 
         /// <summary>
@@ -146,7 +281,7 @@ namespace Watson.ORM.Core
             if (String.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
             if (primaryKey && isNullable) throw new ArgumentException("Primary key columns cannot be nullable.");
             if (maxLength < 1) throw new ArgumentException("Column '" + name + "' must have a maximum length greater than zero.");
-             
+
             if (_LengthAndPrecisionRequired.Contains(dataType))
             {
                 throw new InvalidOperationException("For column '" + name + "', please use a column attribute that includes both maximum length and precision.");
