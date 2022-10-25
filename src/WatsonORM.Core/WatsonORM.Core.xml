@@ -180,6 +180,11 @@
             Blob
             </summary>
         </member>
+        <member name="F:Watson.ORM.Core.DataTypes.Guid">
+            <summary>
+            GUID.
+            </summary>
+        </member>
         <member name="T:Watson.ORM.Core.ReflectionHelper">
             <summary>
             Methods to assist 

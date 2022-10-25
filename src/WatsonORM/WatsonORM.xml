@@ -262,29 +262,5 @@
             </summary>
             <param name="disposing">Indicate if child resources should be disposed.</param>
         </member>
-        <member name="M:Watson.ORM.WatsonORM.DataTableToObjectList``1(System.Data.DataTable)">
-            <summary>
-            Convert a DataTable to an object list for initialized tables and types.  
-            </summary>
-            <typeparam name="T">Type.</typeparam>
-            <param name="table">DataTable.</param>
-            <returns>List of the specified type.</returns>
-        </member>
-        <member name="M:Watson.ORM.WatsonORM.DataTableToObject``1(System.Data.DataTable)">
-            <summary>
-            Convert a DataTable to an object for an initialized table and type.
-            </summary>
-            <typeparam name="T">Type.</typeparam>
-            <param name="table">DataTable.</param>
-            <returns>Object of the specified type.</returns>
-        </member>
-        <member name="M:Watson.ORM.WatsonORM.DataRowToObject``1(System.Data.DataRow)">
-            <summary>
-            Convert a DataRow to an object for an initialized table and type.
-            </summary>
-            <typeparam name="T">Type.</typeparam>
-            <param name="row">DataRow.</param>
-            <returns>Object of the specified type.</returns>
-        </member>
     </members>
 </doc>

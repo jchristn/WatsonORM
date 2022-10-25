@@ -30,7 +30,7 @@ namespace Test.SqlServer
                 Console.Write("Password: ");
                 _Password = Console.ReadLine();
 
-                _Settings = new DatabaseSettings(DbTypes.SqlServer, "localhost", 1433, _Username, _Password, "test");
+                _Settings = new DatabaseSettings(DbTypeEnum.SqlServer, "localhost", 1433, _Username, _Password, "test");
 
                 _Orm = new WatsonORM(_Settings);
                 _Orm.Settings.Debug.Logger = Logger;
@@ -88,6 +88,12 @@ namespace Test.SqlServer
                 List<Person> all = _Orm.SelectMany<Person>();
                 Console.WriteLine("| Retrieved: " + all.Count + " records");
                 foreach (Person curr in all) Console.WriteLine(curr.ToString());
+
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
+                Console.WriteLine("| Selecting by GUID for p7: " + p7.GUID.ToString());
+                Expr eSelectGuid = new Expr("guid", OperatorEnum.Equals, p7.GUID);
+                Person selected1 = _Orm.SelectFirst<Person>(eSelectGuid);
+                Console.WriteLine("| Retrieved: " + Environment.NewLine + selected1.ToString());
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting many by column name");
@@ -200,7 +206,7 @@ namespace Test.SqlServer
                 Console.WriteLine("| Selecting by reverse ID order");
                 Expr eSelect7 = new Expr("id", OperatorEnum.GreaterThan, 0);
                 ResultOrder[] resultOrder = new ResultOrder[1];
-                resultOrder[0] = new ResultOrder("id", OrderDirection.Descending);
+                resultOrder[0] = new ResultOrder("id", OrderDirectionEnum.Descending);
                 selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect7, resultOrder);
                 Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
                 foreach (Person curr in selectedList1) Console.WriteLine(curr.ToString());

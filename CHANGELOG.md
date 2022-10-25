@@ -2,14 +2,19 @@
 
 ## Current Version
 
+v2.1.x
+
+- Minor breaking changes due to dependency updates
+- Support for ```Guid``` data type
+
+## Previous Versions
+
 v2.0.0
 
 - Breaking changes due to dependency update
 - Leveraging ```ExpressionTree``` package, replacing ```DbExpression``` and ```DbOperators```
 - Passthrough of ```DatabaseSettings```, ```OrderDirection```, and ```ResultOrder``` from ```DatabaseWrapper```, eliminating proxy classes
 - Simplified constructors for ```ColumnAttribute```
-
-## Previous Versions
 
 v1.3.x
 

@@ -87,6 +87,12 @@ namespace Test.NoColumnNames
                 foreach (Person curr in all) Console.WriteLine(curr.ToString());
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
+                Console.WriteLine("| Selecting by GUID for p7: " + p7.GUID.ToString());
+                Expr eSelectGuid = new Expr("guid", OperatorEnum.Equals, p7.GUID);
+                Person selected1 = _Orm.SelectFirst<Person>(eSelectGuid);
+                Console.WriteLine("| Retrieved: " + Environment.NewLine + selected1.ToString());
+
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting many by column name");
                 Expr eSelect1 = new Expr("Id", OperatorEnum.GreaterThan, 0);
                 List<Person> selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect1);
@@ -197,7 +203,7 @@ namespace Test.NoColumnNames
                 Console.WriteLine("| Selecting by reverse ID order");
                 Expr eSelect7 = new Expr("Id", OperatorEnum.GreaterThan, 0);
                 ResultOrder[] resultOrder = new ResultOrder[1];
-                resultOrder[0] = new ResultOrder("Id", OrderDirection.Descending);
+                resultOrder[0] = new ResultOrder("Id", OrderDirectionEnum.Descending);
                 selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect7, resultOrder);
                 Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
                 foreach (Person curr in selectedList1) Console.WriteLine(curr.ToString());

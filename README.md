@@ -24,12 +24,10 @@ Core features:
 
 For a sample app exercising this library, refer to the ```Test``` project contained within the solution.
 
-## New in v2.0
+## New in v2.1.x
 
-- Breaking changes due to dependency update
-- Leveraging ```ExpressionTree``` package, replacing ```DbExpression``` and ```DbOperators```
-- Passthrough of ```DatabaseSettings```, ```OrderDirection```, and ```ResultOrder``` from ```DatabaseWrapper```, eliminating proxy classes
-- Simplified constructors for ```ColumnAttribute```
+- Minor breaking changes due to dependency updates
+- Support for ```Guid``` data type
 
 ## Special Thanks
 
@@ -96,7 +94,7 @@ people = orm.SelectMany<Person>(10, 50, e2);
 
 // Select many with descending order
 ResultOrder[] resultOrder = new ResultOrder[1];
-resultOrder[0] = new ResultOrder("id", OrderDirection.Descending);
+resultOrder[0] = new ResultOrder("id", OrderDirectionEnum.Descending);
 people = orm.SelectMany<Person>(null, null, e2, resultOrder);
 
 // Update

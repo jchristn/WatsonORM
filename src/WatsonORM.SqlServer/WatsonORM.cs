@@ -81,7 +81,7 @@ namespace Watson.ORM.SqlServer
             _Settings = settings;
             _Token = _TokenSource.Token;
 
-            if (_Settings.Type != DbTypes.SqlServer) throw new ArgumentException("Database type in settings must be of type 'SqlServer'.");
+            if (_Settings.Type != DbTypeEnum.SqlServer) throw new ArgumentException("Database type in settings must be of type 'SqlServer'.");
         }
 
         #endregion
@@ -522,7 +522,7 @@ namespace Watson.ORM.SqlServer
             if (ro == null)
             {
                 resultOrder = new ResultOrder[1];
-                resultOrder[0] = new ResultOrder(primaryKeyColumnName, OrderDirection.Ascending);
+                resultOrder[0] = new ResultOrder(primaryKeyColumnName, OrderDirectionEnum.Ascending);
             }
             else
             {
@@ -556,7 +556,7 @@ namespace Watson.ORM.SqlServer
             if (ro == null)
             {
                 resultOrder = new ResultOrder[1];
-                resultOrder[0] = new ResultOrder(primaryKeyColumnName, OrderDirection.Ascending);
+                resultOrder[0] = new ResultOrder(primaryKeyColumnName, OrderDirectionEnum.Ascending);
             }
             else
             {
@@ -591,7 +591,7 @@ namespace Watson.ORM.SqlServer
             if (ro == null)
             {
                 resultOrder = new ResultOrder[1];
-                resultOrder[0] = new ResultOrder(primaryKeyColumnName, OrderDirection.Ascending);
+                resultOrder[0] = new ResultOrder(primaryKeyColumnName, OrderDirectionEnum.Ascending);
             }
             else
             {
@@ -730,13 +730,11 @@ namespace Watson.ORM.SqlServer
             _Initialized = false;
         }
 
-        /// <summary>
-        /// Convert a DataTable to an object list for initialized tables and types.  
-        /// </summary>
-        /// <typeparam name="T">Type.</typeparam>
-        /// <param name="table">DataTable.</param>
-        /// <returns>List of the specified type.</returns>
-        public List<T> DataTableToObjectList<T>(DataTable table) where T : class, new()
+        #endregion
+
+        #region Private-Conversion-Methods
+
+        private List<T> DataTableToObjectList<T>(DataTable table) where T : class, new()
         {
             List<T> ret = new List<T>();
 
@@ -752,25 +750,13 @@ namespace Watson.ORM.SqlServer
             return ret;
         }
 
-        /// <summary>
-        /// Convert a DataTable to an object for an initialized table and type.
-        /// </summary>
-        /// <typeparam name="T">Type.</typeparam>
-        /// <param name="table">DataTable.</param>
-        /// <returns>Object of the specified type.</returns>
-        public T DataTableToObject<T>(DataTable table) where T : class, new()
+        private T DataTableToObject<T>(DataTable table) where T : class, new()
         {
             if (table == null || table.Rows == null || table.Rows.Count < 1) return null;
             return DataRowToObject<T>(table.Rows[0]);
         }
 
-        /// <summary>
-        /// Convert a DataRow to an object for an initialized table and type.
-        /// </summary>
-        /// <typeparam name="T">Type.</typeparam>
-        /// <param name="row">DataRow.</param>
-        /// <returns>Object of the specified type.</returns>
-        public T DataRowToObject<T>(DataRow row) where T : class, new()
+        private T DataRowToObject<T>(DataRow row) where T : class, new()
         {
             if (row == null) return null;
 
@@ -810,6 +796,10 @@ namespace Watson.ORM.SqlServer
                             {
                                 property.SetValue(ret, DateTimeOffset.Parse(val.ToString()));
                             }
+                            else if (propType == typeof(Guid))
+                            {
+                                property.SetValue(ret, Guid.Parse(val.ToString()));
+                            }
                             else
                             {
                                 property.SetValue(ret, Convert.ChangeType(val, underlyingType));
@@ -829,6 +819,10 @@ namespace Watson.ORM.SqlServer
                             {
                                 property.SetValue(ret, DateTimeOffset.Parse(val.ToString()));
                             }
+                            else if (propType == typeof(Guid))
+                            {
+                                property.SetValue(ret, Guid.Parse(val.ToString()));
+                            }
                             else
                             {
                                 property.SetValue(ret, Convert.ChangeType(val, propType));
@@ -844,10 +838,6 @@ namespace Watson.ORM.SqlServer
 
             return ret;
         }
-
-        #endregion
-
-        #region Private-Conversion-Methods
 
         private Dictionary<string, object> ObjectToDictionary(object obj)
         {
@@ -901,6 +891,9 @@ namespace Watson.ORM.SqlServer
                                     break;
                                 case DataTypes.Nvarchar:
                                 case DataTypes.Varchar:
+                                    ret.Add(colAttr.Name, val.ToString());
+                                    break;
+                                case DataTypes.Guid:
                                     ret.Add(colAttr.Name, val.ToString());
                                     break;
                                 default:

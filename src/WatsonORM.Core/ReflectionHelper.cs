@@ -325,32 +325,34 @@ namespace Watson.ORM.Core
             return obj.GetType().GetProperty(propName).GetValue(obj, null);
         }
          
-        private static DataType DbTypeConverter(DataTypes dt)
+        private static DataTypeEnum DbTypeConverter(DataTypes dt)
         {
             switch (dt)
             {
                 case DataTypes.Boolean:
-                    return DataType.Int;
+                    return DataTypeEnum.Int;
                 case DataTypes.Enum:
-                    return DataType.Nvarchar;
+                    return DataTypeEnum.Nvarchar;
                 case DataTypes.Varchar:
-                    return DataType.Varchar;
+                    return DataTypeEnum.Varchar;
                 case DataTypes.Nvarchar:
-                    return DataType.Nvarchar;
+                    return DataTypeEnum.Nvarchar;
                 case DataTypes.Int:
-                    return DataType.Int;
+                    return DataTypeEnum.Int;
                 case DataTypes.Long:
-                    return DataType.Long;
+                    return DataTypeEnum.Long;
                 case DataTypes.Decimal:
-                    return DataType.Decimal;
+                    return DataTypeEnum.Decimal;
                 case DataTypes.Double:
-                    return DataType.Double;
+                    return DataTypeEnum.Double;
                 case DataTypes.DateTime:
-                    return DataType.DateTime;
+                    return DataTypeEnum.DateTime;
                 case DataTypes.DateTimeOffset:
-                    return DataType.DateTimeOffset;
+                    return DataTypeEnum.DateTimeOffset;
                 case DataTypes.Blob:
-                    return DataType.Blob;
+                    return DataTypeEnum.Blob;
+                case DataTypes.Guid:
+                    return DataTypeEnum.Guid;
                 default:
                     throw new ArgumentException("Unknown data type '" + dt.ToString() + "'.");
             }

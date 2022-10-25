@@ -64,6 +64,11 @@ namespace Watson.ORM.Core
         /// Blob
         /// </summary>
         [EnumMember(Value = "Blob")]
-        Blob
+        Blob,
+        /// <summary>
+        /// GUID.
+        /// </summary>
+        [EnumMember(Value = "Guid")]
+        Guid
     }
 }

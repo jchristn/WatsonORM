@@ -51,6 +51,9 @@ namespace Test.SqlServer
         [Column("picture", false, DataTypes.Blob, true)]
         public byte[] Picture { get; set; } = null;
 
+        [Column("guid", false, DataTypes.Guid, true)]
+        public Guid GUID { get; set; } = Guid.NewGuid();
+
         public Person()
         {
 
@@ -98,7 +101,8 @@ namespace Test.SqlServer
                 "   Type        : " + Type.ToString() + " nullable " + NullableType + Environment.NewLine +
                 "   Notes       : " + Notes + Environment.NewLine +
                 "   Handsome    : " + IsHandsome + Environment.NewLine +
-                "   Picture     : " + (Picture != null ? Picture.Length + " bytes" : "(null)");
+                "   Picture     : " + (Picture != null ? Picture.Length + " bytes" : "(null)") + Environment.NewLine +
+                "   GUID        : " + GUID.ToString();
         }
     }
 }
