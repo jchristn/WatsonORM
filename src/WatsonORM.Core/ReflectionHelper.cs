@@ -68,7 +68,7 @@ namespace Watson.ORM.Core
         /// </summary>
         /// <param name="t">Type.</param>
         /// <returns>List of Column.</returns>
-        public static List<Column> GetColumnsFromType(Type t)
+        public static List<DatabaseWrapper.Core.Column> GetColumnsFromType(Type t)
         {
             if (t == null) throw new ArgumentNullException(nameof(t));
             
@@ -105,7 +105,7 @@ namespace Watson.ORM.Core
         /// </summary>
         /// <param name="obj">Object.</param>
         /// <returns>List of Column.</returns>
-        public static List<Column> GetColumnsFromObject(object obj)
+        public static List<DatabaseWrapper.Core.Column> GetColumnsFromObject(object obj)
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
             return GetColumnsFromType(obj.GetType());
@@ -116,7 +116,7 @@ namespace Watson.ORM.Core
         /// </summary>
         /// <param name="t">Type.</param>
         /// <returns>Column.</returns>
-        public static Column GetColumnForProperty(Type t)
+        public static DatabaseWrapper.Core.Column GetColumnForProperty(Type t)
         {
             if (t == null) throw new ArgumentNullException(nameof(t));
 
@@ -153,7 +153,7 @@ namespace Watson.ORM.Core
         /// <typeparam name="T">Type.</typeparam>
         /// <param name="propName">Property name.</param>
         /// <returns>Column.</returns>
-        public static Column GetColumnForProperty<T>(string propName)
+        public static DatabaseWrapper.Core.Column GetColumnForProperty<T>(string propName)
         {
             if (String.IsNullOrEmpty(propName)) throw new ArgumentNullException(nameof(propName));
 
@@ -168,7 +168,7 @@ namespace Watson.ORM.Core
                     {
                         if (String.IsNullOrEmpty(colAttr.Name)) colAttr.Name = prop.Name;
 
-                        Column col = new Column(
+                        DatabaseWrapper.Core.Column col = new DatabaseWrapper.Core.Column(
                             colAttr.Name,
                             colAttr.PrimaryKey,
                             DbTypeConverter(colAttr.Type),
@@ -330,13 +330,15 @@ namespace Watson.ORM.Core
             switch (dt)
             {
                 case DataTypes.Boolean:
-                    return DataTypeEnum.Int;
+                    return DataTypeEnum.TinyInt;
                 case DataTypes.Enum:
                     return DataTypeEnum.Nvarchar;
                 case DataTypes.Varchar:
                     return DataTypeEnum.Varchar;
                 case DataTypes.Nvarchar:
                     return DataTypeEnum.Nvarchar;
+                case DataTypes.TinyInt:
+                    return DataTypeEnum.TinyInt;
                 case DataTypes.Int:
                     return DataTypeEnum.Int;
                 case DataTypes.Long:
@@ -352,7 +354,7 @@ namespace Watson.ORM.Core
                 case DataTypes.Blob:
                     return DataTypeEnum.Blob;
                 case DataTypes.Guid:
-                    return DataTypeEnum.Guid;
+                    return DataTypeEnum.Nvarchar;
                 default:
                     throw new ArgumentException("Unknown data type '" + dt.ToString() + "'.");
             }

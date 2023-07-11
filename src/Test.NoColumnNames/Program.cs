@@ -79,6 +79,16 @@ namespace Test.NoColumnNames
 
                 #endregion
 
+                #region Insert-Region-with-Special-Characters
+
+                Person p9 = new Person("TestШЋЖ", "PersonŠĆŽ", Convert.ToDateTime("4/4/1983"), Convert.ToDateTime("5/5/1983"), localTime, localTime, 45, null, "initial notes p9", PersonType.Human, null, true, _FileBytes);
+
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
+                Console.WriteLine("| Creating p9");
+                p9 = _Orm.Insert<Person>(p9);
+
+                #endregion
+
                 #region Select
 
                 Console.WriteLine("| Selecting all records");
@@ -227,6 +237,14 @@ namespace Test.NoColumnNames
 
                 #endregion
 
+                #region Pause
+
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
+                Console.WriteLine("Press ENTER to delete records");
+                Console.ReadLine();
+
+                #endregion
+
                 #region Delete-Records
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
@@ -238,8 +256,8 @@ namespace Test.NoColumnNames
                 _Orm.DeleteByPrimaryKey<Person>(2);
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
-                Console.WriteLine("| Deleting p3 and p4");
-                Expr eDelete = new Expr("Id", OperatorEnum.GreaterThan, 2);
+                Console.WriteLine("| Deleting records");
+                Expr eDelete = new Expr("id", OperatorEnum.GreaterThan, 2);
                 _Orm.DeleteMany<Person>(eDelete);
 
                 #endregion

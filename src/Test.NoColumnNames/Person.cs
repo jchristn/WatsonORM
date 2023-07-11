@@ -50,7 +50,7 @@ namespace Test.NoColumnNames
         [Column(DataTypes.Blob, true)]
         public byte[] Picture { get; set; } = null;
 
-        [Column("guid", false, DataTypes.Guid, true)]
+        [Column(DataTypes.Guid, 36, true)]
         public Guid GUID { get; set; } = Guid.NewGuid();
 
         public Person()

@@ -2,21 +2,22 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFrameworks>netcoreapp3.1;net461;net5.0;net6.0</TargetFrameworks>
+		<TargetFrameworks>net461;net48;net6.0;net7.0</TargetFrameworks>
+		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\WatsonORM.Sqlite\WatsonORM.Sqlite.csproj" />
+		<ProjectReference Include="..\WatsonORM.Sqlite\WatsonORM.Sqlite.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="headshot.png">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
+		<None Update="headshot.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 </Project>

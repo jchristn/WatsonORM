@@ -51,7 +51,7 @@ namespace Test.SqlServer
         [Column("picture", false, DataTypes.Blob, true)]
         public byte[] Picture { get; set; } = null;
 
-        [Column("guid", false, DataTypes.Guid, true)]
+        [Column("guid", false, DataTypes.Guid, 36, true)]
         public Guid GUID { get; set; } = Guid.NewGuid();
 
         public Person()

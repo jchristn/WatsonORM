@@ -24,10 +24,11 @@ Core features:
 
 For a sample app exercising this library, refer to the ```Test``` project contained within the solution.
 
-## New in v2.1.x
+## New in v3.0.x
 
-- Minor breaking changes due to dependency updates
-- Support for ```Guid``` data type
+- Dependency update
+- Minor breaking changes
+- Async API support
 
 ## Special Thanks
 

@@ -2,12 +2,18 @@
 
 ## Current Version
 
+v3.0.x
+
+- Dependency update
+- Minor breaking changes
+- Async API support
+
+## Previous Versions
+
 v2.1.x
 
 - Minor breaking changes due to dependency updates
 - Support for ```Guid``` data type
-
-## Previous Versions
 
 v2.0.0
 

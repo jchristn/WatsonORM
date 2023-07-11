@@ -25,7 +25,7 @@ namespace Watson.ORM.Core
         /// <summary>
         /// Columns in the table.
         /// </summary>
-        public List<Column> Columns { get; private set; } = new List<Column>();
+        public List<DatabaseWrapper.Core.Column> Columns { get; private set; } = new List<Column>();
 
         #endregion
 

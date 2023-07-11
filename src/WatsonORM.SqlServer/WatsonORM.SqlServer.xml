@@ -78,11 +78,25 @@
             </summary>
             <param name="t">Class for which a table should be dropped.</param>
         </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.DropTableAsync(System.Type,System.Threading.CancellationToken)">
+            <summary>
+            Drop table if it exists for a given class.
+            </summary>
+            <param name="t">Class for which a table should be dropped.</param>
+            <param name="token">Cancellation token.</param>
+        </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.TruncateTable(System.Type)">
             <summary>
             Truncate table if it exists for a given class.
             </summary>
             <param name="t">Class for which a table should be dropped.</param>
+        </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.TruncateTableAsync(System.Type,System.Threading.CancellationToken)">
+            <summary>
+            Truncate table if it exists for a given class.
+            </summary>
+            <param name="t">Class for which a table should be dropped.</param>
+            <param name="token">Cancellation token.</param>
         </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.Insert``1(``0)">
             <summary>
@@ -90,6 +104,15 @@
             </summary>
             <typeparam name="T">Type of object.</typeparam>
             <param name="obj">Object to INSERT.</param>
+            <returns>INSERTed object.</returns>
+        </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.InsertAsync``1(``0,System.Threading.CancellationToken)">
+            <summary>
+            INSERT an object.
+            </summary>
+            <typeparam name="T">Type of object.</typeparam>
+            <param name="obj">Object to INSERT.</param>
+            <param name="token">Cancellation token.</param>
             <returns>INSERTed object.</returns>
         </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.InsertMany``1(System.Collections.Generic.List{``0})">
@@ -101,6 +124,16 @@
             <param name="objs">List of objects.</param>
             <returns>List of objects.</returns>
         </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.InsertManyAsync``1(System.Collections.Generic.List{``0},System.Threading.CancellationToken)">
+            <summary>
+            INSERT multiple records.
+            This operation will iteratively call Insert on each individual object.
+            </summary>
+            <typeparam name="T">Type of object.</typeparam>
+            <param name="objs">List of objects.</param>
+            <param name="token">Cancellation token.</param>
+            <returns>List of objects.</returns>
+        </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.InsertMultiple``1(System.Collections.Generic.List{``0})">
             <summary>
             INSERT multiple records.
@@ -109,12 +142,30 @@
             <typeparam name="T">Type of object.</typeparam>
             <param name="objs">List of objects.</param>
         </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.InsertMultipleAsync``1(System.Collections.Generic.List{``0},System.Threading.CancellationToken)">
+            <summary>
+            INSERT multiple records.
+            This operation performs the INSERT using a single database query, and does not return a list of inserted objects.
+            </summary>
+            <typeparam name="T">Type of object.</typeparam>
+            <param name="objs">List of objects.</param>
+            <param name="token">Cancellation token.</param>
+        </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.Update``1(``0)">
             <summary>
             UPDATE an object.
             </summary>
             <typeparam name="T">Type of object.</typeparam>
             <param name="obj">Object to UPDATE.</param>
+            <returns>UPDATEd object.</returns>
+        </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.UpdateAsync``1(``0,System.Threading.CancellationToken)">
+            <summary>
+            UPDATE an object.
+            </summary>
+            <typeparam name="T">Type of object.</typeparam>
+            <param name="obj">Object to UPDATE.</param>
+            <param name="token">Cancellation token.</param>
             <returns>UPDATEd object.</returns>
         </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.UpdateMany``1(ExpressionTree.Expr,System.Collections.Generic.Dictionary{System.String,System.Object})">
@@ -125,12 +176,29 @@
             <param name="expr">Expression.</param>
             <param name="updateVals">Update values.</param>
         </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.UpdateManyAsync``1(ExpressionTree.Expr,System.Collections.Generic.Dictionary{System.String,System.Object},System.Threading.CancellationToken)">
+            <summary>
+            UPDATE multiple rows.
+            </summary>
+            <typeparam name="T">Type of object.</typeparam>
+            <param name="expr">Expression.</param>
+            <param name="updateVals">Update values.</param>
+            <param name="token">Cancellation token.</param>
+        </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.Delete``1(``0)">
             <summary>
             DELETE an object.
             </summary>
             <typeparam name="T">Type of object.</typeparam>
             <param name="obj">Object to DELETE.</param>
+        </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.DeleteAsync``1(``0,System.Threading.CancellationToken)">
+            <summary>
+            DELETE an object.
+            </summary>
+            <typeparam name="T">Type of object.</typeparam>
+            <param name="obj">Object to DELETE.</param>
+            <param name="token">Cancellation token.</param>
         </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.DeleteByPrimaryKey``1(System.Object)">
             <summary>
@@ -139,12 +207,28 @@
             <typeparam name="T">Type of object.</typeparam>
             <param name="id">Id value.</param>
         </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.DeleteByPrimaryKeyAsync``1(System.Object,System.Threading.CancellationToken)">
+            <summary>
+            DELETE an object by its primary key.
+            </summary>
+            <typeparam name="T">Type of object.</typeparam>
+            <param name="id">Id value.</param>
+            <param name="token">Cancellation token.</param>
+        </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.DeleteMany``1(ExpressionTree.Expr)">
             <summary>
             DELETE objects by an Expression..
             </summary>
             <typeparam name="T">Type of object.</typeparam>
             <param name="expr">Expression.</param>
+        </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.DeleteManyAsync``1(ExpressionTree.Expr,System.Threading.CancellationToken)">
+            <summary>
+            DELETE objects by an Expression..
+            </summary>
+            <typeparam name="T">Type of object.</typeparam>
+            <param name="expr">Expression.</param>
+            <param name="token">Cancellation token.</param>
         </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.SelectByPrimaryKey``1(System.Object)">
             <summary>
@@ -153,6 +237,16 @@
             </summary>
             <typeparam name="T">Type of object.</typeparam>
             <param name="id">Id.</param>
+            <returns>Object.</returns>
+        </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.SelectByPrimaryKeyAsync``1(System.Object,System.Threading.CancellationToken)">
+            <summary>
+            SELECT an object by id.
+            This operation will return null if the object does not exist.
+            </summary>
+            <typeparam name="T">Type of object.</typeparam>
+            <param name="id">Id.</param>
+            <param name="token">Cancellation token.</param>
             <returns>Object.</returns>
         </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.SelectFirst``1(ExpressionTree.Expr,DatabaseWrapper.Core.ResultOrder[])">
@@ -165,6 +259,17 @@
             <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
             <returns>Object.</returns>
         </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.SelectFirstAsync``1(ExpressionTree.Expr,DatabaseWrapper.Core.ResultOrder[],System.Threading.CancellationToken)">
+            <summary>
+            SELECT the first instance of an object matching a given expression.
+            This operation will return null if the object does not exist.
+            </summary>
+            <typeparam name="T">Type of filter.</typeparam>
+            <param name="expr">Expression by which SELECT should be filtered (i.e. WHERE clause).</param> 
+            <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
+            <param name="token">Cancellation token.</param>
+            <returns>Object.</returns>
+        </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.SelectMany``1(ExpressionTree.Expr,DatabaseWrapper.Core.ResultOrder[])">
             <summary>
             SELECT multiple rows.
@@ -173,6 +278,17 @@
             <typeparam name="T">Type of object.</typeparam>
             <param name="expr">Expression.</param>
             <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
+            <returns>List of objects.</returns>
+        </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.SelectManyAsync``1(ExpressionTree.Expr,DatabaseWrapper.Core.ResultOrder[],System.Threading.CancellationToken)">
+            <summary>
+            SELECT multiple rows.
+            This operation will return an empty list if no matching objects are found.
+            </summary>
+            <typeparam name="T">Type of object.</typeparam>
+            <param name="expr">Expression.</param>
+            <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
+            <param name="token">Cancellation token.</param>
             <returns>List of objects.</returns>
         </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.SelectMany``1(System.Nullable{System.Int32},System.Nullable{System.Int32},ExpressionTree.Expr,DatabaseWrapper.Core.ResultOrder[])">
@@ -184,6 +300,18 @@
             <param name="maxResults">Maximum number of results to retrieve.</param> 
             <param name="expr">Filter to apply when SELECTing rows (i.e. WHERE clause).</param>
             <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
+            <returns>List of objects.</returns>
+        </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.SelectManyAsync``1(System.Nullable{System.Int32},System.Nullable{System.Int32},ExpressionTree.Expr,DatabaseWrapper.Core.ResultOrder[],System.Threading.CancellationToken)">
+            <summary>
+            SELECT multiple rows with pagination.
+            This operation will return an empty list if no matching objects are found.
+            </summary> 
+            <param name="indexStart">Index start.</param>
+            <param name="maxResults">Maximum number of results to retrieve.</param> 
+            <param name="expr">Filter to apply when SELECTing rows (i.e. WHERE clause).</param>
+            <param name="ro">Result ordering, if not set, results will be ordered ascending by primary key.</param>
+            <param name="token">Cancellation token.</param>
             <returns>List of objects.</returns>
         </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.GetTableName(System.Type)">
@@ -209,12 +337,30 @@
             <param name="expr">Expression.</param>
             <returns>True if exists.</returns>
         </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.ExistsAsync``1(ExpressionTree.Expr,System.Threading.CancellationToken)">
+            <summary>
+            Check if objects of a given type exist that match the supplied expression.
+            </summary> 
+            <typeparam name="T">Type.</typeparam>
+            <param name="expr">Expression.</param>
+            <param name="token">Cancellation token.</param>
+            <returns>True if exists.</returns>
+        </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.Count``1(ExpressionTree.Expr)">
             <summary>
             Determine the number of objects of a given type that exist that match the supplied expression.
             </summary> 
             <typeparam name="T">Type.</typeparam>
             <param name="expr">Expression.</param>
+            <returns>Number of matching records.</returns>
+        </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.CountAsync``1(ExpressionTree.Expr,System.Threading.CancellationToken)">
+            <summary>
+            Determine the number of objects of a given type that exist that match the supplied expression.
+            </summary> 
+            <typeparam name="T">Type.</typeparam>
+            <param name="expr">Expression.</param>
+            <param name="token">Cancellation token.</param>
             <returns>Number of matching records.</returns>
         </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.Sum``1(System.String,ExpressionTree.Expr)">
@@ -226,11 +372,29 @@
             <param name="expr">Expression.</param>
             <returns></returns>
         </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.SumAsync``1(System.String,ExpressionTree.Expr,System.Threading.CancellationToken)">
+            <summary>
+            Add the contents of the specified column from objects that match the supplied expression.
+            </summary>
+            <typeparam name="T">Type.</typeparam>
+            <param name="columnName"></param>
+            <param name="expr">Expression.</param>
+            <param name="token">Cancellation token.</param>
+            <returns></returns>
+        </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.Query(System.String)">
             <summary>
             Execute a query directly against the database.
             </summary>
             <param name="query">Query.</param>
+            <returns>DataTable.</returns>
+        </member>
+        <member name="M:Watson.ORM.SqlServer.WatsonORM.QueryAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Execute a query directly against the database.
+            </summary>
+            <param name="query">Query.</param>
+            <param name="token">Cancellation token.</param>
             <returns>DataTable.</returns>
         </member>
         <member name="M:Watson.ORM.SqlServer.WatsonORM.Timestamp(System.DateTime)">
