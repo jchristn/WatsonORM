@@ -2,13 +2,13 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.1;net461;net48;net6.0;net7.0</TargetFrameworks>
-		<Version>3.0.0</Version>
+		<Version>3.0.3</Version>
 		<PackageReleaseNotes>Minor breaking change, async support</PackageReleaseNotes>
 		<Authors>Joel Christner</Authors>
 		<Company>Joel Christner</Company>
 		<Product>WatsonORM</Product>
 		<Description>WatsonORM is a lightweight and easy to use object-relational mapper (ORM) in C# for .NET Core, .NET Framework, and .NET Standard built on top of DatabaseWrapper.  WatsonORM supports Microsoft SQL Server, MySQL, PostgreSQL, and Sqlite databases.  Refer to other WatsonORM packages if you only need support for a single database type.</Description>
-		<Copyright>(c)2022 Joel Christner</Copyright>
+		<Copyright>(c)2023 Joel Christner</Copyright>
 		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
 		<PackageProjectUrl>https://github.com/jchristn/watsonorm</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/jchristn/watsonorm</RepositoryUrl>
@@ -54,10 +54,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="WatsonORM.Mysql" Version="3.0.0" />
-		<PackageReference Include="WatsonORM.Postgresql" Version="3.0.0" />
-		<PackageReference Include="WatsonORM.Sqlite" Version="3.0.0" />
-		<PackageReference Include="WatsonORM.SqlServer" Version="3.0.0" />
+		<PackageReference Include="WatsonORM.Mysql" Version="3.0.3" />
+		<PackageReference Include="WatsonORM.Postgresql" Version="3.0.3" />
+		<PackageReference Include="WatsonORM.Sqlite" Version="3.0.3" />
+		<PackageReference Include="WatsonORM.SqlServer" Version="3.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>

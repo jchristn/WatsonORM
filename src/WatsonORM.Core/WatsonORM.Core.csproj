@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.1;net461;net48;net6.0;net7.0</TargetFrameworks>
-		<Version>3.0.2</Version>
+		<Version>3.0.3</Version>
 		<PackageReleaseNotes>Minor breaking change, async support</PackageReleaseNotes>
 		<AssemblyName>WatsonORM.Core</AssemblyName>
 		<RootNamespace>Watson.ORM.Core</RootNamespace>
@@ -49,7 +49,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="DatabaseWrapper.Core" Version="6.0.4" />
+	  <PackageReference Include="DatabaseWrapper.Core" Version="6.0.5" />
 	</ItemGroup>
 
 	<ItemGroup>
