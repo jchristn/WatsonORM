@@ -2,8 +2,8 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.1;net461;net48;net6.0;net7.0</TargetFrameworks>
-		<Version>3.0.3</Version>
-		<PackageReleaseNotes>Minor breaking change, async support</PackageReleaseNotes>
+		<Version>3.0.6</Version>
+		<PackageReleaseNotes>Better support for updating multiple objects</PackageReleaseNotes>
 		<Authors>Joel Christner</Authors>
 		<Company>Joel Christner</Company>
 		<Product>WatsonORM</Product>
@@ -54,10 +54,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="WatsonORM.Mysql" Version="3.0.3" />
-		<PackageReference Include="WatsonORM.Postgresql" Version="3.0.3" />
-		<PackageReference Include="WatsonORM.Sqlite" Version="3.0.3" />
-		<PackageReference Include="WatsonORM.SqlServer" Version="3.0.3" />
+		<PackageReference Include="WatsonORM.Mysql" Version="3.0.6" />
+		<PackageReference Include="WatsonORM.Postgresql" Version="3.0.6" />
+		<PackageReference Include="WatsonORM.Sqlite" Version="3.0.6" />
+		<PackageReference Include="WatsonORM.SqlServer" Version="3.0.6" />
 	</ItemGroup>
 
 	<ItemGroup>

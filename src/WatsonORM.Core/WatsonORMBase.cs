@@ -169,6 +169,22 @@ namespace Watson.ORM.Core
         public abstract Task UpdateManyAsync<T>(Expr expr, Dictionary<string, object> updateVals, CancellationToken token = default) where T : class, new();
 
         /// <summary>
+        /// UPDATE multiple rows.
+        /// </summary>
+        /// <typeparam name="T">Type of object.</typeparam>
+        /// <param name="objs">Objects.</param>
+        public abstract void UpdateMany<T>(List<T> objs) where T : class, new();
+
+        /// <summary>
+        /// UPDATE multiple rows.
+        /// </summary>
+        /// <typeparam name="T">Type of object.</typeparam>
+        /// <param name="objs">Objects.</param>
+        /// <param name="token">Cancellation token.</param>
+        /// <returns></returns>
+        public abstract Task UpdateManyAsync<T>(List<T> objs, CancellationToken token = default) where T : class, new();
+
+        /// <summary>
         /// DELETE an object.
         /// </summary>
         /// <typeparam name="T">Type of object.</typeparam>

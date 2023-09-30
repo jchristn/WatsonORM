@@ -753,6 +753,70 @@ namespace Watson.ORM
         }
 
         /// <summary>
+        /// UPDATE multiple rows.
+        /// </summary>
+        /// <typeparam name="T">Type of object.</typeparam>
+        /// <param name="objs">Objects.</param>
+        public override void UpdateMany<T>(List<T> objs)
+        {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
+
+            if (_Mysql != null)
+            {
+                 _Mysql.UpdateMany<T>(objs);
+            }
+            else if (_Postgresql != null)
+            {
+                 _Postgresql.UpdateMany<T>(objs);
+            }
+            else if (_SqlServer != null)
+            {
+                 _SqlServer.UpdateMany<T>(objs);
+            }
+            else if (_Sqlite != null)
+            {
+                 _Sqlite.UpdateMany<T>(objs);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
+        }
+
+        /// <summary>
+        /// UPDATE multiple rows.
+        /// </summary>
+        /// <typeparam name="T">Type of object.</typeparam>
+        /// <param name="objs">Objects.</param>
+        /// <param name="token">Cancellation token.</param>
+        /// <returns>Task.</returns>
+        public override async Task UpdateManyAsync<T>(List<T> objs, CancellationToken token = default)
+        {
+            if (!_Initialized) throw new InvalidOperationException("Initialize WatsonORM and database using the .InitializeDatabase() method first.");
+
+            if (_Mysql != null)
+            {
+                await _Mysql.UpdateManyAsync<T>(objs).ConfigureAwait(false);
+            }
+            else if (_Postgresql != null)
+            {
+                await _Postgresql.UpdateManyAsync<T>(objs).ConfigureAwait(false);
+            }
+            else if (_SqlServer != null)
+            {
+                await _SqlServer.UpdateManyAsync<T>(objs).ConfigureAwait(false);
+            }
+            else if (_Sqlite != null)
+            {
+                await _Sqlite.UpdateManyAsync<T>(objs).ConfigureAwait(false);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
+        }
+
+        /// <summary>
         /// DELETE an object.
         /// </summary>
         /// <typeparam name="T">Type of object.</typeparam>

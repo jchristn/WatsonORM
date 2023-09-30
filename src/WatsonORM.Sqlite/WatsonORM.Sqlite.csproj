@@ -2,9 +2,9 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.1;net461;net48;net6.0;net7.0</TargetFrameworks>
-		<Version>3.0.3</Version>
+		<Version>3.0.6</Version>
 		<RootNamespace>Watson.ORM.Sqlite</RootNamespace>
-		<PackageReleaseNotes>Minor breaking change, async support</PackageReleaseNotes>
+		<PackageReleaseNotes>Better support for updating multiple objects</PackageReleaseNotes>
 		<Authors>Joel Christner</Authors>
 		<Description>WatsonORM is a lightweight and easy to use object-relational mapper (ORM) for Sqlite in C# for .NET Core, .NET Framework, and .NET Standard built on top of DatabaseWrapper.  Refer to other WatsonORM packages if you need support for other database types.</Description>
 		<Copyright>(c)2023 Joel Christner</Copyright>
@@ -49,7 +49,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="DatabaseWrapper.Sqlite" Version="6.0.5" />
-		<PackageReference Include="WatsonORM.Core" Version="3.0.3" />
+		<PackageReference Include="WatsonORM.Core" Version="3.0.6" />
 	</ItemGroup>
 
 	<ItemGroup>

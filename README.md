@@ -29,6 +29,7 @@ For a sample app exercising this library, refer to the ```Test``` project contai
 - Dependency update
 - Minor breaking changes
 - Async API support
+- Better support for updating multiple records
 
 ## Special Thanks
 

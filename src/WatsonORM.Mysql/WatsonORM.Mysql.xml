@@ -185,6 +185,22 @@
             <param name="updateVals">Update values.</param>
             <param name="token">Cancellation token.</param>
         </member>
+        <member name="M:Watson.ORM.Mysql.WatsonORM.UpdateMany``1(System.Collections.Generic.List{``0})">
+            <summary>
+            UPDATE multiple rows.
+            </summary>
+            <typeparam name="T">Type of object.</typeparam>
+            <param name="objs">Objects.</param>
+        </member>
+        <member name="M:Watson.ORM.Mysql.WatsonORM.UpdateManyAsync``1(System.Collections.Generic.List{``0},System.Threading.CancellationToken)">
+            <summary>
+            UPDATE multiple rows.
+            </summary>
+            <typeparam name="T">Type of object.</typeparam>
+            <param name="objs">Objects.</param>
+            <param name="token">Cancellation token.</param>
+            <returns>Task.</returns>
+        </member>
         <member name="M:Watson.ORM.Mysql.WatsonORM.Delete``1(``0)">
             <summary>
             DELETE an object.

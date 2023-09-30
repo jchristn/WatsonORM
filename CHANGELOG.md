@@ -7,6 +7,7 @@ v3.0.x
 - Dependency update
 - Minor breaking changes
 - Async API support
+- Better support for updating multiple records
 
 ## Previous Versions
 

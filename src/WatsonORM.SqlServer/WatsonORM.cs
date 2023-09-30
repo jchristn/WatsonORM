@@ -574,6 +574,40 @@ namespace Watson.ORM.SqlServer
         }
 
         /// <summary>
+        /// UPDATE multiple rows.
+        /// </summary>
+        /// <typeparam name="T">Type of object.</typeparam>
+        /// <param name="objs">Objects.</param>
+        public override void UpdateMany<T>(List<T> objs)
+        {
+            if (objs == null) throw new ArgumentNullException(nameof(objs));
+            if (objs.Count < 1) return;
+
+            foreach (T obj in objs)
+            {
+                Update<T>(obj);
+            }
+        }
+
+        /// <summary>
+        /// UPDATE multiple rows.
+        /// </summary>
+        /// <typeparam name="T">Type of object.</typeparam>
+        /// <param name="objs">Objects.</param>
+        /// <param name="token">Cancellation token.</param>
+        /// <returns>Task.</returns>
+        public override async Task UpdateManyAsync<T>(List<T> objs, CancellationToken token = default)
+        {
+            if (objs == null) throw new ArgumentNullException(nameof(objs));
+            if (objs.Count < 1) return;
+
+            foreach (T obj in objs)
+            {
+                await UpdateAsync<T>(obj, token).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
         /// DELETE an object.
         /// </summary>
         /// <typeparam name="T">Type of object.</typeparam>
