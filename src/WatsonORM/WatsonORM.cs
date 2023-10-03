@@ -837,6 +837,14 @@ namespace Watson.ORM
             {
                 _SqlServer.Delete<T>(obj);
             }
+            else if (_Sqlite != null)
+            {
+                _Sqlite.Delete<T>(obj);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported database type: " + _Settings.Type.ToString());
+            }
         }
 
         /// <summary>
