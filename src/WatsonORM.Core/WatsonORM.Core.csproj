@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.1;net461;net48;net6.0;net7.0</TargetFrameworks>
-		<Version>3.0.6</Version>
+		<TargetFrameworks>netstandard2.1;net462;net48;net6.0;net7.0</TargetFrameworks>
+		<Version>3.0.8</Version>
 		<PackageReleaseNotes>Better support for updating multiple objects</PackageReleaseNotes>
 		<AssemblyName>WatsonORM.Core</AssemblyName>
 		<RootNamespace>Watson.ORM.Core</RootNamespace>
@@ -22,6 +22,8 @@
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\..\WatsonORM.snk</AssemblyOriginatorKeyFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<IncludeSymbols>True</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -49,7 +51,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="DatabaseWrapper.Core" Version="6.0.5" />
+	  <PackageReference Include="DatabaseWrapper.Core" Version="6.0.6" />
 	</ItemGroup>
 
 	<ItemGroup>
