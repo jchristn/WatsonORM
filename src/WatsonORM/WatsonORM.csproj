@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.1;net462;net48;net6.0;net7.0</TargetFrameworks>
-		<Version>3.0.8</Version>
+		<TargetFrameworks>net48;net6.0;net7.0;net8.0</TargetFrameworks>
+		<Version>3.0.9</Version>
 		<PackageReleaseNotes>Better support for updating multiple objects</PackageReleaseNotes>
 		<Authors>Joel Christner</Authors>
 		<Company>Joel Christner</Company>
 		<Product>WatsonORM</Product>
 		<Description>WatsonORM is a lightweight and easy to use object-relational mapper (ORM) in C# for .NET Core, .NET Framework, and .NET Standard built on top of DatabaseWrapper.  WatsonORM supports Microsoft SQL Server, MySQL, PostgreSQL, and Sqlite databases.  Refer to other WatsonORM packages if you only need support for a single database type.</Description>
-		<Copyright>(c)2023 Joel Christner</Copyright>
+		<Copyright>(c)2024 Joel Christner</Copyright>
 		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
 		<PackageProjectUrl>https://github.com/jchristn/watsonorm</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/jchristn/watsonorm</RepositoryUrl>
@@ -24,8 +24,6 @@
 		<RootNamespace>Watson.ORM</RootNamespace>
 		<PackageIcon>watson.png</PackageIcon>
 		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
-		<SignAssembly>True</SignAssembly>
-		<AssemblyOriginatorKeyFile>..\..\WatsonORM.snk</AssemblyOriginatorKeyFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<IncludeSymbols>True</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -56,10 +54,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="WatsonORM.Mysql" Version="3.0.8" />
-		<PackageReference Include="WatsonORM.Postgresql" Version="3.0.8" />
-		<PackageReference Include="WatsonORM.Sqlite" Version="3.0.8" />
-		<PackageReference Include="WatsonORM.SqlServer" Version="3.0.8" />
+		<PackageReference Include="WatsonORM.Mysql" Version="3.0.9" />
+		<PackageReference Include="WatsonORM.Postgresql" Version="3.0.9" />
+		<PackageReference Include="WatsonORM.Sqlite" Version="3.0.9" />
+		<PackageReference Include="WatsonORM.SqlServer" Version="3.0.9" />
 	</ItemGroup>
 
 	<ItemGroup>

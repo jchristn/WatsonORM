@@ -21,7 +21,7 @@ namespace Test
         static string _Password = "password";
         static byte[] _FileBytes = File.ReadAllBytes("./headshot.png");
         static DatabaseSettings _Settings = null;
-        static WatsonORM _Orm = null;
+        static WatsonORM _ORM = null;
 
         static void Main(string[] args)
         {
@@ -76,12 +76,40 @@ namespace Test
                 _Settings.Debug.EnableForQueries = true;
                 _Settings.Debug.EnableForResults = true;
 
-                _Orm = new WatsonORM(_Settings);
+                _ORM = new WatsonORM(_Settings);
 
-                _Orm.InitializeDatabase();
-                _Orm.InitializeTable(typeof(Person));
-                _Orm.TruncateTable(typeof(Person));
-                Console.WriteLine("Using table: " + _Orm.GetTableName(typeof(Person)));
+                _ORM.InitializeDatabase();
+                _ORM.InitializeTable(typeof(Person));
+                _ORM.TruncateTable(typeof(Person));
+                Console.WriteLine("Using table: " + _ORM.GetTableName(typeof(Person)));
+
+                #endregion
+
+                #region Sanitize-Data
+
+                string[] attacks = {
+                    "' OR '1'='1",
+                    "'; DROP TABLE Users; --",
+                    "' UNION SELECT username, password FROM Users--",
+                    "' OR 1=1--",
+                    "admin' --",
+                    "'; EXEC xp_cmdshell 'net user';--",
+                    "' OR 'x'='x",
+                    "1 OR 1=1",
+                    "1; SELECT * FROM Users",
+                    "' OR id IS NOT NULL OR id = '",
+                    "username' AND 1=0 UNION ALL SELECT 'admin', '81dc9bdb52d04dc20036dbd8313ed055'--",
+                    "' OR '1'='1' /*",
+                    "' UNION ALL SELECT NULL, NULL, NULL, CONCAT(username,':',password) FROM Users--",
+                    "' AND (SELECT * FROM (SELECT(SLEEP(5)))bAKL) AND 'vRxe'='vRxe",
+                    "'; WAITFOR DELAY '0:0:5'--",
+                    "The quick brown fox jumped over the lazy dog"
+                };
+
+                for (int i = 0; i < 8; i++) Console.WriteLine("");
+                Console.WriteLine("| Sanitizing input strings");
+                foreach (string attack in attacks)
+                    Console.WriteLine("  | " + attack + " | Sanitized: " + _ORM.Sanitize(attack));
 
                 #endregion
 
@@ -95,19 +123,19 @@ namespace Test
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Creating p1");
-                p1 = _Orm.Insert<Person>(p1);
+                p1 = _ORM.Insert<Person>(p1);
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Creating p2");
-                p2 = _Orm.Insert<Person>(p2);
+                p2 = _ORM.Insert<Person>(p2);
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Creating p3");
-                p3 = _Orm.Insert<Person>(p3);
+                p3 = _ORM.Insert<Person>(p3);
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Creating p4");
-                p4 = _Orm.Insert<Person>(p4);
+                p4 = _ORM.Insert<Person>(p4);
 
                 #endregion
 
@@ -120,7 +148,7 @@ namespace Test
                 Person p7 = new Person("Eddie", "Van Halen", Convert.ToDateTime("3/3/1982"), null, localTime, null, 44, null, "initial notes p7", PersonType.Dog, PersonType.Dog, false, _FileBytes);
                 Person p8 = new Person("Steve", "Vai", Convert.ToDateTime("4/4/1983"), Convert.ToDateTime("5/5/1983"), localTime, localTime, 45, null, "initial notes p8", PersonType.Human, null, true, _FileBytes);
                 List<Person> people = new List<Person> { p5, p6, p7, p8 };
-                _Orm.InsertMultiple<Person>(people);
+                _ORM.InsertMultiple<Person>(people);
 
                 #endregion
 
@@ -130,64 +158,64 @@ namespace Test
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Creating p9");
-                p9 = _Orm.Insert<Person>(p9);
+                p9 = _ORM.Insert<Person>(p9);
 
                 #endregion
 
                 #region Exists-Count-Sum
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
-                Expr existsExpression = new Expr(_Orm.GetColumnName<Person>(nameof(Person.Id)), OperatorEnum.GreaterThan, 0);
-                Console.WriteLine("| Checking existence of records: " + _Orm.Exists<Person>(existsExpression));
+                Expr existsExpression = new Expr(_ORM.GetColumnName<Person>(nameof(Person.Id)), OperatorEnum.GreaterThan, 0);
+                Console.WriteLine("| Checking existence of records: " + _ORM.Exists<Person>(existsExpression));
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
-                Expr countExpression = new Expr(_Orm.GetColumnName<Person>(nameof(Person.Id)), OperatorEnum.GreaterThan, 2);
-                Console.WriteLine("| Checking count of records: " + _Orm.Count<Person>(countExpression));
+                Expr countExpression = new Expr(_ORM.GetColumnName<Person>(nameof(Person.Id)), OperatorEnum.GreaterThan, 2);
+                Console.WriteLine("| Checking count of records: " + _ORM.Count<Person>(countExpression));
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
-                Console.WriteLine("| Checking sum of ages: " + _Orm.Sum<Person>(_Orm.GetColumnName<Person>(nameof(Person.Age)), existsExpression));
+                Console.WriteLine("| Checking sum of ages: " + _ORM.Sum<Person>(_ORM.GetColumnName<Person>(nameof(Person.Age)), existsExpression));
 
                 #endregion
 
                 #region Select
 
                 Console.WriteLine("| Selecting all records");
-                List<Person> all = _Orm.SelectMany<Person>();
+                List<Person> all = _ORM.SelectMany<Person>();
                 Console.WriteLine("| Retrieved: " + all.Count + " records");
                 foreach (Person curr in all) Console.WriteLine(curr.ToString());
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting by GUID for p7: " + p7.GUID.ToString());
                 Expr eSelectGuid = new Expr("guid", OperatorEnum.Equals, p7.GUID);
-                Person selected1 = _Orm.SelectFirst<Person>(eSelectGuid);
+                Person selected1 = _ORM.SelectFirst<Person>(eSelectGuid);
                 Console.WriteLine("| Retrieved: " + Environment.NewLine + selected1.ToString());
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting many by column name");
                 Expr eSelect1 = new Expr("id", OperatorEnum.GreaterThan, 0);
-                List<Person> selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect1);
+                List<Person> selectedList1 = _ORM.SelectMany<Person>(null, null, eSelect1);
                 Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
                 foreach (Person curr in selectedList1) Console.WriteLine(curr.ToString());
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting many by property name");
                 Expr eSelect2 = new Expr(
-                    _Orm.GetColumnName<Person>(nameof(Person.FirstName)),
+                    _ORM.GetColumnName<Person>(nameof(Person.FirstName)),
                     OperatorEnum.Equals,
                     "Abraham");
-                List<Person> selectedList2 = _Orm.SelectMany<Person>(null, null, eSelect2);
+                List<Person> selectedList2 = _ORM.SelectMany<Person>(null, null, eSelect2);
                 Console.WriteLine("| Retrieved: " + selectedList2.Count + " records");
                 foreach (Person curr in selectedList2) Console.WriteLine(curr.ToString());
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting by ID");
-                Person pSelected = _Orm.SelectByPrimaryKey<Person>(3);
+                Person pSelected = _ORM.SelectByPrimaryKey<Person>(3);
                 Console.WriteLine("| Selected: " + pSelected.ToString());
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting first by column name");
                 Expr eSelect3 = new Expr("id", OperatorEnum.Equals, 4);
-                pSelected = _Orm.SelectFirst<Person>(eSelect3);
+                pSelected = _ORM.SelectFirst<Person>(eSelect3);
                 Console.WriteLine("| Selected: " + pSelected.ToString());
 
                 #endregion
@@ -198,25 +226,25 @@ namespace Test
                 Console.WriteLine("| Updating p1");
                 p1.Notes = "updated notes p1";
                 p1.NullableType = null;
-                p1 = _Orm.Update<Person>(p1);
+                p1 = _ORM.Update<Person>(p1);
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Updating p2");
                 p2.Notes = "updated notes p2";
                 p2.NullableType = null;
-                p2 = _Orm.Update<Person>(p2);
+                p2 = _ORM.Update<Person>(p2);
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Updating p3");
                 p3.Notes = "updated notes p3";
                 p3.NullableType = null;
-                p3 = _Orm.Update<Person>(p3);
+                p3 = _ORM.Update<Person>(p3);
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Updating p4");
                 p4.Notes = "updated notes p4";
                 p4.NullableType = null;
-                p4 = _Orm.Update<Person>(p4);
+                p4 = _ORM.Update<Person>(p4);
 
                 #endregion
 
@@ -225,8 +253,8 @@ namespace Test
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Updating many records");
                 Dictionary<string, object> updateVals = new Dictionary<string, object>();
-                updateVals.Add(_Orm.GetColumnName<Person>("Notes"), "Updated during update many!");
-                _Orm.UpdateMany<Person>(eSelect1, updateVals);
+                updateVals.Add(_ORM.GetColumnName<Person>("Notes"), "Updated during update many!");
+                _ORM.UpdateMany<Person>(eSelect1, updateVals);
 
                 #endregion
 
@@ -234,38 +262,38 @@ namespace Test
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting many, test 1");
-                selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect1);
+                selectedList1 = _ORM.SelectMany<Person>(null, null, eSelect1);
                 Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
                 foreach (Person curr in selectedList1) Console.WriteLine(curr.ToString());
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting by ID");
-                pSelected = _Orm.SelectByPrimaryKey<Person>(3);
+                pSelected = _ORM.SelectByPrimaryKey<Person>(3);
                 Console.WriteLine("| Selected: " + pSelected.ToString());
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting first");
-                pSelected = _Orm.SelectFirst<Person>(eSelect2);
+                pSelected = _ORM.SelectFirst<Person>(eSelect2);
                 Console.WriteLine("| Selected: " + pSelected.ToString());
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting between, test 1");
                 Expr eSelect4 = Expr.Between("id", new List<object> { 2, 4 });
-                selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect4);
+                selectedList1 = _ORM.SelectMany<Person>(null, null, eSelect4);
                 Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
                 foreach (Person curr in selectedList1) Console.WriteLine(curr.ToString());
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting by persontype");
                 Expr eSelect5 = new Expr("persontype", OperatorEnum.Equals, PersonType.Dog);
-                selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect5);
+                selectedList1 = _ORM.SelectMany<Person>(null, null, eSelect5);
                 Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
                 foreach (Person curr in selectedList1) Console.WriteLine(curr.ToString());
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Selecting handsome people");
                 Expr eSelect6 = new Expr("ishandsome", OperatorEnum.Equals, true);
-                selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect6);
+                selectedList1 = _ORM.SelectMany<Person>(null, null, eSelect6);
                 Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
                 foreach (Person curr in selectedList1) Console.WriteLine(curr.ToString());
 
@@ -274,7 +302,7 @@ namespace Test
                 Expr eSelect7 = new Expr("id", OperatorEnum.GreaterThan, 0);
                 ResultOrder[] resultOrder = new ResultOrder[1];
                 resultOrder[0] = new ResultOrder("id", OrderDirectionEnum.Descending);
-                selectedList1 = _Orm.SelectMany<Person>(null, null, eSelect7, resultOrder);
+                selectedList1 = _ORM.SelectMany<Person>(null, null, eSelect7, resultOrder);
                 Console.WriteLine("| Retrieved: " + selectedList1.Count + " records");
                 foreach (Person curr in selectedList1) Console.WriteLine(curr.ToString());
 
@@ -287,7 +315,7 @@ namespace Test
 
                 try
                 {
-                    _Orm.Query("SELECT * FROM person (((");
+                    _ORM.Query("SELECT * FROM person (((");
                 }
                 catch (Exception e)
                 {
@@ -309,16 +337,16 @@ namespace Test
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Deleting p1");
-                _Orm.Delete<Person>(p1);
+                _ORM.Delete<Person>(p1);
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Deleting p2");
-                _Orm.DeleteByPrimaryKey<Person>(2);
+                _ORM.DeleteByPrimaryKey<Person>(2);
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Deleting records");
                 Expr eDelete = new Expr("id", OperatorEnum.GreaterThan, 2);
-                _Orm.DeleteMany<Person>(eDelete);
+                _ORM.DeleteMany<Person>(eDelete);
 
                 #endregion
             }

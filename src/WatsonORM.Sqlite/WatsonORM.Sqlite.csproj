@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.1;net462;net48;net6.0;net7.0</TargetFrameworks>
-		<Version>3.0.8</Version>
+		<TargetFrameworks>net48;net6.0;net7.0;net8.0</TargetFrameworks>
+		<Version>3.0.9</Version>
 		<RootNamespace>Watson.ORM.Sqlite</RootNamespace>
 		<PackageReleaseNotes>Better support for updating multiple objects</PackageReleaseNotes>
 		<Authors>Joel Christner</Authors>
 		<Description>WatsonORM is a lightweight and easy to use object-relational mapper (ORM) for Sqlite in C# for .NET Core, .NET Framework, and .NET Standard built on top of DatabaseWrapper.  Refer to other WatsonORM packages if you need support for other database types.</Description>
-		<Copyright>(c)2023 Joel Christner</Copyright>
+		<Copyright>(c)2024 Joel Christner</Copyright>
 		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
 		<PackageProjectUrl>https://github.com/jchristn/watsonorm</PackageProjectUrl>
 		<PackageIconUrl></PackageIconUrl>
@@ -18,8 +18,6 @@
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<PackageIcon>watson.png</PackageIcon>
 		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
-		<SignAssembly>True</SignAssembly>
-		<AssemblyOriginatorKeyFile>..\..\WatsonORM.snk</AssemblyOriginatorKeyFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<IncludeSymbols>True</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -50,8 +48,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DatabaseWrapper.Sqlite" Version="6.0.6" />
-		<PackageReference Include="WatsonORM.Core" Version="3.0.6" />
+		<PackageReference Include="DatabaseWrapper.Sqlite" Version="6.1.0" />
+		<PackageReference Include="WatsonORM.Core" Version="3.0.9" />
 	</ItemGroup>
 
 	<ItemGroup>
