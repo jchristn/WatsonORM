@@ -71,10 +71,10 @@ namespace Test.NoColumnNames
                 #region Create-and-Store-Records
 
                 DateTimeOffset localTime = new DateTimeOffset(Convert.ToDateTime("1/1/2021"));
-                Person p1 = new Person("Abraham", "Lincoln", Convert.ToDateTime("1/1/1980"), null, localTime, null, 42, null, "initial notes p1", PersonType.Human, null, false, _FileBytes);
-                Person p2 = new Person("Ronald", "Reagan", Convert.ToDateTime("2/2/1981"), Convert.ToDateTime("3/3/1982"), localTime, localTime, 43, 43, "initial notes p2", PersonType.Cat, PersonType.Cat, true, _FileBytes);
-                Person p3 = new Person("George", "Bush", Convert.ToDateTime("3/3/1982"), null, localTime, null, 44, null, "initial notes p3", PersonType.Dog, PersonType.Dog, false, _FileBytes);
-                Person p4 = new Person("Barack", "Obama", Convert.ToDateTime("4/4/1983"), Convert.ToDateTime("5/5/1983"), localTime, localTime, 45, null, "initial notes p4", PersonType.Human, null, true, _FileBytes);
+                Person p1 = new Person("Abraham", "Lincoln", Convert.ToDateTime("1/1/1980"), null, localTime, null, 42, null, "initial notes p1", PersonType.Human, null, false, _FileBytes, Guid.NewGuid(), null);
+                Person p2 = new Person("Ronald", "Reagan", Convert.ToDateTime("2/2/1981"), Convert.ToDateTime("3/3/1982"), localTime, localTime, 43, 43, "initial notes p2", PersonType.Cat, PersonType.Cat, true, _FileBytes, Guid.NewGuid(), Guid.NewGuid());
+                Person p3 = new Person("George", "Bush", Convert.ToDateTime("3/3/1982"), null, localTime, null, 44, null, "initial notes p3", PersonType.Dog, PersonType.Dog, false, _FileBytes, Guid.NewGuid(), null);
+                Person p4 = new Person("Barack", "Obama", Convert.ToDateTime("4/4/1983"), Convert.ToDateTime("5/5/1983"), localTime, localTime, 45, null, "initial notes p4", PersonType.Human, null, true, _FileBytes, Guid.NewGuid(), Guid.NewGuid());
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Creating p1");
@@ -98,18 +98,18 @@ namespace Test.NoColumnNames
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Creating p5 through p8");
-                Person p5 = new Person("Jason", "Christner", Convert.ToDateTime("4/21/2020"), null, localTime, null, 1, null, "initial notes p5", PersonType.Human, null, false, _FileBytes);
-                Person p6 = new Person("Maria", "Sanchez", Convert.ToDateTime("10/10/1982"), Convert.ToDateTime("10/10/1982"), localTime, localTime, 38, null, "initial notes p6", PersonType.Cat, PersonType.Cat, true, _FileBytes);
-                Person p7 = new Person("Eddie", "Van Halen", Convert.ToDateTime("3/3/1982"), null, localTime, null, 44, null, "initial notes p7", PersonType.Dog, PersonType.Dog, false, _FileBytes);
-                Person p8 = new Person("Steve", "Vai", Convert.ToDateTime("4/4/1983"), Convert.ToDateTime("5/5/1983"), localTime, localTime, 45, null, "initial notes p8", PersonType.Human, null, true, _FileBytes);
+                Person p5 = new Person("Jason", "Christner", Convert.ToDateTime("4/21/2020"), null, localTime, null, 1, null, "initial notes p5", PersonType.Human, null, false, _FileBytes, Guid.NewGuid(), null);
+                Person p6 = new Person("Maria", "Sanchez", Convert.ToDateTime("10/10/1982"), Convert.ToDateTime("10/10/1982"), localTime, localTime, 38, null, "initial notes p6", PersonType.Cat, PersonType.Cat, true, _FileBytes, Guid.NewGuid(), Guid.NewGuid());
+                Person p7 = new Person("Eddie", "Van Halen", Convert.ToDateTime("3/3/1982"), null, localTime, null, 44, null, "initial notes p7", PersonType.Dog, PersonType.Dog, false, _FileBytes, Guid.NewGuid(), null);
+                Person p8 = new Person("Steve", "Vai", Convert.ToDateTime("4/4/1983"), Convert.ToDateTime("5/5/1983"), localTime, localTime, 45, null, "initial notes p8", PersonType.Human, null, true, _FileBytes, Guid.NewGuid(), Guid.NewGuid());
                 List<Person> people = new List<Person> { p5, p6, p7, p8 };
                 _ORM.InsertMultiple<Person>(people);
 
                 #endregion
 
-                #region Insert-Region-with-Special-Characters
+                #region Insert-with-Special-Characters
 
-                Person p9 = new Person("TestШЋЖ", "PersonŠĆŽ", Convert.ToDateTime("4/4/1983"), Convert.ToDateTime("5/5/1983"), localTime, localTime, 45, null, "initial notes p9", PersonType.Human, null, true, _FileBytes);
+                Person p9 = new Person("TestШЋЖ", "PersonŠĆŽ", Convert.ToDateTime("4/4/1983"), Convert.ToDateTime("5/5/1983"), localTime, localTime, 45, null, "initial notes p9", PersonType.Human, null, true, _FileBytes, Guid.NewGuid(), null);
 
                 for (int i = 0; i < 8; i++) Console.WriteLine("");
                 Console.WriteLine("| Creating p9");
@@ -301,7 +301,7 @@ namespace Test.NoColumnNames
                 Console.WriteLine("Stack trace:" + Environment.NewLine + SerializeJson(st, true));
                 Console.WriteLine("Stack frame: " + Environment.NewLine + SerializeJson(st, true));
                 Console.WriteLine("Line number: " + line);
-                Console.WriteLine("Exception: " + Environment.NewLine + SerializeJson(e, true));
+                Console.WriteLine("Exception: " + Environment.NewLine + e.ToString());
             }
 
             Console.WriteLine("");

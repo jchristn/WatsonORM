@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net48;net6.0;net7.0;net8.0</TargetFrameworks>
-		<Version>3.0.9</Version>
+		<TargetFrameworks>netstandard2.0;netstandard2.1;net48;net6.0;net8.0</TargetFrameworks>
+		<Version>3.0.11</Version>
 		<PackageReleaseNotes>Better support for updating multiple objects</PackageReleaseNotes>
 		<AssemblyName>WatsonORM.Core</AssemblyName>
 		<RootNamespace>Watson.ORM.Core</RootNamespace>
 		<Description>Do not install this package directly.  Core classes and static methods supporting WatsonORM packages.</Description>
 		<Authors>Joel Christner</Authors>
-		<Copyright>(c)2024 Joel Christner</Copyright>
+		<Copyright>(c)2025 Joel Christner</Copyright>
 		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
 		<PackageProjectUrl>https://github.com/jchristn/watsonorm</PackageProjectUrl>
 		<PackageIconUrl></PackageIconUrl>
@@ -49,7 +49,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="DatabaseWrapper.Core" Version="6.1.0" />
+	  <PackageReference Include="DatabaseWrapper.Core" Version="6.1.4" />
 	</ItemGroup>
 
 	<ItemGroup>

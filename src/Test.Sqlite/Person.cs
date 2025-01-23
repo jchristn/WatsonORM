@@ -53,6 +53,9 @@ namespace Test.Sqlite
         [Column("guid", false, DataTypes.Guid, 36, true)]
         public Guid GUID { get; set; } = Guid.NewGuid();
 
+        [Column("nullableguid", false, DataTypes.Guid, 36, true)]
+        public Guid? NullableGUID { get; set; } = null;
+
         public Person()
         {
 
@@ -70,8 +73,10 @@ namespace Test.Sqlite
             string notes,
             PersonType personType,
             PersonType? nullablePersonType,
-            bool isHandsome, 
-            byte[] picture)
+            bool isHandsome,
+            byte[] picture,
+            Guid guid,
+            Guid? nullableGuid)
         {
             FirstName = first;
             LastName = last;
@@ -86,6 +91,8 @@ namespace Test.Sqlite
             NullableType = nullablePersonType;
             IsHandsome = isHandsome;
             Picture = picture;
+            GUID = guid;
+            NullableGUID = nullableGuid;
         }
 
         public override string ToString()
@@ -93,15 +100,16 @@ namespace Test.Sqlite
             return
                 "---" + Environment.NewLine +
                 "ID " + Id + Environment.NewLine +
-                "   Name        : " + FirstName + " " + LastName + Environment.NewLine +
-                "   Birthdate   : " + Birthdate.ToString() + " nullable " + (NullableBirthdate != null ? NullableBirthdate.ToString() : "(null)") + Environment.NewLine +
-                "   Local time  : " + LocalTime.ToString() + " nullable " + (NullableLocalTime != null ? NullableLocalTime.ToString() : "(null)") + Environment.NewLine +
-                "   Age         : " + Age + " nullable " + (NullableAge != null ? NullableAge.ToString() : "(null)") + Environment.NewLine +
-                "   Type        : " + Type.ToString() + " nullable " + NullableType + Environment.NewLine +
-                "   Notes       : " + Notes + Environment.NewLine +
-                "   Handsome    : " + IsHandsome + Environment.NewLine +
-                "   Picture     : " + (Picture != null ? Picture.Length + " bytes" : "(null)") + Environment.NewLine +
-                "   GUID        : " + GUID.ToString();
-        } 
+                "   Name          : " + FirstName + " " + LastName + Environment.NewLine +
+                "   Birthdate     : " + Birthdate.ToString() + " nullable " + (NullableBirthdate != null ? NullableBirthdate.ToString() : "(null)") + Environment.NewLine +
+                "   Local time    : " + LocalTime.ToString() + " nullable " + (NullableLocalTime != null ? NullableLocalTime.ToString() : "(null)") + Environment.NewLine +
+                "   Age           : " + Age + " nullable " + (NullableAge != null ? NullableAge.ToString() : "(null)") + Environment.NewLine +
+                "   Type          : " + Type.ToString() + " nullable " + NullableType + Environment.NewLine +
+                "   Notes         : " + Notes + Environment.NewLine +
+                "   Handsome      : " + IsHandsome + Environment.NewLine +
+                "   Picture       : " + (Picture != null ? Picture.Length + " bytes" : "(null)") + Environment.NewLine +
+                "   GUID          : " + GUID.ToString() + Environment.NewLine +
+                "   Nullable GUID : " + (NullableGUID == null ? "(null)" : NullableGUID.ToString());
+        }
     }
 }

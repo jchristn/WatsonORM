@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
-using DatabaseWrapper.Core;
-using DatabaseWrapper.Mysql;
-using ExpressionTree;
-using Watson.ORM.Core;
-
-namespace Watson.ORM.Mysql
+﻿namespace Watson.ORM.Mysql
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using DatabaseWrapper.Core;
+    using DatabaseWrapper.Mysql;
+    using ExpressionTree;
+    using Watson.ORM.Core;
+
     /// <summary>
     /// WatsonORM for MySQL, a lightweight and easy to use object-relational mapper (ORM).
     /// </summary>
@@ -1181,7 +1181,11 @@ namespace Watson.ORM.Mysql
 
                         if (underlyingType != null)
                         {
-                            if (underlyingType == typeof(bool))
+                            if (val == null)
+                            {
+                                property.SetValue(ret, null);
+                            }
+                            else if (underlyingType == typeof(bool))
                             {
                                 property.SetValue(ret, Convert.ToBoolean(val));
                             }
@@ -1193,9 +1197,24 @@ namespace Watson.ORM.Mysql
                             {
                                 property.SetValue(ret, DateTimeOffset.Parse(val.ToString()));
                             }
-                            else if (propType == typeof(Guid))
+                            else if (underlyingType == typeof(Guid))
                             {
-                                property.SetValue(ret, Guid.Parse(val.ToString()));
+                                if (val is Guid guidVal)
+                                {
+                                    property.SetValue(ret, guidVal);
+                                }
+                                else if (val is byte[] bytesVal && bytesVal.Length == 16)
+                                {
+                                    property.SetValue(ret, new Guid(bytesVal));
+                                }
+                                else if (val is string strVal)
+                                {
+                                    property.SetValue(ret, Guid.Parse(strVal));
+                                }
+                                else
+                                {
+                                    throw new InvalidCastException($"Cannot convert value of type {val.GetType()} to Guid");
+                                }
                             }
                             else
                             {
@@ -1218,7 +1237,22 @@ namespace Watson.ORM.Mysql
                             }
                             else if (propType == typeof(Guid))
                             {
-                                property.SetValue(ret, Guid.Parse(val.ToString()));
+                                if (val is Guid guidVal)
+                                {
+                                    property.SetValue(ret, guidVal);
+                                }
+                                else if (val is byte[] bytesVal && bytesVal.Length == 16)
+                                {
+                                    property.SetValue(ret, new Guid(bytesVal));
+                                }
+                                else if (val is string strVal)
+                                {
+                                    property.SetValue(ret, Guid.Parse(strVal));
+                                }
+                                else
+                                {
+                                    throw new InvalidCastException($"Cannot convert value of type {val.GetType()} to Guid");
+                                }
                             }
                             else
                             {

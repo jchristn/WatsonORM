@@ -1179,7 +1179,11 @@ namespace Watson.ORM.Postgresql
 
                         if (underlyingType != null)
                         {
-                            if (underlyingType == typeof(bool))
+                            if (val == null)
+                            {
+                                property.SetValue(ret, null);
+                            }
+                            else if (underlyingType == typeof(bool))
                             {
                                 property.SetValue(ret, Convert.ToBoolean(val));
                             }
@@ -1191,9 +1195,24 @@ namespace Watson.ORM.Postgresql
                             {
                                 property.SetValue(ret, DateTimeOffset.Parse(val.ToString()));
                             }
-                            else if (propType == typeof(Guid))
+                            else if (underlyingType == typeof(Guid))
                             {
-                                property.SetValue(ret, Guid.Parse(val.ToString()));
+                                if (val is Guid guidVal)
+                                {
+                                    property.SetValue(ret, guidVal);
+                                }
+                                else if (val is byte[] bytesVal && bytesVal.Length == 16)
+                                {
+                                    property.SetValue(ret, new Guid(bytesVal));
+                                }
+                                else if (val is string strVal)
+                                {
+                                    property.SetValue(ret, Guid.Parse(strVal));
+                                }
+                                else
+                                {
+                                    throw new InvalidCastException($"Cannot convert value of type {val.GetType()} to Guid");
+                                }
                             }
                             else
                             {
@@ -1216,7 +1235,22 @@ namespace Watson.ORM.Postgresql
                             }
                             else if (propType == typeof(Guid))
                             {
-                                property.SetValue(ret, Guid.Parse(val.ToString()));
+                                if (val is Guid guidVal)
+                                {
+                                    property.SetValue(ret, guidVal);
+                                }
+                                else if (val is byte[] bytesVal && bytesVal.Length == 16)
+                                {
+                                    property.SetValue(ret, new Guid(bytesVal));
+                                }
+                                else if (val is string strVal)
+                                {
+                                    property.SetValue(ret, Guid.Parse(strVal));
+                                }
+                                else
+                                {
+                                    throw new InvalidCastException($"Cannot convert value of type {val.GetType()} to Guid");
+                                }
                             }
                             else
                             {
