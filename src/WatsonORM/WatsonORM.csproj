@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;netstandard2.1;net48;net6.0;net8.0</TargetFrameworks>
-		<Version>3.0.11</Version>
+		<Version>3.0.14</Version>
 		<PackageReleaseNotes>Better support for updating multiple objects</PackageReleaseNotes>
 		<Authors>Joel Christner</Authors>
 		<Company>Joel Christner</Company>
@@ -18,6 +18,7 @@
 		<PackageId>WatsonORM</PackageId>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<DocumentationFile>WatsonORM.xml</DocumentationFile>
 		<ApplicationIcon />
 		<OutputType>Library</OutputType>
 		<StartupObject />
@@ -27,14 +28,6 @@
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<IncludeSymbols>True</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<DocumentationFile>WatsonORM.xml</DocumentationFile>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<DocumentationFile>WatsonORM.xml</DocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -54,10 +47,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="WatsonORM.Mysql" Version="3.0.11" />
-		<PackageReference Include="WatsonORM.Postgresql" Version="3.0.11" />
-		<PackageReference Include="WatsonORM.Sqlite" Version="3.0.11" />
-		<PackageReference Include="WatsonORM.SqlServer" Version="3.0.11" />
+		<PackageReference Include="WatsonORM.Mysql" Version="3.0.14" />
+		<PackageReference Include="WatsonORM.Postgresql" Version="3.0.14" />
+		<PackageReference Include="WatsonORM.Sqlite" Version="3.0.14" />
+		<PackageReference Include="WatsonORM.SqlServer" Version="3.0.14" />
 	</ItemGroup>
 
 	<ItemGroup>
